@@ -1,8 +1,7 @@
 import chalk from 'chalk';
-import { arrObjEqual } from './objUtil.mjs';
-import { vTypeOf } from './jsUtil.mjs';
-import { mapForIn, mapSize } from './mapUtil.mjs';
-import { strCompareAs } from './strUtil.mjs';
+import { arrObjEqual, objSize, objForIn } from '../utils/objUtil.mjs';
+import { vTypeOf } from '../utils/jsUtil.mjs';
+import { strCompareAs } from '../utils/strUtil.mjs';
 
 const space = `    `;
 const dash = `----------`;
@@ -39,10 +38,10 @@ const runAnswer = (input = {}, answerCb) => {
 
 const beautifyJson = (json) => {
     let beautifiedJson = ``;
-    const jsonLength = mapSize(json);
+    const jsonLength = objSize(json);
 
     let index = 1;
-    mapForIn(json, (value, key) => {
+    objForIn(json, (value, key) => {
         beautifiedJson += `[${key}: ${value}]`;
 
         if (index < jsonLength) {

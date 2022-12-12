@@ -60,17 +60,17 @@ export const getProtoAttr = (any, attrType) => {
     return protoList.filter(attr => vTypeOf(any[attr]) === attrType);
 }
 
-export const mapForIn = (map, cb) => {
-    for (const key in map) {
-        if (Object.hasOwn(map, key)) {
-            const value = map[key];
+export const objForIn = (obj, cb) => {
+    for (const key in obj) {
+        if (Object.hasOwn(obj, key)) {
+            const value = obj[key];
             cb(value, key);
         }
     }
 }
 
-export const mapSize = (map) => {
+export const objSize = (obj) => {
     let size = 0;
-    mapForIn(map, () => size++);
+    objForIn(obj, () => size++);
     return size;
 }
