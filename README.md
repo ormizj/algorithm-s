@@ -1,3 +1,3 @@
 # Algorithm-S
 
-contains various algorithms ranging from utilities, to questions
+Contains various algorithms ranging from algorithmic questions to various utilities
