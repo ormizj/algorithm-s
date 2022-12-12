@@ -6,3 +6,5 @@ export const vTypeOf = (any) => {
     if (any !== any) return 'nan';
     return typeof any;
 }
+
+export const deepClone = (any) => structuredClone(any);
