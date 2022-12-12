@@ -1,46 +1,31 @@
 import { vTypeOf } from "./jsUtil.mjs";
-import { strCompareAs } from "./strUtil.mjs";
 
-//TODO finish
-export const arrObjEqual = (any, oAny) => {
-    if (any === oAny) return true;
-    const type = vTypeOf(any);
-    const oType = vTypeOf(oAny);
-
-    if (type !== oType) return false;
-    if (type === 'array') return arrEqualHelper(any, oAny);
-    if (type === 'object') return objEqualHelper(any, oAny);
-
-    console.error(`arrObjEqual: Equal type not accounted for!`);
+export const objEqual = (obj, otherObj) => {
+    if (obj === otherObj) return true;
+    return objEqualHelper(obj, otherObj);
 }
 
-//TODO finish
-const arrEqualHelper = (arr, oArr) => {
-    for (let index = 0; index < arr.length; index++) {
-        const element = arr[index];
-        const oElement = oArr[index];
+const objEqualHelper = (obj, otherObj) => {
+    if (vTypeOf(obj) !== vTypeOf(otherObj)) return false;
 
-        if (vTypeOf(element) === 'array') {
-            if (vTypeOf(oElement) !== 'array') return false;
-            return arrEqualHelper(element, oElement);
+    if (typeof obj === 'object') {
+        for (const objKey in obj) {
+            if (!Object.hasOwn(obj, objKey)) continue;
+            const value = obj[objKey];
+            const otherValue = otherObj[objKey];
+
+            if (!objEqualHelper(value, otherValue)) {
+                return false;
+            }
         }
 
-        if (vTypeOf(element) === 'object') {
-            if (vTypeOf(oElement) !== 'object') return false;
-            return arrEqualHelper(element, oElement);
-        }
-
-
-        if (!strCompareAs(element, oElement)) {
-            return false
-        }
+        return true;
     }
 
+    if (obj !== otherObj) {
+        return false;
+    }
     return true;
-}
-
-//TODO finish
-const objEqualHelper = (obj, oObj) => {
 }
 
 export const getProtoAttr = (any, attrType) => {
@@ -65,6 +50,17 @@ export const objForIn = (obj, cb) => {
         if (Object.hasOwn(obj, key)) {
             const value = obj[key];
             cb(value, key);
+        }
+    }
+}
+
+export const objForInBreak = (obj, cb) => {
+    for (const key in obj) {
+        if (Object.hasOwn(obj, key)) {
+            const value = obj[key];
+
+            const isBroken = cb(value, key);
+            if (isBroken === true) break;
         }
     }
 }

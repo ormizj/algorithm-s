@@ -17,10 +17,8 @@ const isSameLetter = (char, oChar) => char.toLowerCase() === oChar.toLowerCase()
 
 const removeByIndex = (str, index, count) => str.slice(0, index) + str.slice(index + count);
 
-
-
 /*----------------------------------------------------------------------------------------------------*/
 import { printResult } from "../../../answerUtil.mjs";
-printResult({ answerCb: makeGood, expected: ['leetcode'], input: { s: 'leEeetcode' } });
-printResult({ answerCb: makeGood, expected: [''], input: { s: 'abBAcC' } });
-printResult({ answerCb: makeGood, expected: ['s'], input: { s: 's' } });
+printResult({ answerCb: makeGood, expected: 'leetcode', input: { s: 'leEeetcode' } });
+printResult({ answerCb: makeGood, expected: '', input: { s: 'abBAcC' } });
+printResult({ answerCb: makeGood, expected: 's', input: { s: 's' } });

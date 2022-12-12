@@ -1,7 +1,6 @@
 import chalk from 'chalk';
-import { arrObjEqual, objSize, objForIn } from '../utils/objUtil.mjs';
+import { objEqual, objSize, objForIn } from '../utils/objUtil.mjs';
 import { vTypeOf } from '../utils/jsUtil.mjs';
-import { strCompareAs } from '../utils/strUtil.mjs';
 
 const space = `    `;
 const dash = `----------`;
@@ -19,8 +18,7 @@ export const printResult = ({ answerCb, expected, input = {}, isOrder = false } 
     let answer;
     if (calculateAnswer({ expected, actual, isOrder })) {
         answer = chalk.blue(`Accepted`);
-    }
-    else {
+    } else {
         answer = chalk.red(`Wrong Answer`);
     }
 
@@ -54,12 +52,12 @@ const beautifyJson = (json) => {
 }
 
 //TODO add order
-const calculateAnswer = ({ expected, actual, isOrder = false } = {}) => {
+const calculateAnswer = ({ expected, actual, isOrdered = false } = {}) => {
     const type = vTypeOf(expected);
 
-    if (type === 'array') {
-        return arrObjEqual(expected, actual);
+    if (type === 'object' || type === 'array') {
+        return objEqual(expected, actual);
     }
 
-    return strCompareAs(expected, actual);
+    return expected === actual;
 }

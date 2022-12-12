@@ -1,5 +1,3 @@
 TODO improve "output" and "expected" printing (to include more info)
 TODO improve comparing answers (output vs expected)
-TODO finish jsUtil equal function
-
-TODO fix printAnswer function
+TODO unordered function
