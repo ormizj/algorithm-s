@@ -1,0 +1,1 @@
+export const strCompareAs = (str, oStr) => `${str}` === `${oStr}`;
