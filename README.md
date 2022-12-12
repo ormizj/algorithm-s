@@ -1,3 +1,3 @@
-# leet-code-problems
+# Algorithm-S
 
-LeetCode problems i solved organized by difficulty
+contains various algorithms ranging from utilities, to questions
