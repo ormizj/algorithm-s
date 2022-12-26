@@ -16,3 +16,9 @@ export const numToFixed = (num = 0, digit = 0, { base = 10, roundFunc = 'floor' 
 };
 
 export const numIsBetween = (num = 0, min = 0, max = 0) => num >= min && num <= max;
+
+export const numRandInclusive = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}

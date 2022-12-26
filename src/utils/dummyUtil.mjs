@@ -1,4 +1,5 @@
 import { vTypeOf } from "./jsUtil.js";
+import { numRandInclusive } from "./numUtil.mjs";
 import { objForIn } from "./objUtil.js";
 
 /**
@@ -103,7 +104,7 @@ const genRandData = ({
 		let newCnt = cntLetters[i];
 
 		if (randRange) {
-			newCnt = getRandomIntInclusive(newCnt / 2, newCnt * 2);
+			newCnt = numRandInclusive(newCnt / 2, newCnt * 2);
 		}
 
 		if (i < cntLetters.length - 1) {
@@ -160,7 +161,6 @@ export const randStr = (length, lang) => {
 	let characters;
 	switch (lang) {
 		case 'en':
-			// noinspection SpellCheckingInspection
 			characters = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`;
 			break;
 
@@ -169,7 +169,6 @@ export const randStr = (length, lang) => {
 			break;
 
 		default:
-			// noinspection SpellCheckingInspection
 			characters = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789`;
 			break;
 	}
@@ -202,9 +201,4 @@ export const randNum = (length) => {
 	return Number(result);
 };
 
-const getRandomIntInclusive = (min, max) => {
-	min = Math.ceil(min);
-	max = Math.floor(max);
-	return Math.floor(Math.random() * (max - min + 1) + min);
-}
 
