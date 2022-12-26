@@ -28,7 +28,7 @@ const objEqualHelper = (obj, otherObj) => {
     return true;
 }
 
-export const getProtoAttr = (any, attrType) => {
+export const objProtoAttr = (any, attrType) => {
     const properties = new Set();
     let protoCurr = Object.getPrototypeOf(any);
 
