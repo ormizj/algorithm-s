@@ -1,3 +1,5 @@
+export const isNumber = (num) => typeof num === 'number';
+
 export const numToDigits = (num = 0) => {
     let digits = [];
 

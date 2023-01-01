@@ -1,3 +1,5 @@
+export const isString = (str) => typeof str === 'string';
+
 export const strCompareAs = (str, otherStr) => `${str}` === `${otherStr}`;
 
 /**
@@ -36,7 +38,7 @@ export const strAddHtmlChild = (strHtml = '', strEl = '', strChild = '') => {
     }
 };
 
-module.exports.strInsert = (str, insertStr, index) => {
+export const strInsert = (str, insertStr, index) => {
     if (index > 0) {
         return str.substring(0, index) + insertStr + str.substring(index);
     }
