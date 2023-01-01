@@ -3,6 +3,15 @@ import { isString } from "./strUtil.mjs";
 
 export const isObject = (obj = {}) => obj !== null && !Array.isArray(obj) && typeof obj === 'object';
 
+export const objIsEmpty = (obj = {}) => {
+    for (let objKey in obj) {
+        if (obj.hasOwnProperty(objKey)) return false;
+    }
+    return true;
+}
+
+export const objShallowClone = (obj = {}) => Object.assign({}, obj);
+
 export const objEqual = (obj, otherObj) => {
     if (obj === otherObj) return true;
     return objEqualHelper(obj, otherObj);
@@ -48,7 +57,7 @@ export const objProtoAttr = (any, attrType) => {
     return protoList.filter(attr => vTypeOf(any[attr]) === attrType);
 }
 
-export const objForIn = (obj, cb) => {
+export const forIn = (obj, cb) => {
     for (const key in obj) {
         if (Object.hasOwn(obj, key)) {
             const value = obj[key];
@@ -57,7 +66,7 @@ export const objForIn = (obj, cb) => {
     }
 }
 
-export const objForInBreak = (obj, cb) => {
+export const forInBreak = (obj, cb) => {
     for (const key in obj) {
         if (Object.hasOwn(obj, key)) {
             const value = obj[key];
@@ -70,7 +79,7 @@ export const objForInBreak = (obj, cb) => {
 
 export const objSize = (obj) => {
     let size = 0;
-    objForIn(obj, () => size++);
+    forIn(obj, () => size++);
     return size;
 }
 

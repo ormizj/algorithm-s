@@ -1,6 +1,6 @@
 import { vTypeOf } from "./jsUtil.js";
 import { numRandInclusive } from "./numUtil.mjs";
-import { objForIn } from "./objUtil.js";
+import { forIn } from "./objUtil.js";
 
 /**
  * Example:
@@ -47,7 +47,7 @@ export const buildDummyData = (obj = {}, options = {
 }
 
 const buildDummyDataHelper = (obj, dupeObj, options) => {
-	objForIn(obj, (value, key) => {
+	forIn(obj, (value, key) => {
 		const type = vTypeOf(value);
 
 		//nested values
