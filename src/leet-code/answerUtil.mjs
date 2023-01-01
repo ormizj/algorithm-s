@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { objEqual, objSize, objForIn } from '../utils/objUtil.mjs';
+import { objEqual, objSize, forIn } from '../utils/objUtil.mjs';
 import { vTypeOf } from '../utils/jsUtil.mjs';
 
 const space = `    `;
@@ -39,7 +39,7 @@ const beautifyJson = (json) => {
     const jsonLength = objSize(json);
 
     let index = 1;
-    objForIn(json, (value, key) => {
+    forIn(json, (value, key) => {
         beautifiedJson += `[${key}: ${value}]`;
 
         if (index < jsonLength) {
