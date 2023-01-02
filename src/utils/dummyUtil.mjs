@@ -72,7 +72,7 @@ const buildDummyDataHelper = (obj, dupeObj, options) => {
 	});
 
 	return dupeObj;
-};
+}
 
 
 const genRandData = ({
@@ -116,7 +116,7 @@ const genRandData = ({
 	}
 
 	return randData;
-};
+}
 
 const handleCustomKey = ({
 	value,
@@ -153,7 +153,7 @@ const handleCustomKey = ({
 		lang,
 		randRange
 	});
-};
+}
 
 export const randStr = (length, lang) => {
 	let result = '';
@@ -179,7 +179,7 @@ export const randStr = (length, lang) => {
 	}
 
 	return result;
-};
+}
 
 export const randNum = (length) => {
 	if (length === 0) return 0;
@@ -199,6 +199,6 @@ export const randNum = (length) => {
 	}
 
 	return Number(result);
-};
+}
 
 

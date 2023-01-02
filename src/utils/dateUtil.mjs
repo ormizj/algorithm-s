@@ -13,16 +13,6 @@ export const getDateMap = (date = undefined, format = undefined) => {
     }
 
     return dateObj;
-};
-
-/**
- * @param dateFrom
- * @param dateTo
- * @returns {number} month difference between dates, without taking days into account
- */
-export const dateMonthDuration = (dateFrom, dateTo) => {
-    return dateTo.getMonth() - dateFrom.getMonth()
-        + (12 * (dateTo.getFullYear() - dateFrom.getFullYear()));
 }
 
 /**
@@ -42,4 +32,14 @@ export const getDateArr = (date = new Date) => {
     }
 
     return [year, month, day];
-};
+}
+
+/**
+ * @param dateFrom
+ * @param dateTo
+ * @returns {number} month difference between dates, without taking days into account
+ */
+export const dateMonthDuration = (dateFrom, dateTo) => {
+    return dateTo.getMonth() - dateFrom.getMonth()
+        + (12 * (dateTo.getFullYear() - dateFrom.getFullYear()));
+}

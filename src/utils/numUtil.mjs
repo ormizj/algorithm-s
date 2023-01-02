@@ -1,5 +1,7 @@
 export const isNumber = (num) => typeof num === 'number';
 
+export const numIsBetween = (num = 0, min = 0, max = 0) => num >= min && num <= max;
+
 export const numToDigits = (num = 0) => {
     let digits = [];
 
@@ -16,8 +18,6 @@ export const numToFixed = (num = 0, digit = 0, { base = 10, roundFunc = 'floor' 
     const pow = Math.pow(base, digit);
     return Math[roundFunc](num * pow) / pow;
 };
-
-export const numIsBetween = (num = 0, min = 0, max = 0) => num >= min && num <= max;
 
 export const numRandInclusive = (min, max) => {
     min = Math.ceil(min);

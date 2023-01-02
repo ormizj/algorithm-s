@@ -2,6 +2,12 @@ export const isString = (str) => typeof str === 'string';
 
 export const strCompareAs = (str, otherStr) => `${str}` === `${otherStr}`;
 
+export const strIsSubString = (longStr = '', shortStr = '') => longStr.indexOf(shortStr) > -1;
+
+export const strRemoveLastLetter = (str = '') => str.substring(0, str.length - 1);
+
+export const strGetFirstWord = (str = '') => str.split(' ')[0];
+
 /**
  * Adds a child to html structured {String}. 
  * 
@@ -45,3 +51,20 @@ export const strInsert = (str, insertStr, index) => {
 
     return str + insertStr;
 };
+
+
+export const strGetLastWord = (str = '') => {
+    const strArr = str.split(' ');
+    return strArr[strArr.length - 1];
+}
+
+export const toStringDelimiter = (delimiter = '', ...any) => {
+    let str = '';
+    for (let i = 0; i < any.length - 1; i++) {
+        str += `${any[i]}${delimiter}`;
+    }
+    str += `${any[any.length - 1]}`;
+    return str;
+}
+
+export const strCut = (str = '', cut = '') => str.replace(cut, '');
