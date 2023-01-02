@@ -6,6 +6,8 @@ export const arrIsEmpty = (arr = []) => arr.length === 0;
 
 export const arrRemoveIndex = (arr = [], index = 0, count = 1) => arr.splice(index, count);
 
+export const validateComparator = (comparator) => comparator ? comparator : () => 0;
+
 export const arrFindIndex = (arr = [], element) => {
 	for (let i = 0; i < arr.length; i++) {
 		if (arr[i] === element) return i;
@@ -18,12 +20,10 @@ export const arrRemove = (arr = [], element) => {
 	arrRemoveIndex(arr, index);
 }
 
-export const validateComparator = (comparator) => comparator ? comparator : () => 0;
-
 export const arrValidate = (arr) => {
 	if (isNull(arr)) return [];
 	return Array.isArray(arr) ? arr : [arr]
-};
+}
 
 export const arrToStringDelimiter = (arr = [], delimiter = '') => {
 	let str = '';
