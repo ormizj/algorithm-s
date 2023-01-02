@@ -8,6 +8,19 @@ export const arrRemoveIndex = (arr = [], index = 0, count = 1) => arr.splice(ind
 
 export const validateComparator = (comparator) => comparator ? comparator : () => 0;
 
+export const forOfReverse = (arr, cb) => {
+	for (let index = arr.length - 1; index > -1; index--) {
+		cb(arr[index], index);
+	}
+}
+
+export const forOfReverseBreak = (arr, cb) => {
+	for (let index = arr.length - 1; index > -1; index--) {
+		const isBroken = cb(arr[index], index);
+		if (isBroken === true) break;
+	}
+}
+
 export const arrFindIndex = (arr = [], element) => {
 	for (let i = 0; i < arr.length; i++) {
 		if (arr[i] === element) return i;
@@ -34,13 +47,13 @@ export const arrToStringDelimiter = (arr = [], delimiter = '') => {
 	return str;
 }
 
-export const arrCompare = (arr, otherArr) => {
+export const arrShallowCompare = (arr, otherArr) => {
 	return arr.length !== otherArr.length
 		&& arr.every((element, index) => element === otherArr[index]);
 }
 
 /**
- * shallow comparison, only insures both arrays have the same value, does not check duplications
+ * shallow comparison, insures both arrays have at least 1 of each value between them
  *
  * @param arr
  * @param otherArr
@@ -66,7 +79,7 @@ export const arrMutateWithoutIndex = (arr = [], index = 0) => {
 	return arr.splice(index, 1);
 }
 
-export const arrToIndex = (arr = [], index = 0) => {
+export const arrUpToIndex = (arr = [], index = 0) => {
 	const tempArr = [];
 	for (let i = 0; i <= index; i++) {
 		tempArr.push(arr[i]);
@@ -85,8 +98,13 @@ export const arrFromIndex = (arr = [], index = 0) => {
 
 export const arrFindLastIndexOfType = (arr = [], type = '') => {
 	let lastIndex = -1;
-	arr.forEach((element, index) => {
-		if (typeof element === type) lastIndex = index;
+
+	forOfReverseBreak(arr, (element, index) => {
+		if (typeof element === type) {
+			lastIndex = index;
+			return true;
+		}
 	})
+
 	return lastIndex;
 }

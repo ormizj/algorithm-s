@@ -69,9 +69,7 @@ export const forIn = (obj, cb) => {
 export const forInBreak = (obj, cb) => {
     for (const key in obj) {
         if (Object.hasOwn(obj, key)) {
-            const value = obj[key];
-
-            const isBroken = cb(value, key);
+            const isBroken = cb(obj[key], key);
             if (isBroken === true) break;
         }
     }
