@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { objEqual, objSize, forIn } from '../utils/objUtil.mjs';
+import { objEqual, objSize, forIn, objEqualMessy } from '../utils/objUtil.mjs';
 import { vTypeOf } from '../utils/jsUtil.mjs';
 
 const space = `    `;
@@ -51,12 +51,16 @@ const beautifyJson = (json) => {
     return beautifiedJson;
 }
 
-//TODO add order
-const calculateAnswer = ({ expected, actual, isOrdered = false } = {}) => {
+const calculateAnswer = ({ expected, actual, isOrder = false } = {}) => {
     const type = vTypeOf(expected);
 
     if (type === 'object' || type === 'array') {
-        return objEqual(expected, actual);
+        if (isOrder) {
+            return objEqual(expected, actual);
+
+        } else {
+            return objEqualMessy(expected, actual);
+        };
     }
 
     return expected === actual;

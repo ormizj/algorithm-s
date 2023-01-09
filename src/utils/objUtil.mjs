@@ -1,3 +1,4 @@
+import { arrRemove } from "./arrUtil.mjs";
 import { vTypeOf } from "./jsUtil.mjs";
 import { isString } from "./strUtil.mjs";
 
@@ -10,7 +11,25 @@ export const objIsEmpty = (obj = {}) => {
     return true;
 }
 
-export const objShallowClone = (obj = {}) => Object.assign({}, obj);
+export const objCloneShallow = (obj = {}) => Object.assign({}, obj);
+
+const objExistDeep = (obj, target) => {
+    for (let key in obj) {
+        if (!obj.hasOwnProperty(key)) continue;
+        const value = obj[key];
+
+        if (value === target) {
+            return true;
+        }
+
+        if (typeof value === 'object') {
+            const res = objExistDeep(value, target);
+            if (res) return true;
+        }
+    }
+
+    return false;
+}
 
 export const objEqual = (obj, otherObj) => {
     if (obj === otherObj) return true;
@@ -40,6 +59,31 @@ const objEqualHelper = (obj, otherObj) => {
     return true;
 }
 
+export const objEqualMessy = (obj, otherObj) => {
+    if (obj === otherObj) return true;
+    const flatArr = deepFlat(obj);
+    return objEqualMessyHelper(otherObj, flatArr);
+}
+
+const objEqualMessyHelper = (obj, flatArr) => {
+    if (typeof obj === 'object') {
+        for (const objKey in obj) {
+            if (!Object.hasOwn(obj, objKey)) continue;
+            const value = obj[objKey];
+
+            if (typeof value === 'object') {
+                objEqualMessyHelper(value, flatArr);
+
+            } else {
+                if (!objExistDeep(flatArr, value)) return false;
+                arrRemove(flatArr, value);
+            }
+        }
+    }
+
+    return flatArr.length === 0;
+}
+
 export const objProtoAttr = (any, attrType) => {
     const properties = new Set();
     let protoCurr = Object.getPrototypeOf(any);
@@ -59,19 +103,18 @@ export const objProtoAttr = (any, attrType) => {
 
 export const forIn = (obj, cb) => {
     for (const key in obj) {
-        if (Object.hasOwn(obj, key)) {
-            const value = obj[key];
-            cb(value, key);
-        }
+        if (!Object.hasOwn(obj, key)) continue;
+
+        cb(obj[key], key);
     }
 }
 
 export const forInBreak = (obj, cb) => {
     for (const key in obj) {
-        if (Object.hasOwn(obj, key)) {
-            const isBroken = cb(obj[key], key);
-            if (isBroken === true) break;
-        }
+        if (!Object.hasOwn(obj, key)) continue;
+
+        const isBroken = cb(obj[key], key);
+        if (isBroken === true) break;
     }
 }
 
@@ -82,38 +125,36 @@ export const objSize = (obj) => {
 }
 
 /**
- * @param objArr an object or an array
+ * @param obj an object or an array
  * @param key in the object you want to find the path of 
  *            (returns value path, if the key is inside an {Array})
  * @returns {*|*[]} a path to the object key, or null if key was not found
  */
-export const keyPath = (objArr = {}, key) => {
-    if (objArr.hasOwnProperty(key)) return [key];
-    if (Array.isArray(objArr)) return pathArrHelper(objArr, key, [], keyPathHelper);
-    return keyPathHelper(objArr, key, []);
+export const keyPath = (obj = {}, key) => {
+    if (obj.hasOwnProperty(key)) return [key];
+    if (Array.isArray(obj)) return pathArrHelper(obj, key, [], keyPathHelper);
+    return keyPathHelper(obj, key, []);
 }
 
 const keyPathHelper = (obj = {}, target, path = []) => {
-    let tempObj = obj;
-
     if (path.length > 0 && isString(path[path.length - 1]))
-        tempObj = tempObj[path[path.length - 1]];
+        obj = obj[path[path.length - 1]];
 
-    for (let key in tempObj) {
-        if (!tempObj.hasOwnProperty(key)) continue;
+    for (let key in obj) {
+        if (!obj.hasOwnProperty(key)) continue;
         path.push(key);
 
         if (key === target) {
             return path;
         }
 
-        if (isObject(tempObj[key])) {
-            const res = keyPathHelper(tempObj, target, path);
+        if (isObject(obj[key])) {
+            const res = keyPathHelper(obj, target, path);
             if (res !== null) return res;
         }
 
-        if (Array.isArray(tempObj[key])) {
-            const res = pathArrHelper(tempObj[key], target, path, keyPathHelper);
+        if (Array.isArray(obj[key])) {
+            const res = pathArrHelper(obj[key], target, path, keyPathHelper);
             if (res !== null) return res;
         }
 
@@ -124,25 +165,23 @@ const keyPathHelper = (obj = {}, target, path = []) => {
 }
 
 /**
- * @param objArr an object or an array
+ * @param obj an object or an array
  * @param value in the object you want to find the path of
  * @returns {*|*[]} a path to the object/array value, or null if the value was not found
  */
-export const valuePath = (objArr = {}, value) => {
-    if (objArr === value) return [];
-    if (Array.isArray(objArr)) return pathArrHelper(objArr, value, [], valuePathHelper);
-    return valuePathHelper(objArr, value, []);
+export const valuePath = (obj = {}, value) => {
+    if (obj === value) return [];
+    if (Array.isArray(obj)) return pathArrHelper(obj, value, [], valuePathHelper);
+    return valuePathHelper(obj, value, []);
 }
 
 const valuePathHelper = (obj = {}, target, path = []) => {
-    let tempObj = obj;
-
     if (path.length > 0 && isString(path[path.length - 1]))
-        tempObj = tempObj[path[path.length - 1]];
+        obj = obj[path[path.length - 1]];
 
-    for (let key in tempObj) {
-        if (!tempObj.hasOwnProperty(key)) continue;
-        const value = tempObj[key];
+    for (let key in obj) {
+        if (!obj.hasOwnProperty(key)) continue;
+        const value = obj[key];
         path.push(key);
 
         if (value === target) {
@@ -150,7 +189,7 @@ const valuePathHelper = (obj = {}, target, path = []) => {
         }
 
         if (isObject(value)) {
-            const res = valuePathHelper(tempObj, target, path);
+            const res = valuePathHelper(obj, target, path);
             if (res !== null) return res;
         }
 
@@ -188,4 +227,23 @@ const pathArrHelper = (value, target, path, cb) => {
     }
 
     return null;
+}
+
+const deepFlat = (obj) => {
+    return deepFlatHelper(obj, []);
+}
+
+const deepFlatHelper = (obj, flatArr) => {
+    if (typeof obj === 'object') {
+        forIn(obj, (value) => {
+
+            if (typeof value === 'object') {
+                deepFlatHelper(value, flatArr);
+            } else {
+                flatArr.push(value);
+            }
+        })
+    }
+
+    return flatArr;
 }

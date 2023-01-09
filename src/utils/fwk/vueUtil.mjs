@@ -1,4 +1,4 @@
-import { deepClone } from "../jsUtil.mjs";
+import { cloneDeep } from "../jsUtil.mjs";
 
 /**
  * creates props as reference
@@ -18,5 +18,5 @@ export const initProps = (sourceProps, defaultProps = {}) => {
 }
 
 export const initPropsClone = (sourceProps, defaultProps = {}) => {
-	return { ...deepClone(defaultProps), ...deepClone(sourceProps) };
+	return { ...cloneDeep(defaultProps), ...cloneDeep(sourceProps) };
 }

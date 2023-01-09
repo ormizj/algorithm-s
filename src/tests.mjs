@@ -14,26 +14,24 @@ export const keyPath = (objArr = {}, key) => {
 }
 
 const keyPathHelper = (obj = {}, target, path = []) => {
-    let tempObj = obj;
-
     if (path.length > 0 && isString(path[path.length - 1]))
-        tempObj = tempObj[path[path.length - 1]];
+        obj = obj[path[path.length - 1]];
 
-    for (let key in tempObj) {
-        if (!tempObj.hasOwnProperty(key)) continue;
+    for (let key in obj) {
+        if (!obj.hasOwnProperty(key)) continue;
         path.push(key);
 
         if (key === target) {
             return path;
         }
 
-        if (isObject(tempObj[key])) {
-            const res = keyPathHelper(tempObj, target, path);
+        if (isObject(obj[key])) {
+            const res = keyPathHelper(obj, target, path);
             if (res !== null) return res;
         }
 
-        if (Array.isArray(tempObj[key])) {
-            const res = pathArrHelper(tempObj[key], target, path, keyPathHelper);
+        if (Array.isArray(obj[key])) {
+            const res = pathArrHelper(obj[key], target, path, keyPathHelper);
             if (res !== null) return res;
         }
 
@@ -55,14 +53,12 @@ export const valuePath = (objArr = {}, value) => {
 }
 
 const valuePathHelper = (obj = {}, target, path = []) => {
-    let tempObj = obj;
-
     if (path.length > 0 && isString(path[path.length - 1]))
-        tempObj = tempObj[path[path.length - 1]];
+        obj = obj[path[path.length - 1]];
 
-    for (let key in tempObj) {
-        if (!tempObj.hasOwnProperty(key)) continue;
-        const value = tempObj[key];
+    for (let key in obj) {
+        if (!obj.hasOwnProperty(key)) continue;
+        const value = obj[key];
         path.push(key);
 
         if (value === target) {
@@ -70,7 +66,7 @@ const valuePathHelper = (obj = {}, target, path = []) => {
         }
 
         if (isObject(value)) {
-            const res = valuePathHelper(tempObj, target, path);
+            const res = valuePathHelper(obj, target, path);
             if (res !== null) return res;
         }
 
@@ -131,3 +127,5 @@ const arr = [{ test2: 'abc' }, obj]
 
 console.log(keyPath(arr, 'd'))
 console.log(valuePath(arr, 'd'));
+
+console.log(obj)

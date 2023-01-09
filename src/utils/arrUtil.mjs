@@ -1,6 +1,6 @@
 import { isNull } from "./jsUtil.mjs";
 
-export const arrShallowClone = (arr = []) => [...arr];
+export const arrCloneShallow = (arr = []) => [...arr];
 
 export const arrIsEmpty = (arr = []) => arr.length === 0;
 
