@@ -8,6 +8,8 @@ export const arrRemoveIndex = (arr = [], index = 0, count = 1) => arr.splice(ind
 
 export const validateComparator = (comparator) => comparator ? comparator : () => 0;
 
+export const isArr = (arr) => Array.isArray(arr);
+
 export const forOfReverse = (arr, cb) => {
 	for (let index = arr.length - 1; index > -1; index--) {
 		cb(arr[index], index);
