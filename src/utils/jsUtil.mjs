@@ -2,7 +2,7 @@ import { isObject } from "./objUtil.mjs";
 
 export const isNull = (any) => any === null || any === undefined;
 
-export const deepClone = (any) => structuredClone(any);
+export const cloneDeep = (any) => structuredClone(any);
 
 export const vTypeOf = (any) => {
     if (any === null || any === undefined) return 'undefined';
