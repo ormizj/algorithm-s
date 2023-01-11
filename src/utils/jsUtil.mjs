@@ -73,7 +73,7 @@ export const isFunctionMsg = (func) => {
     if (isFunction(func)) {
         return true;
     } else if (func) {
-        console.error(`${from}: variable is not a function`);
+        console.error(`"${func}" variable is not a function`);
     }
 
     return false;
