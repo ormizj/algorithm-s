@@ -1,46 +1,41 @@
 import { isArr } from "./utils/arrUtil.mjs";
 
 
-/**
- * @param obj
- * @param value path of the object
- * @returns {*|*[]} a path to the obj value, or null if the value was not found
- */
-export const valuePath = (obj = {}, value) => pathHelper(obj, value, []);
 
-/**
- * @param obj
- * @param key path of the object
- * @returns {*|*[]} a path to the obj key, or null if key was not found
- */
-export const keyPath = (obj = {}, key) => pathHelper(obj, key, [], true);
-
-const pathHelper = (obj = {}, target, path = [], keyMode = false) => {
-    for (const key in obj) {
+const forInDeep = (obj, cb) => {
+    for (let key in obj) {
         if (!obj.hasOwnProperty(key)) continue;
         const value = obj[key];
 
-        if (isArr(obj)) {
-            path.push(Number(key));
-        } else {
-            path.push(key);
-        }
-
-        if (keyMode && key === target) return path;
-        else if (value === target) return path;
-
         if (typeof value === 'object') {
-            const res = pathHelper(value, target, path, keyMode);
-            if (res !== null) return res;
+            forInDeep(value, cb);
+        } else {
+            cb(value, key);
         }
-
-        path.pop();
     }
-
-    return null;
 }
 
+const forInDeepBreak = (obj, cb) => {
+    let stop = false;
 
+    const forInDeepBreakHelper = (obj) => {
+        for (let key in obj) {
+            if (stop === true) return;
+            if (!obj.hasOwnProperty(key)) continue;
+            const value = obj[key];
+
+            if (typeof value === 'object') {
+                forInDeepBreakHelper(value, cb);
+
+            } else {
+                const toBreak = cb(value, key);
+                if (toBreak === true) stop = true;
+            }
+        }
+    }
+
+    forInDeepBreakHelper(obj);
+}
 
 
 const obj = {
@@ -60,9 +55,13 @@ const obj = {
     }
 }
 
-const arr = [{ test2: 'abc' }, obj]
+const arr = [{ test3: 'yxz' }, obj]
 
-console.log(keyPath(arr, 'mostNested'))
-console.log(valuePath(arr, 'd'));
 
-// console.log(obj)
+forInDeepBreak(arr, (value, key) => {
+    console.log('iteration')
+    if (value === 'c') {
+        console.log('STOP')
+        return true
+    };
+})

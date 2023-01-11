@@ -632,7 +632,7 @@ export class CacheSearch {
 		let shortestList = null;
 
 		for (let foundListKey in foundLists) {
-			if (!foundLists.hasOwnProperty(foundListKey)) continue;
+			if (!Object.hasOwn(foundLists, foundListKey)) continue;
 			const foundList = foundLists[foundListKey];
 
 			//if sub string, state match and shorter list

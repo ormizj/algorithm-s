@@ -18,8 +18,8 @@ export const forOfReverse = (arr, cb) => {
 
 export const forOfReverseBreak = (arr, cb) => {
 	for (let index = arr.length - 1; index > -1; index--) {
-		const isBroken = cb(arr[index], index);
-		if (isBroken === true) break;
+		const toBreak = cb(arr[index], index);
+		if (toBreak === true) break;
 	}
 }
 

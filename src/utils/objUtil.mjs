@@ -5,16 +5,18 @@ export const isObject = (obj = {}) => obj !== null && !Array.isArray(obj) && typ
 
 export const objIsEmpty = (obj = {}) => {
     for (let objKey in obj) {
-        if (obj.hasOwnProperty(objKey)) return false;
+        if (hasOwn(obj, objKey)) return false;
     }
     return true;
 }
 
 export const objCloneShallow = (obj = {}) => Object.assign({}, obj);
 
+export const hasOwn = (obj, property) => Object.hasOwn(obj, property);
+
 const objExistDeep = (obj, target) => {
     for (let key in obj) {
-        if (!obj.hasOwnProperty(key)) continue;
+        if (!hasOwn(obj, key)) continue;
         const value = obj[key];
 
         if (value === target) {
@@ -40,7 +42,7 @@ const objEqualHelper = (obj, otherObj) => {
 
     if (typeof obj === 'object') {
         for (const objKey in obj) {
-            if (!Object.hasOwn(obj, objKey)) continue;
+            if (!hasOwn(obj, objKey)) continue;
             const value = obj[objKey];
             const otherValue = otherObj[objKey];
 
@@ -67,7 +69,7 @@ export const objEqualMessy = (obj, otherObj) => {
 const objEqualMessyHelper = (obj, flatArr) => {
     if (typeof obj === 'object') {
         for (const objKey in obj) {
-            if (!Object.hasOwn(obj, objKey)) continue;
+            if (!hasOwn(obj, objKey)) continue;
             const value = obj[objKey];
 
             if (typeof value === 'object') {
@@ -102,7 +104,7 @@ export const objProtoAttr = (any, attrType) => {
 
 export const forIn = (obj, cb) => {
     for (const key in obj) {
-        if (!Object.hasOwn(obj, key)) continue;
+        if (!hasOwn(obj, key)) continue;
 
         cb(obj[key], key);
     }
@@ -110,11 +112,46 @@ export const forIn = (obj, cb) => {
 
 export const forInBreak = (obj, cb) => {
     for (const key in obj) {
-        if (!Object.hasOwn(obj, key)) continue;
+        if (!hasOwn(obj, key)) continue;
 
-        const isBroken = cb(obj[key], key);
-        if (isBroken === true) break;
+        const toBreak = cb(obj[key], key);
+        if (toBreak === true) break;
     }
+}
+
+export const forInDeep = (obj, cb) => {
+    for (let key in obj) {
+        if (!obj.hasOwnProperty(key)) continue;
+        const value = obj[key];
+
+        if (typeof value === 'object') {
+            forInDeep(value, cb);
+        } else {
+            cb(value, key);
+        }
+    }
+}
+
+export const forInDeepBreak = (obj, cb) => {
+    let toStop = false;
+
+    const forInDeepBreakHelper = (obj) => {
+        for (let key in obj) {
+            if (toStop === true) return;
+            if (!obj.hasOwnProperty(key)) continue;
+            const value = obj[key];
+
+            if (typeof value === 'object') {
+                forInDeepBreakHelper(value, cb);
+
+            } else {
+                const toBreak = cb(value, key);
+                if (toBreak === true) toStop = true;
+            }
+        }
+    }
+
+    forInDeepBreakHelper(obj);
 }
 
 export const objSize = (obj) => {
@@ -139,7 +176,7 @@ export const keyPath = (obj = {}, key) => pathHelper(obj, key, [], true);
 
 const pathHelper = (obj = {}, target, path = [], keyMode = false) => {
     for (const key in obj) {
-        if (!obj.hasOwnProperty(key)) continue;
+        if (!hasOwn(obj, key)) continue;
         const value = obj[key];
 
         if (isArr(obj)) {

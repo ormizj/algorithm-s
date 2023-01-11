@@ -1,4 +1,5 @@
 import { cloneDeep } from "../jsUtil.mjs";
+import { hasOwn } from "../objUtil.mjs";
 
 /**
  * creates props as reference
@@ -9,9 +10,9 @@ import { cloneDeep } from "../jsUtil.mjs";
  */
 export const initProps = (sourceProps, defaultProps = {}) => {
 	for (const propKey in defaultProps) {
-		if (!defaultProps.hasOwnProperty(propKey)) continue;
+		if (!hasOwn(defaultProps, propKey)) continue;
 
-		if (!sourceProps.hasOwnProperty(propKey)) {
+		if (!hasOwn(sourceProps, propKey)) {
 			Vue.set(sourceProps, propKey, defaultProps[propKey]);
 		}
 	}
