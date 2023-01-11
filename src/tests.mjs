@@ -1,4 +1,5 @@
 import { isArr } from "./utils/arrUtil.mjs";
+import { hasOwn } from "./utils/objUtil.mjs";
 
 
 
@@ -15,26 +16,24 @@ const forInDeep = (obj, cb) => {
     }
 }
 
-const forInDeepBreak = (obj, cb) => {
-    let stop = false;
+export const forInDeepBreak = (obj, cb) => {
+    let toStop = false;
 
-    const forInDeepBreakHelper = (obj) => {
+    (function forInDeepBreakHelper(obj) {
         for (let key in obj) {
-            if (stop === true) return;
-            if (!obj.hasOwnProperty(key)) continue;
+            if (toStop === true) return;
+            if (!hasOwn(obj, key)) continue;
             const value = obj[key];
 
             if (typeof value === 'object') {
-                forInDeepBreakHelper(value, cb);
+                forInDeepBreakHelper(value);
 
             } else {
                 const toBreak = cb(value, key);
-                if (toBreak === true) stop = true;
+                if (toBreak === true) toStop = true;
             }
         }
-    }
-
-    forInDeepBreakHelper(obj);
+    })(obj)
 }
 
 
@@ -65,3 +64,5 @@ forInDeepBreak(arr, (value, key) => {
         return true
     };
 })
+
+

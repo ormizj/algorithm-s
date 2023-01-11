@@ -121,7 +121,7 @@ export const forInBreak = (obj, cb) => {
 
 export const forInDeep = (obj, cb) => {
     for (let key in obj) {
-        if (!obj.hasOwnProperty(key)) continue;
+        if (!hasOwn(obj, key)) continue;
         const value = obj[key];
 
         if (typeof value === 'object') {
@@ -135,23 +135,21 @@ export const forInDeep = (obj, cb) => {
 export const forInDeepBreak = (obj, cb) => {
     let toStop = false;
 
-    const forInDeepBreakHelper = (obj) => {
+    (function forInDeepBreakHelper(obj) {
         for (let key in obj) {
             if (toStop === true) return;
-            if (!obj.hasOwnProperty(key)) continue;
+            if (!hasOwn(obj, key)) continue;
             const value = obj[key];
 
             if (typeof value === 'object') {
-                forInDeepBreakHelper(value, cb);
+                forInDeepBreakHelper(value);
 
             } else {
                 const toBreak = cb(value, key);
                 if (toBreak === true) toStop = true;
             }
         }
-    }
-
-    forInDeepBreakHelper(obj);
+    })(obj)
 }
 
 export const objSize = (obj) => {
