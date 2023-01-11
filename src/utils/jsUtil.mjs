@@ -25,10 +25,10 @@ export const vTypeOf = (any) => {
 export const recursiveTimeout = (handler, timeout) => {
     let active = true;
 
-    (function loop() {
+    (function recursiveTimeoutHelper() {
         setTimeout(() => {
             if (active) {
-                loop();
+                recursiveTimeoutHelper();
                 handler();
             }
         }, timeout);
