@@ -4,8 +4,6 @@ export const arrCloneShallow = (arr = []) => [...arr];
 
 export const arrIsEmpty = (arr = []) => arr.length === 0;
 
-export const arrRemoveIndex = (arr = [], index = 0, count = 1) => arr.splice(index, count);
-
 export const validateComparator = (comparator) => comparator ? comparator : () => 0;
 
 export const isArr = (arr) => Array.isArray(arr);
@@ -28,11 +26,6 @@ export const arrFindIndex = (arr = [], element) => {
 		if (arr[i] === element) return i;
 	}
 	return -1;
-}
-
-export const arrRemove = (arr = [], element) => {
-	const index = arrFindIndex(arr, element);
-	arrRemoveIndex(arr, index);
 }
 
 export const arrValidate = (arr) => {

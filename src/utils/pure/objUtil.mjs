@@ -1,4 +1,4 @@
-import { arrRemove } from "./arrUtil.mjs";
+import { arrRemove } from "../mutation/arrUtil.mjs";
 import { vTypeOf } from "./jsUtil.mjs";
 
 export const isObject = (obj = {}) => obj !== null && !Array.isArray(obj) && typeof obj === 'object';

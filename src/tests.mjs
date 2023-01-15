@@ -1,5 +1,6 @@
-import { isArr } from "./utils/arrUtil.mjs";
-import { hasOwn } from "./utils/objUtil.mjs";
+import { isArr } from "./utils/pure/arrUtil.mjs";
+import { quickArray } from "./utils/classes/quickArray.mjs";
+import { hasOwn } from "./utils/pure/objUtil.mjs";
 
 
 
@@ -57,12 +58,15 @@ const obj = {
 const arr = [{ test3: 'yxz' }, obj]
 
 
-forInDeepBreak(arr, (value, key) => {
-    console.log('iteration')
-    if (value === 'c') {
-        console.log('STOP')
-        return true
-    };
-})
+// forInDeepBreak(arr, (value, key) => {
+//     console.log('iteration')
+//     if (value === 'c') {
+//         console.log('STOP')
+//         return true
+//     };
+// })
 
-
+const quicker = new quickArray({ srcArr: [5, 3, 2, 8, 9] });
+quicker.insert(123, 0)
+console.log(quicker.getSrcArr());
+console.log(quicker.getIndexMap());
