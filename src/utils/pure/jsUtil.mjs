@@ -1,4 +1,4 @@
-export const isNull = (any) => any === null || any === undefined;
+export const isNull = (any) => any === undefined || any === null;
 
 export const cloneDeep = (any) => structuredClone(any);
 
@@ -36,7 +36,6 @@ export const recursiveTimeout = (handler, timeout) => {
 }
 
 /**
- *
  * @param objArr an object or an array
  * @param {string[]} path
  * @returns {*}
@@ -66,14 +65,3 @@ export const setValueByPath = (objArr = {}, value, path = []) => {
 }
 
 export const isFunction = (func) => typeof func === 'function';
-
-export const isFunctionMsg = (func) => {
-    if (isFunction(func)) {
-        return true;
-    } else if (func) {
-        console.error(`"${func}" variable is not a function`);
-    }
-
-    return false;
-}
-

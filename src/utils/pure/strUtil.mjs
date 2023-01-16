@@ -8,6 +8,8 @@ export const strRemoveLastLetter = (str = '') => str.substring(0, str.length - 1
 
 export const strGetFirstWord = (str = '') => str.split(' ')[0];
 
+export const numericAddToStr = (numeric = '0' | 0, otherNumeric = '1' | 1) => `${BigInt(`${numeric}`) + BigInt(`${otherNumeric}`)}`;
+
 /**
  * Adds a child to html structured {String}. 
  * 

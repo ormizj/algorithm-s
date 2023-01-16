@@ -1,3 +1,5 @@
+import { isFunction } from "../../../utils/pure/jsUtil.mjs";
+
 /**
  * calls functions on the "context" param, can add arguments to the last function in the "functions" param
  * Example: callFunction(['word1','word2'], 'pop.charAt', 4);
@@ -24,4 +26,14 @@ export const getFunctionName = function (argument = arguments) {
     funcName = funcName.substring(0, funcName.indexOf('('));
 
     return funcName;
+}
+
+export const isFunctionMsg = (func) => {
+    if (isFunction(func)) {
+        return true;
+    } else if (func) {
+        console.error(`"${func}" variable is not a function`);
+    }
+
+    return false;
 }

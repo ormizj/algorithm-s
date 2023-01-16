@@ -1,5 +1,5 @@
 import { isArr } from "./utils/pure/arrUtil.mjs";
-import { quickArray } from "./utils/classes/quickArray.mjs";
+import { keyArray } from "./utils/classes/keyArray.mjs";
 import { hasOwn } from "./utils/pure/objUtil.mjs";
 
 
@@ -66,7 +66,7 @@ const arr = [{ test3: 'yxz' }, obj]
 //     };
 // })
 
-const quicker = new quickArray({ srcArr: [5, 3, 2, 8, 9] });
-quicker.insert(123, 0)
-console.log(quicker.getSrcArr());
-console.log(quicker.getIndexMap());
+const quicker = new keyArray({ arr: ['a', 'e', 'c', 'l', 'b'] });
+console.log(quicker.elementMap)
+console.log(quicker.indexMap)
+// quicker.insert(123, 0)
