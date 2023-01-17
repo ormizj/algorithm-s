@@ -66,7 +66,7 @@ const arr = [{ test3: 'yxz' }, obj]
 //     };
 // })
 
-const quicker = new keyArray({ arr: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] });
+const karr = new keyArray({ arr: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] });
 console.log(`
 
 
@@ -74,11 +74,11 @@ HERE
 
 
 `);
-quicker.insert([1, 2, 3], 2)
+karr.insert([1, 2, 3], 4)
 // console.log(quicker.elementMap)
 // console.log(quicker.indexMap)
 console.log(`
 `);
-console.table(quicker.toArray())
+console.table(karr.toArray())
 
 // quicker.insert(123, 0)

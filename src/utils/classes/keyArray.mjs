@@ -1,8 +1,7 @@
 import { arrRemoveIndex } from "../mutation/arrUtil.mjs";
 import { arrValidate, arrIsEmpty } from "../pure/arrUtil.mjs";
 import { getValueByPath, isNull } from "../pure/jsUtil.mjs";
-import { numericAddToStr } from "../pure/strUtil.mjs";
-import { forIn, hasOwn } from "../pure/objUtil.mjs";
+import { hasOwn } from "../pure/objUtil.mjs";
 
 export class keyArray {
     constructor({
@@ -23,11 +22,10 @@ export class keyArray {
 
     //TODO finish + testing
     insert(elements = [], index) {
-        index = this.#validateIndex(index);
+        index = this.#validateIndex(index, elements.length);
         elements = arrValidate(elements);
 
         const overwrittenElements = [];
-        let lastFilledIndex = index - 1;
         let indexesToMove = 0;
         let currentLength = this.length;
 
@@ -35,7 +33,6 @@ export class keyArray {
             // overwriting value in "elementMap"
             if (hasOwn(this.elementMap, index)) {
                 overwrittenElements.push(this.elementMap[index]);
-                lastFilledIndex++;
                 indexesToMove++;
 
                 // new value in "elementMap"
@@ -49,17 +46,18 @@ export class keyArray {
 
         // re-orgnize "indexMap" (if elements were overwritten)
         if (!arrIsEmpty(overwrittenElements)) {
-            index = currentLength;
+            let lastFilledIndex = index;
+            const targetIndex = lastFilledIndex - 1;
 
-            while (lastFilledIndex < --index) {
+            index = currentLength;
+            while (targetIndex < --index) {
                 const newIndex = index + indexesToMove;
                 this.#insertToMaps(this.elementMap[index], newIndex);
             }
 
-            index++;
             for (const overwrittenElement of overwrittenElements) {
-                this.#insertToMaps(overwrittenElement, index);
-                index++;
+                this.#insertToMaps(overwrittenElement, lastFilledIndex);
+                lastFilledIndex++;
             }
         }
 
@@ -97,8 +95,8 @@ export class keyArray {
     //TODO toArr
     //TODO sort
 
-    #validateIndex = (index, canBeEmptyIndex = true) => {
-        const maxIndex = canBeEmptyIndex ? this.length : this.length - 1;
+    #validateIndex = (index, indexingLength = 0, canBeEmptyIndex = true) => {
+        const maxIndex = canBeEmptyIndex ? this.length : this.length - 1 - indexingLength;
 
         if (isNull(index) || index >= maxIndex) return maxIndex;
         if (index < 0) return 0;
