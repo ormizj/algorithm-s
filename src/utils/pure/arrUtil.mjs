@@ -28,9 +28,11 @@ export const arrFindIndex = (arr = [], element) => {
 	return -1;
 }
 
-export const arrValidate = (arr) => {
+export const arrValidate = (arr) => Array.isArray(arr) ? arr : [arr];
+
+export const arrValidateSafe = (arr) => {
 	if (isNull(arr)) return [];
-	return Array.isArray(arr) ? arr : [arr]
+	return Array.isArray(arr) ? arr : [arr];
 }
 
 export const arrToStringDelimiter = (arr = [], delimiter = '') => {
