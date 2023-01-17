@@ -75,8 +75,8 @@ HERE
 
 `);
 karr.insert([1, 2, 3], 4)
-// console.log(quicker.elementMap)
-// console.log(quicker.indexMap)
+console.log(karr.elementMap)
+console.log(karr.indexMap)
 console.log(`
 `);
 console.table(karr.toArray())

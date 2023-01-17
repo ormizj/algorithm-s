@@ -20,9 +20,8 @@ export class keyArray {
         this.insert(arr);// convert array to "elementMap" + "indexMap"
     }
 
-    //TODO finish + testing
     insert(elements = [], index) {
-        index = this.#validateIndex(index, elements.length);
+        index = this.#validateIndex(index);
         elements = arrValidate(elements);
 
         const overwrittenElements = [];
@@ -95,8 +94,8 @@ export class keyArray {
     //TODO toArr
     //TODO sort
 
-    #validateIndex = (index, indexingLength = 0, canBeEmptyIndex = true) => {
-        const maxIndex = canBeEmptyIndex ? this.length : this.length - 1 - indexingLength;
+    #validateIndex = (index, canBeEmptyIndex = true) => {
+        const maxIndex = canBeEmptyIndex ? this.length : this.length - 1;
 
         if (isNull(index) || index >= maxIndex) return maxIndex;
         if (index < 0) return 0;
