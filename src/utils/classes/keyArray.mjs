@@ -6,11 +6,9 @@ import { hasOwn } from "../pure/objUtil.mjs";
 export class keyArray {
     constructor({
         arr = [],
-        keyPath = [],
-        keyStringFunc = (element) => `${element}`
+        elementToKey = (element) => `${element}`
     } = {}) {
-        this.keyPath = keyPath;// path to the value to be used as the "indexMap" key
-        this.keyStringFunc = keyStringFunc;// function to stringifiy the key before placed in the "indexMap"
+        this.elementToKey = elementToKey;// function to generate a key for the "indexMap"
 
         this.elementMap = {};// map containing the elements [key: index,    value:element]
         this.indexMap = {};// map containing the indexes    [key: string,   value:index]
@@ -25,8 +23,8 @@ export class keyArray {
         elements = arrValidate(elements);
 
         const overwrittenElements = [];
-        let indexesToMove = 0;
         let currentLength = this.length;
+        let indexesToMove = 0;
 
         for (const element of elements) {
             // overwriting value in "elementMap"
@@ -65,7 +63,7 @@ export class keyArray {
 
     //TODO how to remove from middle
     remove = (index) => {
-        const mapKey = this.#getMapKey(this.srcArr[index]);
+        const mapKey = this.elementToKey(this.srcArr[index]);
         delete this.indexMap[mapKey];
 
         arrRemoveIndex(this.srcArrarr, index);
@@ -91,7 +89,7 @@ export class keyArray {
     }
 
     //TODO forEach
-    //TODO toArr
+    //TODO forEachBreak
     //TODO sort
 
     #validateIndex = (index, canBeEmptyIndex = true) => {
@@ -102,16 +100,12 @@ export class keyArray {
         return index;
     }
 
+    //TODO make duplicated element support
     #insertToMaps = (element, index) => {
         this.elementMap[index] = element;
-        const key = this.#getMapKey(element);
+        const key = this.elementToKey(element);
         this.indexMap[key] = index;
     }
-
-    #getMapKey = (element) => {
-        const key = getValueByPath(element, this.indexPath);
-        return this.keyStringFunc(key);
-    };
 
     find = (index) => this.elementMap[index];
     size = () => this.length;
