@@ -3,6 +3,8 @@ import { arrValidate, arrIsEmpty, isArr, arrIndexToInsertNum } from "../pure/arr
 import { isNull } from "../pure/jsUtil.mjs";
 import { hasOwn } from "../pure/objUtil.mjs";
 
+//TODO add "at" support, to support functions
+
 //TODO add unique (keySet class)
 export class keyArray {
     constructor({
@@ -67,7 +69,7 @@ export class keyArray {
         this.length += elements.length;
     }
 
-    //TODO how to remove from middle
+    //TODO create the function
     remove(index) {
         const mapKey = this.elementToKey(this.srcArr[index]);
         delete this.indexMap[mapKey];
@@ -88,9 +90,15 @@ export class keyArray {
     //TODO remove by key
 
     //TODO testing with an object
-    // key is determined by indexPath
-    findByKey(key) {
-        const index = mapKey[key];
+    /**
+     * 
+     * @param {''} key is determined by {indexPath} 
+     * @param {Number} position of the element (0 for first, -1 for last...)
+     * @returns 
+     * @see Array.at()
+     */
+    getByKey(key, position = 0) {
+        const index = mapKey[key].at(position);
         return this.elementMap[index];
     }
 
@@ -102,7 +110,7 @@ export class keyArray {
         const maxIndex = canBeEmptyIndex ? this.length : this.length - 1;
 
         if (isNull(index) || index >= maxIndex) return maxIndex;
-        if (index < 0) return 0;
+        if (index < 0) return index;
         return index;
     }
 
@@ -131,9 +139,11 @@ export class keyArray {
         }
     }
 
-    #getIndexMapSortedIndex = (key, index) => arrIndexToInsertNum(this.indexMap[key], index);
+    //TODO add "at" function
 
-    find = (index) => this.elementMap[index];
+    get = (index) => this.elementMap[index];
     size = () => this.length;
+
+    #getIndexMapSortedIndex = (key, index) => arrIndexToInsertNum(this.indexMap[key], index);
 }
 
