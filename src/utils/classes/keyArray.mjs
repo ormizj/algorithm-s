@@ -51,6 +51,8 @@ export class keyArray {
             index = currentLength;
             while (targetIndex < --index) {
                 const newIndex = index + indexesToMove;
+
+                // deleting from maps before inserting, for performance
                 const element = this.elementMap[index];
                 this.#deleteFromMaps(index);
                 this.#insertToMaps(element, newIndex);
