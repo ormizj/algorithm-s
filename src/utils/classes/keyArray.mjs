@@ -116,7 +116,6 @@ export class keyArray {
         }
     }
 
-    //TODO #1
     #deleteFromMaps(index) {
         const element = this.elementMap[index];
         delete this.elementMap[index];
