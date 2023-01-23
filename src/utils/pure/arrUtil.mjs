@@ -8,6 +8,28 @@ export const validateComparator = (comparator) => comparator ? comparator : () =
 
 export const isArr = (arr) => Array.isArray(arr);
 
+/**
+ * @param {[Number]} sortedArr 
+ * @param {Number} num 
+ * @returns the index of the {sortedArr} to insert the {num} to
+ */
+export const arrIndexToInsertNum = (sortedArr, num) => {
+	let high = sortedArr.length;
+	let low = 0;
+
+	while (low < high) {
+		const mid = (low + high) >>> 1;
+
+		if (sortedArr[mid] < num) {
+			low = mid + 1;
+		} else {
+			high = mid;
+		}
+	}
+
+	return low;
+}
+
 export const forOfReverse = (arr, cb) => {
 	for (let index = arr.length - 1; index > -1; index--) {
 		cb(arr[index], index);

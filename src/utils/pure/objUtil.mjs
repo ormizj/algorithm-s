@@ -1,4 +1,4 @@
-import { arrRemove } from "../mutation/arrUtil.mjs";
+import { arrRemoveElement } from "../mutation/arrUtil.mjs";
 import { vTypeOf } from "./jsUtil.mjs";
 
 export const isObject = (obj = {}) => obj !== null && !Array.isArray(obj) && typeof obj === 'object';
@@ -77,7 +77,7 @@ const objEqualMessyHelper = (obj, flatArr) => {
 
             } else {
                 if (!objExistDeep(flatArr, value)) return false;
-                arrRemove(flatArr, value);
+                arrRemoveElement(flatArr, value);
             }
         }
     }

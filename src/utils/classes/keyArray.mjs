@@ -1,8 +1,9 @@
-import { arrRemoveIndex } from "../mutation/arrUtil.mjs";
-import { arrValidate, arrIsEmpty } from "../pure/arrUtil.mjs";
-import { getValueByPath, isNull } from "../pure/jsUtil.mjs";
+import { arrInsert, arrRemove } from "../mutation/arrUtil.mjs";
+import { arrValidate, arrIsEmpty, isArr, arrIndexToInsertNum } from "../pure/arrUtil.mjs";
+import { isNull } from "../pure/jsUtil.mjs";
 import { hasOwn } from "../pure/objUtil.mjs";
 
+//TODO add unique (keySet class)
 export class keyArray {
     constructor({
         arr = [],
@@ -30,6 +31,7 @@ export class keyArray {
             // overwriting value in "elementMap"
             if (hasOwn(this.elementMap, index)) {
                 overwrittenElements.push(this.elementMap[index]);
+                this.#deleteFromMaps(index);
                 indexesToMove++;
 
                 // new value in "elementMap"
@@ -49,11 +51,13 @@ export class keyArray {
             index = currentLength;
             while (targetIndex < --index) {
                 const newIndex = index + indexesToMove;
-                this.#insertToMaps(this.elementMap[index], newIndex);
+                const element = this.elementMap[index];
+                this.#deleteFromMaps(index);
+                this.#insertToMaps(element, newIndex);
             }
 
             for (const overwrittenElement of overwrittenElements) {
-                this.#insertToMaps(overwrittenElement, lastFilledIndex);
+                this.#insertToMaps(overwrittenElement, lastFilledIndex, true);
                 lastFilledIndex++;
             }
         }
@@ -62,14 +66,14 @@ export class keyArray {
     }
 
     //TODO how to remove from middle
-    remove = (index) => {
+    remove(index) {
         const mapKey = this.elementToKey(this.srcArr[index]);
         delete this.indexMap[mapKey];
 
-        arrRemoveIndex(this.srcArrarr, index);
+        arrRemove(this.srcArrarr, index);
     }
 
-    toArray = () => {
+    toArray() {
         const arr = [];
         let index = -1;
         while (++index < this.length) {
@@ -82,7 +86,7 @@ export class keyArray {
     //TODO remove by key
 
     //TODO testing with an object
-    //key is determined by indexPath
+    // key is determined by indexPath
     findByKey(key) {
         const index = mapKey[key];
         return this.elementMap[index];
@@ -92,7 +96,7 @@ export class keyArray {
     //TODO forEachBreak
     //TODO sort
 
-    #validateIndex = (index, canBeEmptyIndex = true) => {
+    #validateIndex(index, canBeEmptyIndex = true) {
         const maxIndex = canBeEmptyIndex ? this.length : this.length - 1;
 
         if (isNull(index) || index >= maxIndex) return maxIndex;
@@ -100,12 +104,33 @@ export class keyArray {
         return index;
     }
 
-    //TODO make duplicated element support
-    #insertToMaps = (element, index) => {
+    #insertToMaps(element, index) {
         this.elementMap[index] = element;
+
         const key = this.elementToKey(element);
-        this.indexMap[key] = index;
+        if (isArr(this.indexMap[key])) {
+            arrInsert(this.indexMap[key], this.#getIndexMapSortedIndex(key, index), index);
+
+        } else {
+            this.indexMap[key] = [index];
+        }
     }
+
+    //TODO #1
+    #deleteFromMaps(index) {
+        const element = this.elementMap[index];
+        delete this.elementMap[index];
+
+        const key = this.elementToKey(element);
+        if (this.indexMap[key].length > 1) {
+            arrRemove(this.indexMap[key], this.#getIndexMapSortedIndex(key, index))
+
+        } else {
+            delete this.indexMap[key];
+        }
+    }
+
+    #getIndexMapSortedIndex = (key, index) => arrIndexToInsertNum(this.indexMap[key], index);
 
     find = (index) => this.elementMap[index];
     size = () => this.length;

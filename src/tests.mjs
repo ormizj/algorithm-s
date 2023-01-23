@@ -66,7 +66,7 @@ const arr = [{ test3: 'yxz' }, obj]
 //     };
 // })
 
-const karr = new keyArray({ arr: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] });
+const karr = new keyArray({ arr: ['a', 'b', 'c', 'd', 'e', 'f', 'j', 'g', 'h', 'i', 'j'] });
 console.log(`
 
 
