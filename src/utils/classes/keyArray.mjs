@@ -3,7 +3,7 @@ import { arrValidate, arrIsEmpty, isArr, arrIndexToInsertNum } from "../pure/arr
 import { isNull } from "../pure/jsUtil.mjs";
 import { hasOwn } from "../pure/objUtil.mjs";
 
-//TODO add "at" support, to support functions
+//TODO functions to get infromation related to indexMap
 
 //TODO add unique (keySet class)
 export class keyArray {

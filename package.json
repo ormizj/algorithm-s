@@ -12,6 +12,7 @@
     "chalk": "5.1.2"
   },
   "devDependencies": {
+    "jest": "^29.4.0",
     "nodemon": "^2.0.20"
   }
 }
