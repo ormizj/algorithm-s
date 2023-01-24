@@ -1,6 +1,6 @@
-import { isArr } from "./utils/pure/arrUtil.mjs";
-import { keyArray } from "./utils/classes/keyArray.mjs";
-import { hasOwn } from "./utils/pure/objUtil.mjs";
+import { isArr } from "./utils/pure/arrUtil.js";
+import { keyArray } from "./utils/classes/KeyArray.js";
+import { hasOwn } from "./utils/pure/objUtil.js";
 
 
 

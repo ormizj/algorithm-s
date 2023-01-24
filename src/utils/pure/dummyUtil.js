@@ -1,5 +1,5 @@
 import { vTypeOf } from "./jsUtil.js";
-import { numRandInclusive } from "./numUtil.mjs";
+import { numRandInclusive } from "./numUtil.js";
 import { forIn } from "./objUtil.js";
 
 /**

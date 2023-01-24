@@ -1,7 +1,7 @@
-import { arrInsert, arrRemove } from "../mutation/arrUtil.mjs";
-import { arrValidate, arrIsEmpty, isArr, arrIndexToInsertNum } from "../pure/arrUtil.mjs";
-import { isNull } from "../pure/jsUtil.mjs";
-import { hasOwn } from "../pure/objUtil.mjs";
+import { arrInsert, arrRemove } from "../mutation/arrUtil.js";
+import { arrValidate, arrIsEmpty, isArr, arrIndexToInsertNum } from "../pure/arrUtil.js";
+import { isNull } from "../pure/jsUtil.js";
+import { hasOwn } from "../pure/objUtil.js";
 
 //TODO functions to get infromation related to indexMap
 

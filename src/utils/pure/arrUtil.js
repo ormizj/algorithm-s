@@ -1,4 +1,4 @@
-import { isNull } from "./jsUtil.mjs";
+import { isNull } from "./jsUtil.js";
 
 export const arrCloneShallow = (arr = []) => [...arr];
 

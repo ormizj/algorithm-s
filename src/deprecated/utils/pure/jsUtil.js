@@ -1,4 +1,4 @@
-import { isFunction } from "../../../utils/pure/jsUtil.mjs";
+import { isFunction } from "../../../utils/pure/jsUtil.js";
 
 /**
  * calls functions on the "context" param, can add arguments to the last function in the "functions" param

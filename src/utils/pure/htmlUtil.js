@@ -1,5 +1,5 @@
-import { numIsBetween } from "./numUtil.mjs";
-import { arrValidate } from "./arrUtil.mjs";
+import { numIsBetween } from "./numUtil.js";
+import { arrValidate } from "./arrUtil.js";
 
 export const findChild = (element = HTMLElement, className = '') => {
     for (let child of element.children) {

@@ -1,5 +1,5 @@
-import { cloneDeep } from "../jsUtil.mjs";
-import { hasOwn } from "../objUtil.mjs";
+import { cloneDeep } from "../jsUtil.js";
+import { hasOwn } from "../objUtil.js";
 
 /**
  * creates props as reference
