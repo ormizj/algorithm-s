@@ -1,11 +1,11 @@
 {
-  "name": "leet-code",
+  "name": "algorithm-s",
   "version": "1.0.0",
   "description": "Contains various algorithms ranging from algorithmic questions to various utilities",
   "main": "tests.js",
   "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll"
   },
   "author": "Or Mizrahi",
   "license": "ISC",
