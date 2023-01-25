@@ -3,10 +3,8 @@ import { arrValidate, arrIsEmpty, isArr, arrIndexToInsertNum } from "../pure/arr
 import { isNull } from "../pure/jsUtil.js";
 import { hasOwn } from "../pure/objUtil.js";
 
-//TODO functions to get infromation related to indexMap
-
-//TODO add unique (keySet class)
-export class keyArray {
+//TODO add unique version (keySet class)
+export default class keyArray {
     constructor({
         arr = [],
         elementToKey = (element) => `${element}`
@@ -21,7 +19,11 @@ export class keyArray {
         this.insert(arr);// convert array to "elementMap" + "indexMap"
     }
 
-    insert(elements = [], index) {
+    /* PUBLIC FUNCTIONS */
+
+    //TODO insert by key
+
+    insert(elements = [], index = 0) {
         index = this.#validateIndex(index);
         elements = arrValidate(elements);
 
@@ -69,13 +71,24 @@ export class keyArray {
         this.length += elements.length;
     }
 
+    //TODO replace by key
+
     //TODO create the function
-    remove(index) {
+    replace(elements = [], index) {
+
+    }
+
+    //TODO remove by key
+
+    //TODO create the function
+    remove(index = 0) {
         const mapKey = this.elementToKey(this.srcArr[index]);
         delete this.indexMap[mapKey];
 
         arrRemove(this.srcArrarr, index);
     }
+
+    //TODO sort
 
     toArray() {
         const arr = [];
@@ -87,26 +100,62 @@ export class keyArray {
         return arr;
     }
 
-    //TODO remove by key
-
-    //TODO testing with an object
-    /**
-     * 
-     * @param {''} key is determined by {indexPath} 
-     * @param {Number} position of the element (0 for first, -1 for last...)
-     * @returns 
-     * @see Array.at()
-     */
-    getByKey(key, position = 0) {
-        const index = mapKey[key].at(position);
-        return this.elementMap[index];
+    forEach(callback = (element, index = 0) => { }) {
+        let index = -1;
+        while (++index < this.length) {
+            callback(this.elementMap[index], index);
+        }
     }
 
-    //TODO forEach
-    //TODO forEachBreak
-    //TODO sort
+    forEachBreak(callback = (element, index) => true) {
+        let index = -1;
+        while (++index < this.length) {
+            const toBreak = callback(this.elementMap[index], index);
+            if (toBreak === true) break;
+        }
+    }
 
-    #validateIndex(index, canBeEmptyIndex = true) {
+    /* KEY FUNCTIONS */
+
+    /**
+    * @param {''} key is determined by {indexPath} 
+    * @param {Number} position of the element (0 for first, -1 for last...)
+    * @returns 
+    */
+    getByKey(key = '', position = 0) {
+        const index = this.indexMap[key][position];
+        return this.elementMap[index];
+    }
+    /** returns {true} if the key exists*/
+    keyExists = (key = '') => hasOwn(this.indexMap[key]);
+    /** returns the key array*/
+    getKeyArray = (key = '') => this.indexMap[key];
+    /** returns the size of the key array*/
+    getKeySize = (key = '') => this.indexMap[key].length;
+    /** returns the index of the key array*/
+    getKeyIndex = (key = '', index = 0) => this.indexMap[key][index];
+    /** returns the first index of the key array*/
+    getKeyFirstIndex = (key = '') => this.indexMap[key][0];
+    /** returns the last index of the key array */
+    getKeyLastIndex = (key = '') => this.indexMap[key][this.getKeySize(key) - 1];
+
+    /* INDEX FUNCTIONS */
+
+    /**
+     * @param {Number} position positive or negative integers
+     * @returns 
+     * @see Array.at
+     */
+    at = (position = 0) => position >= 0 ? this.elementMap[position] : this.elementMap[this.length + position];
+    get = (index = 0) => this.elementMap[index];
+    getFirst = () => this.elementMap[0];
+    getLast = () => this.elementMap[this.length - 1];
+    size = () => this.length;
+    exists = (index = 0) => hasOwn(this.elementMap, index);
+
+    /* PRIVATE FUNCTIONS */
+
+    #validateIndex(index = 0, canBeEmptyIndex = true) {
         const maxIndex = canBeEmptyIndex ? this.length : this.length - 1;
 
         if (isNull(index) || index >= maxIndex) return maxIndex;
@@ -114,7 +163,7 @@ export class keyArray {
         return index;
     }
 
-    #insertToMaps(element, index) {
+    #insertToMaps(element, index = 0) {
         this.elementMap[index] = element;
 
         const key = this.elementToKey(element);
@@ -126,7 +175,7 @@ export class keyArray {
         }
     }
 
-    #deleteFromMaps(index) {
+    #deleteFromMaps(index = 0) {
         const element = this.elementMap[index];
         delete this.elementMap[index];
 
@@ -139,11 +188,6 @@ export class keyArray {
         }
     }
 
-    //TODO add "at" function
-
-    get = (index) => this.elementMap[index];
-    size = () => this.length;
-
-    #getIndexMapSortedIndex = (key, index) => arrIndexToInsertNum(this.indexMap[key], index);
+    #getIndexMapSortedIndex = (key = '', index = 0) => arrIndexToInsertNum(this.indexMap[key], index);
 }
 

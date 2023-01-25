@@ -1,5 +1,5 @@
 import { isArr } from "./utils/pure/arrUtil.js";
-import { keyArray } from "./utils/classes/KeyArray.js";
+import KeyArray from "./utils/classes/KeyArray.js";
 import { hasOwn } from "./utils/pure/objUtil.js";
 
 
@@ -66,7 +66,7 @@ const arr = [{ test3: 'yxz' }, obj]
 //     };
 // })
 
-const karr = new keyArray({ arr: ['a', 'b', 'c', 'd', 'e', 'f', 'j', 'g', 'h', 'i', 'j'] });
+const karr = new KeyArray({ arr: ['a', 'b', 'c', 'd', 'e', 'f', 'j', 'g', 'h', 'i', 'j'] });
 console.log(`
 
 
@@ -80,5 +80,7 @@ console.log(karr.indexMap)
 console.log(`
 `);
 console.table(karr.toArray())
+
+console.log(karr.at(-1));
 
 // quicker.insert(123, 0)
