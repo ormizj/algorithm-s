@@ -74,13 +74,19 @@ HERE
 
 
 `);
-karr.insert([1, 2, 3], 4)
+console.table(karr.toArray())
+
+karr.insertByKey([1, 2, 3], 'j')
+
+karr.replaceByKey(['new1', 'new2', 'new3'], 'g');
+
 console.log(karr.elementMap)
 console.log(karr.indexMap)
 console.log(`
 `);
+console.log(karr.length);
 console.table(karr.toArray())
 
-console.log(karr.at(-1));
 
 // quicker.insert(123, 0)
+
