@@ -56,12 +56,7 @@ export default class keyArray {
 
             index = currentLength;
             while (lastFilledIndex < --index) {
-                const newIndex = index + indexesToMove;
-
-                // deleting from maps before inserting, for performance
-                const element = this.elementMap[index];
-                this.#deleteFromMaps(index);
-                this.#insertToMaps(element, newIndex);
+                this.replaceInMaps(index, index + indexesToMove);
             }
 
             lastFilledIndex++;
@@ -95,7 +90,7 @@ export default class keyArray {
         }
     }
 
-    //TODO remove by key
+    removeByKey = (key, position, amount) => this.remove(this.getKeyIndex(key, position), amount);
 
     //TODO test deleting at the end of the KeyArray
     //TODO create the function
@@ -105,7 +100,6 @@ export default class keyArray {
         let indexesToMove = 0;
         let amountDeleted = amount;
 
-        // console.log(this.elementMap);
         while (hasOwn(this.elementMap, index) && amount > 0) {
             this.#deleteFromMaps(index);
             indexesToMove++;
@@ -116,12 +110,7 @@ export default class keyArray {
         let newLength = this.length + amount - amountDeleted;
         index--;//TODO fix for multiple amounts
         while (index++ < newLength) {
-            const newIndex = index - indexesToMove;
-
-            // deleting from maps before inserting, for performance
-            const element = this.elementMap[index];
-            this.#deleteFromMaps(index);
-            this.#insertToMaps(element, newIndex);
+            this.replaceInMaps(index, index - indexesToMove);
         }
 
         this.length = newLength;
@@ -219,6 +208,13 @@ export default class keyArray {
         } else {
             this.indexMap[key] = [index];
         }
+    }
+
+    #replaceInMaps(index, newIndex) {
+        // deleting from maps before inserting, for performance
+        const element = this.elementMap[index];
+        this.#deleteFromMaps(index);
+        this.#insertToMaps(element, newIndex);
     }
 
     #deleteFromMaps(index) {
