@@ -5,13 +5,13 @@ import { hasOwn } from "../pure/objUtil.js";
 export default class keyArray {
 
     /**
-     * @param {[]} arr
+     * @param {[]} array
      * @param {(element) => `${element}`} elementToKey
      */
     constructor({
-        arr,
+        array = [],
         elementToKey = (element) => `${element}`
-    }) {
+    } = {}) {
         this.elementToKey = elementToKey;// function to generate a key for the "indexMap"
 
         this.elementMap = {};// map containing the elements [key: index,    value:element]
@@ -19,7 +19,7 @@ export default class keyArray {
 
         this.length = 0;// length of the keyArray
 
-        this.insert(arr);// convert array to "elementMap" + "indexMap"
+        this.insert(array);// convert array to "elementMap" + "indexMap"
     }
 
     /* PUBLIC FUNCTIONS */
@@ -52,11 +52,10 @@ export default class keyArray {
 
         // re-orgnize "indexMap" (if elements were overwritten)
         if (!arrIsEmpty(overwrittenElements)) {
-            let lastFilledIndex = index;
-            const targetIndex = lastFilledIndex - 1;
+            let lastFilledIndex = index - 1;
 
             index = currentLength;
-            while (targetIndex < --index) {
+            while (lastFilledIndex < --index) {
                 const newIndex = index + indexesToMove;
 
                 // deleting from maps before inserting, for performance
@@ -65,6 +64,7 @@ export default class keyArray {
                 this.#insertToMaps(element, newIndex);
             }
 
+            lastFilledIndex++;
             for (const overwrittenElement of overwrittenElements) {
                 this.#insertToMaps(overwrittenElement, lastFilledIndex, true);
                 lastFilledIndex++;
@@ -97,12 +97,34 @@ export default class keyArray {
 
     //TODO remove by key
 
+    //TODO test deleting at the end of the KeyArray
     //TODO create the function
-    remove(index) {
-        const mapKey = this.elementToKey(this.srcArr[index]);
-        delete this.indexMap[mapKey];
+    remove(index, amount = 1) {
+        index = this.#validateIndex(index, false);
 
-        arrRemove(this.srcArrarr, index);
+        let indexesToMove = 0;
+        let amountDeleted = amount;
+
+        // console.log(this.elementMap);
+        while (hasOwn(this.elementMap, index) && amount > 0) {
+            this.#deleteFromMaps(index);
+            indexesToMove++;
+            index++;
+            amount--;
+        }
+
+        let newLength = this.length + amount - amountDeleted;
+        index--;//TODO fix for multiple amounts
+        while (index++ < newLength) {
+            const newIndex = index - indexesToMove;
+
+            // deleting from maps before inserting, for performance
+            const element = this.elementMap[index];
+            this.#deleteFromMaps(index);
+            this.#insertToMaps(element, newIndex);
+        }
+
+        this.length = newLength;
     }
 
     //TODO sort (mergeSort)
@@ -120,7 +142,6 @@ export default class keyArray {
     }
 
     /**
-     * 
      * @param {(element, index)} callback 
      */
     forEach(callback) {
@@ -192,7 +213,7 @@ export default class keyArray {
         this.elementMap[index] = element;
 
         const key = this.elementToKey(element);
-        if (isArr(this.indexMap[key])) {
+        if (hasOwn(this.indexMap, key)) {
             arrInsert(this.indexMap[key], this.#getIndexMapSortedIndex(key, index), index);
 
         } else {

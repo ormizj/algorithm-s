@@ -66,7 +66,7 @@ const arr = [{ test3: 'yxz' }, obj]
 //     };
 // })
 
-const karr = new KeyArray({ arr: ['a', 'b', 'c', 'd', 'e', 'f', 'j', 'g', 'h', 'i', 'j'] });
+const karr = new KeyArray({ array: ['a', 'b', 'c', 'd', 'e', 'f', 'j', 'g', 'h', 'i', 'j', 'k'] });
 console.log(`
 
 
@@ -76,9 +76,11 @@ HERE
 `);
 console.table(karr.toArray())
 
-karr.insertByKey([1, 2, 3], 'j')
+karr.insertByKey([1, 2, 3, 4, 5, 6, 7], 'k')
 
-karr.replaceByKey(['new1', 'new2', 'new3'], 'g');
+// karr.replaceByKey(['new1', 'new2', 'new3'], 'g');
+
+karr.remove(9, 1)
 
 console.log(karr.elementMap)
 console.log(karr.indexMap)
