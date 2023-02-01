@@ -80,7 +80,7 @@ karr.insertByKey([1, 2, 3, 4, 5, 6, 7], 'k')
 
 // karr.replaceByKey(['new1', 'new2', 'new3'], 'g');
 
-// karr.remove(9, 1)
+// karr.removeAllByKey('j', 5)
 
 console.log(karr.elementMap)
 console.log(karr.indexMap)

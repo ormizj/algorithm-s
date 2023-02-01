@@ -26,6 +26,8 @@ export default class keyArray {
 
     insertByKey = (elements, key, position) => this.insert(elements, this.getKeyIndex(key, position));
 
+    //TODO insertAllByKey
+
     insert(elements, index) {
         index = this.#validateIndex(index);
         elements = arrValidate(elements);
@@ -56,7 +58,7 @@ export default class keyArray {
 
             index = currentLength;
             while (lastFilledIndex < --index) {
-                this.replaceInMaps(index, index + indexesToMove);
+                this.#moveInMaps(index, index + indexesToMove);
             }
 
             lastFilledIndex++;
@@ -70,6 +72,8 @@ export default class keyArray {
     }
 
     replaceByKey = (elements, key, position) => this.replace(elements, this.getKeyIndex(key, position));
+
+    //TODO replaceAllByKey
 
     replace(elements, index) {
         index = this.#validateIndex(index);
@@ -92,8 +96,14 @@ export default class keyArray {
 
     removeByKey = (key, position, amount) => this.remove(this.getKeyIndex(key, position), amount);
 
-    //TODO test deleting at the end of the KeyArray
-    //TODO create the function
+    removeAllByKey = (key, amount, firstToLast = true) => {
+        const getKeyFunction = firstToLast ? this.getKeyFirstIndex : this.getKeyLastIndex;
+
+        for (let elementIndex; elementIndex = getKeyFunction(key);) {
+            this.remove(elementIndex, amount);
+        }
+    }
+
     remove(index, amount = 1) {
         index = this.#validateIndex(index, false);
 
@@ -107,13 +117,12 @@ export default class keyArray {
             amount--;
         }
 
-        let newLength = this.length + amount - amountDeleted;
-        index--;//TODO fix for multiple amounts
-        while (index++ < newLength) {
-            this.replaceInMaps(index, index - indexesToMove);
+        index--;
+        while (++index < this.length) {
+            this.#moveInMaps(index, index - indexesToMove);
         }
 
-        this.length = newLength;
+        this.length += amount - amountDeleted;
     }
 
     //TODO sort (mergeSort)
@@ -172,9 +181,9 @@ export default class keyArray {
     /** returns the index of the key array, position optional*/
     getKeyIndex = (key, position = 0) => this.indexMap[key][position];
     /** returns the first index of the key array*/
-    getKeyFirstIndex = (key) => this.indexMap[key][0];
+    getKeyFirstIndex = (key) => this.indexMap[key]?.[0];
     /** returns the last index of the key array */
-    getKeyLastIndex = (key) => this.indexMap[key][this.getKeySize(key) - 1];
+    getKeyLastIndex = (key) => this.indexMap[key]?.[this.getKeySize(key) - 1];
 
     /* INDEX FUNCTIONS */
 
@@ -210,7 +219,7 @@ export default class keyArray {
         }
     }
 
-    #replaceInMaps(index, newIndex) {
+    #moveInMaps(index, newIndex) {
         // deleting from maps before inserting, for performance
         const element = this.elementMap[index];
         this.#deleteFromMaps(index);
