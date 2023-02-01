@@ -96,11 +96,9 @@ export default class keyArray {
 
     removeByKey = (key, position, amount) => this.remove(this.getKeyIndex(key, position), amount);
 
-    removeAllByKey = (key, amount, firstToLast = true) => {
-        const getKeyFunction = firstToLast ? this.getKeyFirstIndex : this.getKeyLastIndex;
-
-        for (let elementIndex; elementIndex = getKeyFunction(key);) {
-            this.remove(elementIndex, amount);
+    removeAllByKey = (key, amount) => {
+        while (this.keyExists(key)) {
+            this.remove(this.getKeyLastIndex(key), amount);
         }
     }
 
@@ -173,7 +171,7 @@ export default class keyArray {
         return this.elementMap[index];
     }
     /** returns {true} if the key exists*/
-    keyExists = (key) => hasOwn(this.indexMap[key]);
+    keyExists = (key) => hasOwn(this.indexMap, key);
     /** returns the key array*/
     getKeyArray = (key) => this.indexMap[key];
     /** returns the size of the key array*/
@@ -181,9 +179,9 @@ export default class keyArray {
     /** returns the index of the key array, position optional*/
     getKeyIndex = (key, position = 0) => this.indexMap[key][position];
     /** returns the first index of the key array*/
-    getKeyFirstIndex = (key) => this.indexMap[key]?.[0];
+    getKeyFirstIndex = (key) => this.indexMap[key][0];
     /** returns the last index of the key array */
-    getKeyLastIndex = (key) => this.indexMap[key]?.[this.getKeySize(key) - 1];
+    getKeyLastIndex = (key) => this.indexMap[key][this.getKeySize(key) - 1];
 
     /* INDEX FUNCTIONS */
 
