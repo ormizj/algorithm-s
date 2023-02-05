@@ -15,7 +15,7 @@ export default class keyArray {
         this.elementToKey = elementToKey;// function to generate a key for the "indexMap"
 
         this.elementMap = {};// map containing the elements [key: index,    value:element]
-        this.indexMap = {};// map containing the indexes    [key: string,   value:index]
+        this.indexMap = {};//   map containing the indexes  [key: string,   value:index]
 
         this.length = 0;// length of the keyArray
 
@@ -98,7 +98,21 @@ export default class keyArray {
 
     removeAllByKey = (key, amount) => {
         while (this.keyExists(key)) {
-            this.remove(this.getKeyLastIndex(key), amount);
+            let tempAmount = 0;
+            let firstKeyIndex = this.getKeyFirstIndex(key);
+
+            if (firstKeyIndex !== this.getKeyLastIndex(key)) {
+                while (++tempAmount < amount) {
+                    if (this.elementMap[firstKeyIndex] === this.elementMap[firstKeyIndex + tempAmount]) {
+                        break;
+                    }
+                }
+
+            } else {
+                tempAmount = amount;
+            }
+
+            this.remove(firstKeyIndex, tempAmount);
         }
     }
 

@@ -76,17 +76,18 @@ HERE
 `);
 console.table(karr.toArray())
 
-karr.insertByKey([1, 2, 3, 4, 5, 6, 7], 'k')
+// karr.insertByKey([1, 2, 3, 4, 5, 6, 7], 'k')
 
 // karr.replaceByKey(['new1', 'new2', 'new3'], 'g');
-
-karr.removeAllByKey('j', 5)
+console.log(karr.keyExists('j'));
+karr.removeAllByKey('j', 4)
 
 console.log(karr.elementMap)
 console.log(karr.indexMap)
 console.log(`
 `);
 console.log(karr.length);
+
 console.table(karr.toArray())
 
 
