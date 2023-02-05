@@ -99,17 +99,14 @@ export default class keyArray {
     removeAllByKey = (key, amount) => {
         while (this.keyExists(key)) {
             let firstKeyIndex = this.getKeyFirstIndex(key);
-            let tempAmount = 0;
+            let tempAmount = amount;
 
-            if (firstKeyIndex !== this.getKeyLastIndex(key)) {
-                while (++tempAmount < amount) {
+            if (!this.keyUnique(key)) {
+                for (tempAmount = 1; tempAmount < amount; tempAmount++) {
                     if (this.elementMap[firstKeyIndex] === this.elementMap[firstKeyIndex + tempAmount]) {
                         break;
                     }
                 }
-
-            } else {
-                tempAmount = amount;
             }
 
             this.remove(firstKeyIndex, tempAmount);
@@ -186,6 +183,8 @@ export default class keyArray {
     }
     /** returns {true} if the key exists*/
     keyExists = (key) => hasOwn(this.indexMap, key);
+    /** returns {true} if exactly 1 key of the type exists */
+    keyUnique = (key) => this.getKeySize(key) === 1;
     /** returns the key array*/
     getKeyArray = (key) => this.indexMap[key];
     /** returns the size of the key array*/
