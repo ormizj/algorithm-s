@@ -98,8 +98,8 @@ export default class keyArray {
 
     removeAllByKey = (key, amount) => {
         while (this.keyExists(key)) {
-            let tempAmount = 0;
             let firstKeyIndex = this.getKeyFirstIndex(key);
+            let tempAmount = 0;
 
             if (firstKeyIndex !== this.getKeyLastIndex(key)) {
                 while (++tempAmount < amount) {
