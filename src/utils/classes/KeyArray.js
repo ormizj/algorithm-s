@@ -1,5 +1,6 @@
 import { arrInsert, arrRemove } from "../mutation/arrUtil.js";
 import { arrValidate, arrIsEmpty, isArr, arrIndexToInsertNum } from "../pure/arrUtil.js";
+import { cloneDeep } from "../pure/jsUtil.js";
 import { hasOwn } from "../pure/objUtil.js";
 
 export default class keyArray {
@@ -23,8 +24,6 @@ export default class keyArray {
     }
 
     /* PUBLIC FUNCTIONS */
-
-    insertByKey = (elements, key, position) => this.insert(elements, this.getKeyIndex(key, position));
 
     //TODO insertAllByKey
 
@@ -71,9 +70,18 @@ export default class keyArray {
         this.length += elements.length;
     }
 
+    insertByKey = (elements, key, position) => this.insert(elements, this.getKeyIndex(key, position));
+
+    insertByKeyAll = (elements, key) => {
+
+    }
+
     replaceByKey = (elements, key, position) => this.replace(elements, this.getKeyIndex(key, position));
 
     //TODO replaceAllByKey
+    replaceByKeyAll = (elements, key) => {
+        const replaceIndexes = cloneDeep();
+    }
 
     replace(elements, index) {
         index = this.#validateIndex(index);
@@ -96,7 +104,7 @@ export default class keyArray {
 
     removeByKey = (key, position, amount) => this.remove(this.getKeyIndex(key, position), amount);
 
-    removeAllByKey = (key, amount) => {
+    removeByKeyAll = (key, amount) => {
         while (this.keyExists(key)) {
             let firstKeyIndex = this.getKeyFirstIndex(key);
             let tempAmount = amount;

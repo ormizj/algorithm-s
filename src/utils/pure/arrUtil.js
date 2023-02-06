@@ -1,7 +1,5 @@
 import { isNull } from "./jsUtil.js";
 
-export const arrCloneShallow = (arr = []) => [...arr];
-
 export const arrIsEmpty = (arr = []) => arr.length === 0;
 
 export const validateComparator = (comparator) => comparator ? comparator : () => 0;

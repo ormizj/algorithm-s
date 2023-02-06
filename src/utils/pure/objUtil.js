@@ -10,8 +10,6 @@ export const objIsEmpty = (obj = {}) => {
     return true;
 }
 
-export const objCloneShallow = (obj = {}) => Object.assign({}, obj);
-
 export const hasOwn = (obj, property) => Object.hasOwn(obj, property);
 
 const objExistDeep = (obj, target) => {

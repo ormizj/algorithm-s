@@ -80,7 +80,7 @@ console.table(karr.toArray())
 
 // karr.replaceByKey(['new1', 'new2', 'new3'], 'g');
 console.log(karr.keyExists('j'));
-karr.removeAllByKey('j', 4)
+karr.removeByKeyAll('j', 4)
 
 console.log(karr.elementMap)
 console.log(karr.indexMap)
