@@ -1,7 +1,7 @@
 import { arrInsert, arrRemove } from "../mutation/arrUtil.js";
 import { arrValidate, arrIsEmpty, isArr, arrIndexToInsertNum } from "../pure/arrUtil.js";
 import { cloneDeep } from "../pure/jsUtil.js";
-import { forIn, hasOwn } from "../pure/objUtil.js";
+import { hasOwn } from "../pure/objUtil.js";
 
 export default class KeyArray {
 
@@ -23,7 +23,7 @@ export default class KeyArray {
         this.insert(array);// convert array to "elementMap" + "indexMap"
     }
 
-    /* PUBLIC FUNCTIONS */
+    /* PUBLIC METHODS */
 
     //TODO insertAllByKey
 
@@ -177,7 +177,7 @@ export default class KeyArray {
         }
     }
 
-    /* KEY FUNCTIONS */
+    /* KEY METHODS */
 
     /**
     * @param {''} key is determined by {indexPath} 
@@ -206,7 +206,7 @@ export default class KeyArray {
     /** returns the last index of the key array */
     getKeyLastIndex = (key) => this.indexMap[key][this.getKeySize(key) - 1];
 
-    /* INDEX FUNCTIONS */
+    /* INDEX METHODS */
 
     /**
      * @param {Number} position positive or negative integers
@@ -220,7 +220,7 @@ export default class KeyArray {
     size = () => this.length;
     exists = (index) => hasOwn(this.elementMap, index);
 
-    /* PRIVATE FUNCTIONS */
+    /* PRIVATE METHODS */
 
     #validateIndex(index, canBeEmptyIndex = true) {
         const maxIndex = canBeEmptyIndex ? this.length : this.length - 1;
@@ -262,7 +262,7 @@ export default class KeyArray {
 
     #getIndexMapSortedIndex = (key, index) => arrIndexToInsertNum(this.indexMap[key], index);
 
-    /* SYMBOL FUNCTIONS */
+    /* SYMBOL METHODS */
 
     [Symbol.iterator]() {
         let index = 0;
