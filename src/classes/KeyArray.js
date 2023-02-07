@@ -1,7 +1,7 @@
-import { arrInsert, arrRemove } from "../mutation/arrUtil.js";
-import { arrValidate, arrIsEmpty, isArr, arrIndexToInsertNum } from "../pure/arrUtil.js";
-import { cloneDeep } from "../pure/jsUtil.js";
-import { hasOwn } from "../pure/objUtil.js";
+import { arrInsert, arrRemove } from "../utils/mutation/arrUtil.js";
+import { arrValidate, arrIsEmpty, arrIndexToInsertNum } from "../utils/pure/arrUtil.js";
+import { cloneDeep } from "../utils/pure/jsUtil.js";
+import { hasOwn } from "../utils/pure/objUtil.js";
 
 export default class KeyArray {
 
