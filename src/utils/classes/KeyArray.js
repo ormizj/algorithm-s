@@ -3,7 +3,7 @@ import { arrValidate, arrIsEmpty, isArr, arrIndexToInsertNum } from "../pure/arr
 import { cloneDeep } from "../pure/jsUtil.js";
 import { hasOwn } from "../pure/objUtil.js";
 
-export default class keyArray {
+export default class KeyArray {
 
     /**
      * @param {[]} array
@@ -259,5 +259,17 @@ export default class keyArray {
     }
 
     #getIndexMapSortedIndex = (key, index) => arrIndexToInsertNum(this.indexMap[key], index);
-}
 
+    /* SYMBOL FUNCTIONS */
+
+    [Symbol.iterator]() {
+        let index = 0;
+
+        return {
+            next: () => ({
+                value: this.elementMap[index],
+                done: ++index > this.length
+            })
+        };
+    };
+}
