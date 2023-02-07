@@ -1,7 +1,7 @@
 import { arrInsert, arrRemove } from "../mutation/arrUtil.js";
 import { arrValidate, arrIsEmpty, isArr, arrIndexToInsertNum } from "../pure/arrUtil.js";
 import { cloneDeep } from "../pure/jsUtil.js";
-import { hasOwn } from "../pure/objUtil.js";
+import { forIn, hasOwn } from "../pure/objUtil.js";
 
 export default class KeyArray {
 
@@ -193,6 +193,8 @@ export default class KeyArray {
     keyExists = (key) => hasOwn(this.indexMap, key);
     /** returns {true} if exactly 1 key of the type exists */
     keyUnique = (key) => this.getKeySize(key) === 1;
+    /** returns the key of the index */
+    getKey = (index) => this.elementToKey(this.elementMap[index]);
     /** returns the key array*/
     getKeyArray = (key) => this.indexMap[key];
     /** returns the size of the key array*/
