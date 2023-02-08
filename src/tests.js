@@ -1,4 +1,4 @@
-import KeyArray from "./classes/KeyArray";
+import KeyArray from "./classes/KeyArray.js";
 
 
 const karr = new KeyArray({ array: ['a', 'b', 'c', 'd', 'e', 'f', 'j', 'g', 'h', 'i', 'j', 'k'] });
