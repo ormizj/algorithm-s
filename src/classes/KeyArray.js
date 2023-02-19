@@ -99,6 +99,13 @@ export default class KeyArray {
 
     replaceByKey = (elements, key, position) => this.replace(elements, this.getKeyIndex(key, position));
 
+    /**
+     * replaces all elements in the {key} index, does not overwrites added elements,
+     * inserts elements instead of replacing if needed to avoid overwriting added elements
+     * 
+     * @param {[]} elements 
+     * @param {''} key
+     */
     replaceByKeyAll = (elements, key) => {
         const replaceIndexes = this.getKeyArray(key);
         const amount = elements.length;
@@ -144,6 +151,14 @@ export default class KeyArray {
 
     removeByKey = (key, position, amount) => this.remove(this.getKeyIndex(key, position), amount);
 
+    /**
+     * removes all elements in the {key} index, 
+     * ensures that removed elements will not exceed {amount} from the {key} index
+     * E.G. ['a', 'a', 'b', 'c'], calling "removeByKeyAll('a',2)" will not delete 'c' (even though, total amount to remove is 4)
+     * 
+     * @param {''} key 
+     * @param {Number} amount 
+     */
     removeByKeyAll = (key, amount) => {
         while (this.keyExists(key)) {
             let firstKeyIndex = this.getKeyFirstIndex(key);
