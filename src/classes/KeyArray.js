@@ -1,6 +1,5 @@
 import { arrInsert, arrRemove } from "../utils/mutation/arrUtil.js";
-import { arrValidate, arrIsEmpty, arrIndexToInsertNum } from "../utils/pure/arrUtil.js";
-import { cloneDeep } from "../utils/pure/jsUtil.js";
+import { arrValidate, arrIsEmpty, arrIndexToInsertNum, arrUpToIndex, arrFromIndex } from "../utils/pure/arrUtil.js";
 import { hasOwn } from "../utils/pure/objUtil.js";
 
 export default class KeyArray {
@@ -24,8 +23,6 @@ export default class KeyArray {
     }
 
     /* PUBLIC METHODS */
-
-    //TODO insertAllByKey
 
     insert(elements, index) {
         index = this.#validateIndex(index);
@@ -72,15 +69,13 @@ export default class KeyArray {
 
     insertByKey = (elements, key, position) => this.insert(elements, this.getKeyIndex(key, position));
 
-    insertByKeyAll = (elements, key) => {
+    insertByKeyAll(elements, key) {
+        const insertIndexes = this.getKeyArray(key);
+        elements = arrValidate(elements);
 
-    }
-
-    replaceByKey = (elements, key, position) => this.replace(elements, this.getKeyIndex(key, position));
-
-    //TODO replaceAllByKey
-    replaceByKeyAll = (elements, key) => {
-        const replaceIndexes = cloneDeep();
+        for (let index = insertIndexes.length - 1; index >= 0; index--) {
+            this.insert(elements, insertIndexes[index] + 1);
+        }
     }
 
     replace(elements, index) {
@@ -102,22 +97,27 @@ export default class KeyArray {
         }
     }
 
-    removeByKey = (key, position, amount) => this.remove(this.getKeyIndex(key, position), amount);
+    replaceByKey = (elements, key, position) => this.replace(elements, this.getKeyIndex(key, position));
 
-    removeByKeyAll = (key, amount) => {
-        while (this.keyExists(key)) {
-            let firstKeyIndex = this.getKeyFirstIndex(key);
+    replaceByKeyAll = (elements, key) => {
+        const replaceIndexes = this.getKeyArray(key);
+        const amount = elements.length;
+
+        for (let index = replaceIndexes.length - 1; index >= 0; index--) {
+            let replaceIndex = replaceIndexes[index];
             let tempAmount = amount;
 
-            if (!this.keyUnique(key)) {
-                for (tempAmount = 1; tempAmount < amount; tempAmount++) {
-                    if (this.elementMap[firstKeyIndex] === this.elementMap[firstKeyIndex + tempAmount]) {
-                        break;
-                    }
+            for (tempAmount = 0; tempAmount < amount; tempAmount++) {
+                if (elements[0] === this.elementMap[replaceIndex + tempAmount]) {
+                    break;
                 }
             }
 
-            this.remove(firstKeyIndex, tempAmount);
+            const startElements = arrUpToIndex(elements, tempAmount - 1);
+            this.replace(startElements, replaceIndex);
+
+            const endElements = arrFromIndex(elements, tempAmount);
+            this.insert(endElements, replaceIndex + tempAmount);
         }
     }
 
@@ -140,6 +140,23 @@ export default class KeyArray {
         }
 
         this.length += amount - amountDeleted;
+    }
+
+    removeByKey = (key, position, amount) => this.remove(this.getKeyIndex(key, position), amount);
+
+    removeByKeyAll = (key, amount) => {
+        while (this.keyExists(key)) {
+            let firstKeyIndex = this.getKeyFirstIndex(key);
+            let tempAmount = amount;
+
+            for (tempAmount = 1; tempAmount < amount; tempAmount++) {
+                if (this.elementMap[firstKeyIndex] === this.elementMap[firstKeyIndex + tempAmount]) {
+                    break;
+                }
+            }
+
+            this.remove(firstKeyIndex, tempAmount);
+        }
     }
 
     //TODO sort (mergeSort)
