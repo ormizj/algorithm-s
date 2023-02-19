@@ -74,7 +74,7 @@ export default class KeyArray {
         elements = arrValidate(elements);
 
         for (let index = insertIndexes.length - 1; index >= 0; index--) {
-            this.insert(elements, insertIndexes[index] + 1);
+            this.insert(elements, insertIndexes[index]);
         }
     }
 
