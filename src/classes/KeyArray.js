@@ -1,5 +1,5 @@
 import { arrInsert, arrRemove } from "../utils/mutation/arrUtil.js";
-import { arrValidate, arrIsEmpty, arrIndexToInsertNum, arrUpToIndex, arrFromIndex } from "../utils/pure/arrUtil.js";
+import { arrValidate, arrIsEmpty, arrIndexToInsertNum } from "../utils/pure/arrUtil.js";
 import { hasOwn } from "../utils/pure/objUtil.js";
 
 export default class KeyArray {
@@ -120,10 +120,10 @@ export default class KeyArray {
                 }
             }
 
-            const startElements = arrUpToIndex(elements, tempAmount - 1);
+            const startElements = elements.slice(0, tempAmount);
             this.replace(startElements, replaceIndex);
 
-            const endElements = arrFromIndex(elements, tempAmount);
+            const endElements = elements.slice(tempAmount);
             this.insert(endElements, replaceIndex + tempAmount);
         }
     }
@@ -177,6 +177,8 @@ export default class KeyArray {
     //TODO sort (mergeSort)
 
     //TODO (after "sort") option to send custom sort function, to sort the array
+
+    //TODO insertSorted (returns index where the element was placed in)
 
     toArray() {
         const arr = [];

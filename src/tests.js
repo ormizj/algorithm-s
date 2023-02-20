@@ -3,7 +3,7 @@ import KeyArray from "./classes/KeyArray.js";
 
 const karr = new KeyArray({ array: ['a', 'b', 'c', 'd', 'e', 'f', 'j', 'j', 'k', 'm', 'o', 'p'] });
 
-console.table(karr.toArray())
+// console.table(karr.toArray())
 
 // karr.insertByKey([1, 2, 3, 4, 5, 6, 7], 'k')
 
