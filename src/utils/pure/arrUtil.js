@@ -9,7 +9,7 @@ export const isArr = (arr) => Array.isArray(arr);
 /**
  * @param {[Number]} sortedArr 
  * @param {Number} num 
- * @returns the index of the {sortedArr} to insert the {num} to
+ * @returns the index of the {sortedArr} to insert the {num} to, to keep the array sorted
  */
 export const arrIndexToInsertNum = (sortedArr, num) => {
 	let high = sortedArr.length;

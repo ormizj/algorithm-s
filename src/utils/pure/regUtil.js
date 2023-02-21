@@ -1,5 +1,5 @@
 /**
- * Tests for regex of inputs, ignores tests on modifiers (Backspace, Tab, etc.)
+ * Tests regex, ignores modifiers (Backspace, Tab, etc.)
  *
  * @param {RegExp} regex
  * @param input

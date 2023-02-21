@@ -206,7 +206,7 @@ const deepFlatHelper = (obj, flatArr) => {
             } else {
                 flatArr.push(value);
             }
-        })
+        });
     }
 
     return flatArr;
