@@ -22,4 +22,8 @@ karr.replaceByKeyAll([1, 2, 3], 'j')
 
 console.table(karr.toArray())
 
+console.log(karr.insert(['test'], -1));
 
+console.table(karr.toArray())
+
+console.log(karr.test);
