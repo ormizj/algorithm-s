@@ -22,10 +22,26 @@ export default class KeyArray {
         this.insert(array);// convert array to "elementMap" + "indexMap"
     }
 
+    //TODO add push
+
+    //TODO add shift
+
+    //TODO add splice
+
+    //TODO add split
+
+    //TODO add unshift
+
+    //TODO add pop
+
+    //TODO add spread (...)
+
+    //TODO add indexing to the object
+
     /* PUBLIC METHODS */
 
     insert(elements, index) {
-        index = this.#validateIndex(index);
+        index = this.#validateIndexEmpty(index);
         elements = arrValidate(elements);
 
         const overwrittenElements = [];
@@ -79,7 +95,7 @@ export default class KeyArray {
     }
 
     replace(elements, index) {
-        index = this.#validateIndex(index);
+        index = this.#validateIndexEmpty(index);
         elements = arrValidate(elements);
 
         for (const element of elements) {
@@ -129,7 +145,7 @@ export default class KeyArray {
     }
 
     remove(index, amount = 1) {
-        index = this.#validateIndex(index, false);
+        index = this.#validateIndex(index);
 
         let indexesToMove = 0;
         let amountDeleted = amount;
@@ -243,11 +259,11 @@ export default class KeyArray {
     /* INDEX METHODS */
 
     /**
-     * @param {Number} position positive or negative integers
+     * @param {Number} index positive or negative integers
      * @returns 
      * @see Array.at
      */
-    at = (position) => position >= 0 ? this.elementMap[position] : this.elementMap[this.length + position];
+    at = (index) => index >= 0 ? this.elementMap[index] : this.elementMap[this.length + index];
     get = (index) => this.elementMap[index];
     getFirst = () => this.elementMap[0];
     getLast = () => this.elementMap[this.length - 1];
@@ -256,10 +272,24 @@ export default class KeyArray {
 
     /* PRIVATE METHODS */
 
-    #validateIndex(index, canBeEmptyIndex = true) {
-        const maxIndex = canBeEmptyIndex ? this.length : this.length - 1;
-        if (index === undefined || index > maxIndex) return maxIndex;
-        return index;
+    /**
+     * @param {Number} index 
+     * @returns index within the range of existing elements, supporting negative indexes
+     * @see Array.at
+     */
+    #validateIndex(index) {
+        if (index === undefined) return this.length - 1;
+        return index >= 0 ? index : index + this.length;
+    }
+
+    /**
+    * @param {Number} index 
+    * @returns index within the range + 1 (1 index out of bounds) of existing elements, supporting negative indexes
+    * @see Array.at
+    */
+    #validateIndexEmpty(index) {
+        if (index === undefined) return this.length;
+        return index >= 0 ? index : index + this.length + 1;
     }
 
     #insertToMaps(element, index) {
