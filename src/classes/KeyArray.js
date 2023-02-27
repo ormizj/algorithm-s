@@ -272,7 +272,7 @@ export default class KeyArray {
 
     /**
      * @param {Number} index 
-     * @param {Number} lastIndex 
+     * @param {Number} lastIndex the last index valid of the array
      * @returns
      * @see Array.at
      */
@@ -289,9 +289,11 @@ export default class KeyArray {
     }
 
     /**
+     * throws an exception if the {index} is bigger or equal {lastIndex}
+     * 
     * @param {Number} index 
-    * @param {Number} lastIndex 
-    * @returns index that will have an existing element in the {elementMap}
+    * @param {Number} lastIndex the last index valid of the array 
+    * @returns
     */
     #validateIndexBound(index, lastIndex) {
         index = this.$.#validateIndex(index, lastIndex);
