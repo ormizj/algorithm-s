@@ -362,7 +362,7 @@ export function KeyArrayProxy(
 
     return new Proxy(instance, {
         get(obj, key, receiver) {
-            if (key in obj) return obj[key];
+            if (isNaN(key)) return obj[key];
 
             return obj.get(key);
         },
