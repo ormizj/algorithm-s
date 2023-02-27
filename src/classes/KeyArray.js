@@ -1,9 +1,8 @@
 import { arrInsert, arrRemove } from "../utils/mutation/arrUtil.js";
 import { arrValidate, arrIsEmpty, arrIndexToInsertNum } from "../utils/pure/arrUtil.js";
+import { validateNum } from "../utils/pure/numUtil.js";
 import { hasOwn } from "../utils/pure/objUtil.js";
-
 export default class KeyArray {
-
     /**
      * @param {[]} array
      * @param {(element) => `${element}`} elementToKey
@@ -12,14 +11,15 @@ export default class KeyArray {
         array = [],
         elementToKey = (element) => `${element}`
     } = {}) {
-        this.elementToKey = elementToKey;// function to generate a key for the "indexMap"
+        this.$ = this; // "this" variable for "KeyArrayProxy" (Proxy can't access private methods)
 
-        this.elementMap = {};// map containing the elements [key: index,    value:element]
-        this.indexMap = {};//   map containing the indexes  [key: string,   value:index]
+        this.elementToKey = elementToKey; // function to generate a key for the "indexMap"
+        this.elementMap = {}; // map containing the elements [key: index,    value:element]
+        this.indexMap = {}; //   map containing the indexes  [key: string,   value:index]
 
-        this.length = 0;// length of the keyArray
+        this.length = 0; // length of the keyArray
 
-        this.insert(array);// convert array to "elementMap" + "indexMap"
+        this.insert(array); // convert array to "elementMap" + "indexMap"
     }
 
     //TODO add push
@@ -34,14 +34,13 @@ export default class KeyArray {
 
     //TODO add pop
 
-    //TODO add spread (...)
-
     //TODO add indexing to the object
 
     /* PUBLIC METHODS */
 
+    //TODO handle inserting to indexes outside of length
     insert(elements, index) {
-        index = this.#validateIndexEmpty(index);
+        index = this.$.#validateIndex(index, this.length);
         elements = arrValidate(elements);
 
         const overwrittenElements = [];
@@ -52,7 +51,7 @@ export default class KeyArray {
             // overwriting value in "elementMap"
             if (hasOwn(this.elementMap, index)) {
                 overwrittenElements.push(this.elementMap[index]);
-                this.#deleteFromMaps(index);
+                this.$.#deleteFromMaps(index);
                 indexesToMove++;
 
                 // new value in "elementMap"
@@ -60,7 +59,7 @@ export default class KeyArray {
                 currentLength++;
             }
 
-            this.#insertToMaps(element, index);
+            this.$.#insertToMaps(element, index);
             index++;
         }
 
@@ -70,12 +69,12 @@ export default class KeyArray {
 
             index = currentLength;
             while (lastFilledIndex < --index) {
-                this.#moveInMaps(index, index + indexesToMove);
+                this.$.#moveInMaps(index, index + indexesToMove);
             }
 
             lastFilledIndex++;
             for (const overwrittenElement of overwrittenElements) {
-                this.#insertToMaps(overwrittenElement, lastFilledIndex, true);
+                this.$.#insertToMaps(overwrittenElement, lastFilledIndex, true);
                 lastFilledIndex++;
             }
         }
@@ -95,20 +94,20 @@ export default class KeyArray {
     }
 
     replace(elements, index) {
-        index = this.#validateIndexEmpty(index);
+        index = this.$.#validateIndexBound(index, this.length - 1);
         elements = arrValidate(elements);
 
         for (const element of elements) {
             // overwriting value in "elementMap"
             if (hasOwn(this.elementMap, index)) {
-                this.#deleteFromMaps(index);
+                this.$.#deleteFromMaps(index);
 
                 // new value in "elementMap"
             } else {
                 this.length++;
             }
 
-            this.#insertToMaps(element, index);
+            this.$.#insertToMaps(element, index);
             index++;
         }
     }
@@ -145,13 +144,13 @@ export default class KeyArray {
     }
 
     remove(index, amount = 1) {
-        index = this.#validateIndex(index);
+        index = this.$.#validateIndexBound(index, this.length - 1);
 
         let indexesToMove = 0;
         let amountDeleted = amount;
 
         while (hasOwn(this.elementMap, index) && amount > 0) {
-            this.#deleteFromMaps(index);
+            this.$.#deleteFromMaps(index);
             indexesToMove++;
             index++;
             amount--;
@@ -159,7 +158,7 @@ export default class KeyArray {
 
         index--;
         while (++index < this.length) {
-            this.#moveInMaps(index, index - indexesToMove);
+            this.$.#moveInMaps(index, index - indexesToMove);
         }
 
         this.length += amount - amountDeleted;
@@ -194,7 +193,7 @@ export default class KeyArray {
 
     //TODO (after "sort") option to send custom sort function, to sort the array
 
-    //TODO insertSorted (returns index where the element was placed in)
+    //TODO insertSorted (returns index where the element was placed in)?
 
     toArray() {
         const arr = [];
@@ -236,7 +235,6 @@ export default class KeyArray {
     */
     getByKey(key, position = 0) {
         const index = this.indexMap[key][position];
-        console.log(index);
         return this.elementMap[index];
     }
     /** returns {true} if the key exists*/
@@ -274,22 +272,33 @@ export default class KeyArray {
 
     /**
      * @param {Number} index 
-     * @returns index within the range of existing elements, supporting negative indexes
+     * @param {Number} lastIndex 
+     * @returns
      * @see Array.at
      */
-    #validateIndex(index) {
-        if (index === undefined) return this.length - 1;
-        return index >= 0 ? index : index + this.length;
+    #validateIndex(index, lastIndex) {
+        if (index === undefined) {
+            return lastIndex;
+
+        } else {
+            index = validateNum(index);
+            if (index < 0) index = index + lastIndex + 1;
+        }
+
+        return index;
     }
 
     /**
     * @param {Number} index 
-    * @returns index within the range + 1 (1 index out of bounds) of existing elements, supporting negative indexes
-    * @see Array.at
+    * @param {Number} lastIndex 
+    * @returns index that will have an existing element in the {elementMap}
     */
-    #validateIndexEmpty(index) {
-        if (index === undefined) return this.length;
-        return index >= 0 ? index : index + this.length + 1;
+    #validateIndexBound(index, lastIndex) {
+        index = this.$.#validateIndex(index, lastIndex);
+
+        if (index >= this.length) throw RangeError(`Index ${index} out of bounds for length ${lastIndex}`);
+
+        return index;
     }
 
     #insertToMaps(element, index) {
@@ -297,7 +306,7 @@ export default class KeyArray {
 
         const key = this.elementToKey(element);
         if (hasOwn(this.indexMap, key)) {
-            arrInsert(this.indexMap[key], this.#getIndexMapSortedIndex(key, index), index);
+            arrInsert(this.indexMap[key], this.$.#getIndexMapSortedIndex(key, index), index);
 
         } else {
             this.indexMap[key] = [index];
@@ -307,8 +316,8 @@ export default class KeyArray {
     #moveInMaps(index, newIndex) {
         // deleting from maps before inserting, for performance
         const element = this.elementMap[index];
-        this.#deleteFromMaps(index);
-        this.#insertToMaps(element, newIndex);
+        this.$.#deleteFromMaps(index);
+        this.$.#insertToMaps(element, newIndex);
     }
 
     #deleteFromMaps(index) {
@@ -317,7 +326,7 @@ export default class KeyArray {
 
         const key = this.elementToKey(element);
         if (this.indexMap[key].length > 1) {
-            arrRemove(this.indexMap[key], this.#getIndexMapSortedIndex(key, index))
+            arrRemove(this.indexMap[key], this.$.#getIndexMapSortedIndex(key, index))
 
         } else {
             delete this.indexMap[key];
@@ -338,4 +347,31 @@ export default class KeyArray {
             })
         };
     };
+}
+
+export function KeyArrayProxy(
+    array = [],
+    elementToKey = (element) => `${element}`
+) {
+    // if the "new" keyword isn't used when calling the function, throw TypeError
+    if (!(this instanceof KeyArrayProxy)) throw TypeError(`Constructor KeyArrayProxy requires 'new'`);
+
+    const instance = new KeyArray(array, elementToKey);
+
+    return new Proxy(instance, {
+        get(obj, key, receiver) {
+            if (key in obj) return obj[key];
+
+            return obj.get(key);
+        },
+
+        set(obj, key, value, receiver) {
+            if (isNaN(key)) return obj[key] = value;
+
+            if (obj.exists(key)) obj.replace(value, key);
+            else obj.insert(value, key);
+
+            return true;
+        },
+    });
 }

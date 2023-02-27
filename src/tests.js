@@ -1,29 +1,25 @@
-import KeyArray from "./classes/KeyArray.js";
+import KeyArray, { KeyArrayProxy } from "./classes/KeyArray.js";
 
+const karr = new KeyArrayProxy({ array: ['a', 'b', 'c', 'd', 'e', 'f', 'j', 'j', 'k', 'm', 'o', 'p'] });
+// karr[5] = 'hello'
+// console.log(karr.length)
+// karr[15] = 5
+// karr.insert('testa', 9)
+// console.log(karr.get(1));
 
-const karr = new KeyArray({ array: ['a', 'b', 'c', 'd', 'e', 'f', 'j', 'j', 'k', 'm', 'o', 'p'] });
+// console.log(karr[1]);
 
-// console.table(karr.toArray())
+// console.log(karr['a']);
+// karr[15] = 5
+// karr.replace('test', 11)
+// console.log(karr);
+// console.log(karr.remove(1));
+console.log(karr[5]);
+karr[5] = 'test'
+console.log(karr);
+// objEqual.a = 'hello'
+// karr[7] = undefined;
+// karr.remove(14)
+// console.log(karr.toArray());
+// karr[7] = 'abc';
 
-// karr.insertByKey([1, 2, 3, 4, 5, 6, 7], 'k')
-
-// karr.replaceByKey(['new1', 'new2', 'new3'], 'g');
-// console.log(karr.keyExists('j'));
-// karr.removeByKeyAll('j', 2)
-
-karr.replaceByKeyAll([1, 2, 3], 'j')
-
-// console.log(karr.elementMap)
-// console.log(karr.indexMap)
-
-// console.log();
-
-// console.log(karr.length);
-
-console.table(karr.toArray())
-
-console.log(karr.insert(['test'], -1));
-
-console.table(karr.toArray())
-
-console.log(karr.test);

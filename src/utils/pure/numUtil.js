@@ -1,4 +1,6 @@
-export const isNumber = (num) => typeof num === 'number';
+export const isNum = (num) => typeof num === 'number';
+
+export const validateNum = (num) => Number(num);
 
 export const numIsBetween = (num = 0, min = 0, max = 0) => num >= min && num <= max;
 
@@ -19,7 +21,7 @@ export const numToFixed = (num = 0, digit = 0, { base = 10, roundFunc = 'floor' 
     return Math[roundFunc](num * pow) / pow;
 };
 
-export const numRandInclusive = (min, max) => {
+export const numRand = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min);
