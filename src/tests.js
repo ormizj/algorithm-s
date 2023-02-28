@@ -14,9 +14,16 @@ const karr = new KeyArrayProxy({ array: ['a', 'b', 'c', 'd', 'e', 'f', 'j', 'j',
 // karr.replace('test', 11)
 // console.log(karr);
 // console.log(karr.remove(1));
-console.log(karr[5]);
-karr[5] = 'test'
-console.log(karr);
+// console.log(karr[5]);
+karr[15] = 'test'
+karr[13] = 'test2'
+karr[18] = 'test3'
+
+karr.remove(18)
+
+// console.log(karr);
+// console.log(karr.toArray());
+console.log(karr.toArray());
 // objEqual.a = 'hello'
 // karr[7] = undefined;
 // karr.remove(14)

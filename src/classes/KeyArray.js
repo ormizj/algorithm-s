@@ -22,23 +22,8 @@ export default class KeyArray {
         this.insert(array); // convert array to "elementMap" + "indexMap"
     }
 
-    //TODO add push
-
-    //TODO add shift
-
-    //TODO add splice
-
-    //TODO add split
-
-    //TODO add unshift
-
-    //TODO add pop
-
-    //TODO add indexing to the object
-
     /* PUBLIC METHODS */
 
-    //TODO handle inserting to indexes outside of length
     insert(elements, index) {
         index = this.$.#validateIndex(index, this.length);
         elements = arrValidate(elements);
@@ -63,6 +48,7 @@ export default class KeyArray {
             index++;
         }
 
+
         // re-orgnize "indexMap" (if elements were overwritten)
         if (!arrIsEmpty(overwrittenElements)) {
             let lastFilledIndex = index - 1;
@@ -74,9 +60,20 @@ export default class KeyArray {
 
             lastFilledIndex++;
             for (const overwrittenElement of overwrittenElements) {
-                this.$.#insertToMaps(overwrittenElement, lastFilledIndex, true);
+                this.$.#insertToMaps(overwrittenElement, lastFilledIndex);
                 lastFilledIndex++;
             }
+
+            // handle inserting element outside of the range
+        } else if (index - elements.length > this.length) {
+            index--;
+            const emptyIndexes = index - this.length;
+
+            while (this.length < index--) {
+                this.$.#insertToMaps(undefined, index);
+            }
+
+            this.length += emptyIndexes;
         }
 
         this.length += elements.length;
@@ -267,6 +264,30 @@ export default class KeyArray {
     getLast = () => this.elementMap[this.length - 1];
     size = () => this.length;
     exists = (index) => hasOwn(this.elementMap, index);
+
+    /* ARRAY METHODS */
+
+    //TODO add splice
+
+    //TODO add split
+
+    //TODO add indexing to the object
+
+    push = (elements) => this.insert(elements, this.length - 1);
+
+    pop() {
+        const poppedElement = this.getLast();
+        this.remove(this.length - 1);
+        return poppedElement;
+    }
+
+    unshift = (elements) => this.insert(elements, 0);
+
+    shift() {
+        const shiftedElement = this.getFirst();
+        this.remove(0);
+        return shiftedElement;
+    }
 
     /* PRIVATE METHODS */
 
