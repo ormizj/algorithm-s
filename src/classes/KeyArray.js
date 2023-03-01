@@ -3,8 +3,8 @@ import { arrValidate, arrIsEmpty, arrIndexToInsertNum } from "../utils/pure/arrU
 import { validateNum } from "../utils/pure/numUtil.js";
 export default class KeyArray {
     /**
-     * @param {[]} array
-     * @param {(element) => any} elementToKey
+     * @param {[]} array to initialize elements
+     * @param {(element) => any} elementToKey  to set the keys for the elements
      */
     constructor({
         array = [],
