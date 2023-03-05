@@ -259,7 +259,17 @@ export default class KeyArray {
 
     //TODO add split
 
-    //TODO add indexing to the object
+    includes(searchElement, fromIndex) {
+        fromIndex = this.$.#validateIndex(fromIndex, 0);
+
+        console.log(fromIndex);
+        while (fromIndex < this.elementMap.size) {
+            if (this.elementMap.get(fromIndex) === searchElement) return true;
+            fromIndex++;
+        }
+
+        return false;
+    }
 
     push = (elements) => this.insert(elements, this.elementMap.size - 1);
 
