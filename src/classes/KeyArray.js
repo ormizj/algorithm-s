@@ -226,8 +226,6 @@ export default class KeyArray {
     keyExists = (key) => this.indexMap.has(key);
     /** returns {true} if exactly 1 key of the type exists */
     keyUnique = (key) => this.getKeySize(key) === 1;
-    /** returns the key of the index */
-    getKey = (index) => this.elementToKey(this.elementMap.get(index));
     /** returns the key array*/
     getKeyArray = (key) => this.indexMap.get(key);
     /** returns the size of the key array*/
@@ -238,6 +236,10 @@ export default class KeyArray {
     getKeyFirstIndex = (key) => this.indexMap.get(key)[0];
     /** returns the last index of the key array */
     getKeyLastIndex = (key) => this.indexMap.get(key)[this.getKeySize(key) - 1];
+    /** returns the key of the index */
+    getByKey = (index) => this.elementToKey(this.elementMap.get(index));
+    /** returns true if the element exists after it is transfered into its key value */
+    includesByKey = (element) => this.keyExists(this.elementToKey(element));
 
     /* INDEX METHODS */
 

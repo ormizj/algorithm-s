@@ -28,6 +28,7 @@ console.log(karr);
 console.log(karr.size());
 console.log(karr.getByKey(obj))
 console.log(karr.includes('test', 20));
+console.log(karr.includesByKey('test'));
 // objEqual.a = 'hello'
 // karr[7] = undefined;
 // karr.remove(14)
