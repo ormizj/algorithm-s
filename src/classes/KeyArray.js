@@ -6,7 +6,7 @@ export default class KeyArray {
      * @param {[]} array to initialize elements
      * @param {(element) => any} elementToKey  to set the keys for the elements
      */
-    constructor({
+    constructor({// when updating the argument object, update the "new KeyArray" calls
         array = [],
         elementToKey = (element) => typeof element === 'object' ? element : `${element}`
     } = {}) {
@@ -159,7 +159,7 @@ export default class KeyArray {
      * @param {''} key 
      * @param {Number} amount 
      */
-    removeByKeyAll = (key, amount) => {
+    removeByKeyAll(key, amount) {
         while (this.keyExists(key)) {
             let firstKeyIndex = this.getKeyFirstIndex(key);
             let tempAmount = amount;
@@ -172,6 +172,24 @@ export default class KeyArray {
 
             this.remove(firstKeyIndex, tempAmount);
         }
+    }
+
+    concatToKeyArray(...values) {
+        const keyArray = new KeyArray({
+            array: [...this.$],
+            elementToKey: this.elementToKey,
+        });
+
+        return this.$.#concatTo(keyArray, values);
+    }
+
+    concatToKeyArrayProxy(...values) {
+        const keyArray = new KeyArrayProxy({
+            array: [...this.$],
+            elementToKey: this.elementToKey,
+        });
+
+        return this.$.#concatTo(keyArray, values);
     }
 
     //TODO sort (mergeSort)
@@ -260,6 +278,16 @@ export default class KeyArray {
     //TODO add splice
 
     //TODO add split
+
+    //TODO reduce
+
+    //TODO map
+
+    concat(...values) {
+        const array = [...this.$];
+
+        return this.$.#concatTo(array, values);
+    }
 
     includes(searchElement, fromIndex) {
         fromIndex = this.$.#validateIndex(fromIndex, 0);
@@ -356,6 +384,18 @@ export default class KeyArray {
         }
     }
 
+    #concatTo(obj, values) {
+        for (const value of values) {
+            if (Array.isArray(value)) {
+                obj.push(...value);
+            } else {
+                obj.push(value);
+            }
+        }
+
+        return obj;
+    }
+
     #getIndexMapSortedIndex = (key, index) => arrIndexToInsertNum(this.indexMap.get(key), index);
 
     /* SYMBOL AND DEFINE METHODS */
@@ -399,13 +439,13 @@ export function KeyArrayProxy(
 
     return new Proxy(instance, {
         get(obj, key, receiver) {
-            if (isNaN(key)) return obj[key];
+            if (!Number(key)) return obj[key];
 
             return obj.get(key);
         },
 
         set(obj, key, value, receiver) {
-            if (isNaN(key)) return obj[key] = value;
+            if (!Number(key)) return obj[key] = value;
 
             if (obj.exists(key)) obj.replace(value, key);
             else obj.insert(value, key);

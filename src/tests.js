@@ -35,3 +35,5 @@ console.log(karr.includesByKey('test'));
 // console.log(karr.toArray());
 // karr[7] = 'abc';
 
+console.log(karr.concat('testNormal', ['test', 'array']))
+console.log(karr.concatToKeyArrayProxy());
