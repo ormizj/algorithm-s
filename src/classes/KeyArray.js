@@ -1,6 +1,6 @@
 import { arrInsert, arrRemove } from "../utils/mutation/arrUtil.js";
 import { arrValidate, arrIsEmpty, arrIndexToInsertNum } from "../utils/pure/arrUtil.js";
-import { validateNum } from "../utils/pure/numUtil.js";
+import { numValidate } from "../utils/pure/numUtil.js";
 export default class KeyArray {
     /**
      * @param {[]} array to initialize elements
@@ -192,11 +192,35 @@ export default class KeyArray {
         return this.$.#concatTo(keyArray, values);
     }
 
+    /**
+     * @param {(element, index = 0, instance = KeyArray)=> any} callback, "this" will return the instance of {KeyArray}, not an {Array}
+     * @returns {KeyArray}
+     */
+    mapToKeyArray(callback) {
+        const keyArray = new KeyArray({
+            elementToKey: this.elementToKey,
+        });
+
+        return this.$.#mapTo(keyArray, callback);
+    }
+
+    /**
+     * @param {(element, index = 0, instance = KeyArray)=> any} callback, "this" will return the instance of {KeyArray}, not an {Array}
+     * @returns {KeyArrayProxy}
+     */
+    mapToKeyArrayProxy(callback) {
+        const keyArray = new KeyArrayProxy({
+            elementToKey: this.elementToKey,
+        });
+
+        return this.$.#mapTo(keyArray, callback);
+    }
+
     //TODO sort (mergeSort)
 
-    //TODO (after "sort") option to send custom sort function, to sort the array
-
     //TODO insertSorted (returns index where the element was placed in)?
+
+    //TODO searchComparator
 
     toArray() {
         const arr = [];
@@ -281,13 +305,13 @@ export default class KeyArray {
 
     //TODO reduce
 
-    //TODO map
+    /**
+     * @param {(element, index = 0, instance = KeyArray)=> any} callback, "this" will return the instance of {KeyArray}, not an {Array}
+     * @returns {[]}
+     */
+    map = (callback) => this.$.#mapTo([], callback);
 
-    concat(...values) {
-        const array = [...this.$];
-
-        return this.$.#concatTo(array, values);
-    }
+    concat = (...values) => this.$.#concatTo([...this.$], values);
 
     includes(searchElement, fromIndex) {
         fromIndex = this.$.#validateIndex(fromIndex, 0);
@@ -301,7 +325,7 @@ export default class KeyArray {
         return false;
     }
 
-    push = (elements) => this.insert(elements, this.elementMap.size - 1);
+    push = (...elements) => this.insert(elements, this.elementMap.size - 1);
 
     pop() {
         const poppedElement = this.getLast();
@@ -309,7 +333,7 @@ export default class KeyArray {
         return poppedElement;
     }
 
-    unshift = (elements) => this.insert(elements, 0);
+    unshift = (...elements) => this.insert(elements, 0);
 
     shift() {
         const shiftedElement = this.getFirst();
@@ -330,7 +354,7 @@ export default class KeyArray {
             return lastIndex;
 
         } else {
-            index = validateNum(index);
+            index = numValidate(index);
             if (index < 0) index = index + lastIndex + 1;
         }
 
@@ -392,6 +416,14 @@ export default class KeyArray {
                 obj.push(value);
             }
         }
+
+        return obj;
+    }
+
+    #mapTo(obj, callback) {
+        this.forEach((element, index) => {
+            obj.push(callback(element, index, this.$));
+        });
 
         return obj;
     }
