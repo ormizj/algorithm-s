@@ -358,7 +358,7 @@ export default class KeyArray {
      * @returns
      * @see reduceRight
      */
-    reduceRightFix() {
+    reduceRightFix(callback, initialValue = null) {
         let index;
         let accumulator;
         let missingIndex;
