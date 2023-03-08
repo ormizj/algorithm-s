@@ -193,7 +193,7 @@ export default class KeyArray {
     }
 
     /**
-     * @param {(element, index = 0, instance = KeyArray)=> any} callback, "this" will return the instance of {KeyArray}, not an {Array}
+     * @param {(element, index = 0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
      * @returns {KeyArray}
      */
     mapToKeyArray(callback) {
@@ -205,7 +205,7 @@ export default class KeyArray {
     }
 
     /**
-     * @param {(element, index = 0, instance = KeyArray)=> any} callback, "this" will return the instance of {KeyArray}, not an {Array}
+     * @param {(element, index = 0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
      * @returns {KeyArrayProxy}
      */
     mapToKeyArrayProxy(callback) {
@@ -230,16 +230,6 @@ export default class KeyArray {
             arr.push(element);
         }
         return arr;
-    }
-
-    /**
-     * @param {(element, index)} callback 
-     */
-    forEach(callback) {
-        let index = -1;
-        while (++index < this.elementMap.size) {
-            callback(this.elementMap.get(index), index);
-        }
     }
 
     /**
@@ -303,10 +293,96 @@ export default class KeyArray {
 
     //TODO add split
 
-    //TODO reduce
+    /**
+     * @param {(element, index)} callback 
+     */
+    forEach(callback) {
+        let index = -1;
+        while (++index < this.elementMap.size) {
+            callback(this.elementMap.get(index), index);
+        }
+    }
 
     /**
-     * @param {(element, index = 0, instance = KeyArray)=> any} callback, "this" will return the instance of {KeyArray}, not an {Array}
+     * @param {(accumulator, currentValue, currentIndex=0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
+     * @returns
+     */
+    reduce(callback, initialValue = null) {
+        let index;
+        let accumulator;
+
+        if (initialValue === null) {
+            accumulator = this.getFirst();
+            index = 0;
+        } else {
+            accumulator = initialValue;
+            index = -1;
+        }
+
+        while (++index < this.elementMap.size) {
+            const element = this.elementMap.get(index);
+            accumulator = callback(accumulator, element, index, this.$);
+        }
+
+        return accumulator;
+    }
+
+    /**
+     * @param {(accumulator, currentValue, currentIndex=0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
+     * @returns
+     */
+    reduceRight(callback, initialValue = null) {
+        let index;
+        let accumulator;
+
+        if (initialValue === null) {
+            accumulator = this.getLast();
+            index = this.size() - 1;
+        } else {
+            accumulator = initialValue;
+            index = this.size();
+        }
+
+        while (--index >= 0) {
+            const element = this.elementMap.get(index);
+            accumulator = callback(accumulator, element, index, this.$);
+        }
+
+        return accumulator;
+    }
+
+    /**
+     * fixed the last index skip present in the {reduceRight} function (problem also occurs in the {Array.reduceRight} method)
+     * 
+     * @param {(accumulator, currentValue, currentIndex=0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
+     * @returns
+     * @see reduceRight
+     */
+    reduceRightFix() {
+        let index;
+        let accumulator;
+        let missingIndex;
+
+        if (initialValue === null) {
+            accumulator = this.getLast();
+            index = this.size() - 1;
+            missingIndex = 1;
+        } else {
+            accumulator = initialValue;
+            index = this.size();
+            missingIndex = 0;
+        }
+
+        while (--index >= 0) {
+            const element = this.elementMap.get(index);
+            accumulator = callback(accumulator, element, index + missingIndex, this.$);
+        }
+
+        return accumulator;
+    }
+
+    /**
+     * @param {(element, index = 0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
      * @returns {[]}
      */
     map = (callback) => this.$.#mapTo([], callback);

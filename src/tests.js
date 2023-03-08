@@ -2,6 +2,7 @@ import KeyArray, { KeyArrayProxy } from "./classes/KeyArray.js";
 
 const obj = { 'a': 1 };
 const karr = new KeyArrayProxy({ array: ['a', 'b', 'c', 'd', 'e', 'f', 'j', 'j', 'k', 'm', 'o', 'p'] });
+const karr2 = new KeyArrayProxy({ array: [1, 2, 3, 4] });
 // karr[5] = 'hello'
 // console.log(karr.length)
 // karr[15] = 5
@@ -35,8 +36,12 @@ console.log(karr.includesByKey('test'));
 // console.log(karr.toArray());
 // karr[7] = 'abc';
 
-console.log(karr.concat('testNormal', ['test', 'array']))
-console.log(karr.concatToKeyArrayProxy());
-console.log(karr.mapToKeyArrayProxy((element, index, instance) => {
-    return element?.toUpperCase() + index
-}));
+// console.log(karr.concat('testNormal', ['test', 'array']))
+// console.log(karr.concatToKeyArrayProxy());
+// console.log(karr.mapToKeyArrayProxy((element, index, instance) => {
+//     return element?.toUpperCase() + index
+// }));
+
+console.log(karr2.reduceRight((accumulator, currentValue, index, instance) => {
+    return accumulator + currentValue + index
+}, 1))
