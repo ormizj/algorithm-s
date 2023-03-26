@@ -13,23 +13,23 @@ const karr2 = new KeyArrayProxy({ array: [1, 2, 3, 4] });
 
 // console.log(karr['a']);
 // karr[15] = 5
-karr.replace('test11', 11)
+// karr.replace('test11', 11)
 // console.log(karr);
 // console.log(karr.remove(1));
 // console.log(karr[5]);
-karr[15] = 'test'
-karr[13] = 'test2'
-karr[18] = 'test3'
+// karr[15] = 'test'
+// karr[13] = 'test2'
+// karr[18] = 'test3'
 
-karr.remove(18)
+// karr.remove(18)
 // karr.length = 10
-console.log(karr);
+// console.log(karr);
 // console.log(karr);
 // console.log(karr.toArray());
-console.log(karr.size());
-console.log(karr.getByKey(obj))
-console.log(karr.includes('test', 20));
-console.log(karr.includesByKey('test'));
+// console.log(karr.size());
+// console.log(karr.getByKey(obj))
+// console.log(karr.includes('test', 20));
+// console.log(karr.includesByKey('test'));
 // objEqual.a = 'hello'
 // karr[7] = undefined;
 // karr.remove(14)
@@ -42,6 +42,9 @@ console.log(karr.includesByKey('test'));
 //     return element?.toUpperCase() + index
 // }));
 
-console.log(karr2.reduceRight((accumulator, currentValue, index, instance) => {
-    return accumulator + currentValue + index
-}, 1))
+
+const karr3 = new KeyArrayProxy({ array: [1, 2, 3, 4, 5] });
+
+console.log(karr3.splice(-1));
+console.log(karr3.toArray());
+

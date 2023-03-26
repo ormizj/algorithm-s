@@ -144,7 +144,7 @@ export default class KeyArray {
         }
 
         index--;
-        while (++index < this.elementMap.size) {
+        while (++index - indexesToMove < this.elementMap.size) {
             this.$.#moveInMaps(index, index - indexesToMove);
         }
     }
@@ -216,7 +216,7 @@ export default class KeyArray {
         return this.$.#mapTo(keyArray, callback);
     }
 
-    //TODO sort (mergeSort)
+    //TODO spliceToKeyArray + Proxy
 
     //TODO insertSorted (returns index where the element was placed in)?
 
@@ -289,10 +289,6 @@ export default class KeyArray {
 
     /* ARRAY METHODS */
 
-    //TODO add splice
-
-    //TODO add split
-
     /**
      * @param {(element, index)} callback 
      */
@@ -301,6 +297,40 @@ export default class KeyArray {
         while (++index < this.elementMap.size) {
             callback(this.elementMap.get(index), index);
         }
+    }
+
+    //TODO split
+
+    //TODO sort
+
+    splice(start = 0, deleteCount, ...items) {
+        const removedElements = [];
+
+        start = Number(start);
+        if (isNaN(start)) {
+            start = 0;
+
+        } else {
+            start = this.$.#validateIndex(start, this.elementMap.size - 1);
+        }
+
+        deleteCount = Number(deleteCount);
+        if (isNaN(deleteCount)) {
+            deleteCount = this.length;
+        }
+
+        let deleteFrom = start - 1;
+        let deleteTo = deleteCount + start;
+        if (deleteTo > this.length) deleteTo = this.length;
+
+        while (++deleteFrom < deleteTo) {
+            removedElements.push(this.get(deleteFrom));
+        }
+
+        this.remove(start, deleteTo);
+        this.insert(items, start);
+
+        return removedElements;
     }
 
     /**
@@ -362,7 +392,6 @@ export default class KeyArray {
     includes(searchElement, fromIndex) {
         fromIndex = this.$.#validateIndex(fromIndex, 0);
 
-        console.log(fromIndex);
         while (fromIndex < this.elementMap.size) {
             if (this.elementMap.get(fromIndex) === searchElement) return true;
             fromIndex++;
