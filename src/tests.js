@@ -43,8 +43,8 @@ const karr2 = new KeyArrayProxy({ array: [1, 2, 3, 4] });
 // }));
 
 
-const karr3 = new KeyArrayProxy({ array: [1, 2, 3, 4, 5] });
+// const karr3 = new KeyArrayProxy({ array: [1, 2, 3, 4, 5] });
 
-console.log(karr3.splice(-1));
-console.log(karr3.toArray());
+// console.log(karr3.spliceToKeyArrayProxy(-1));
+// console.log(karr3.toArray());
 

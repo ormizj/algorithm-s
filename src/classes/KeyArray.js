@@ -6,7 +6,7 @@ export default class KeyArray {
      * @param {[]} array to initialize elements
      * @param {(element) => any} elementToKey  to set the keys for the elements
      */
-    constructor({// when updating the argument object, update the "new KeyArray" calls
+    constructor({// when updating the argument for the constructor, update the "#newKeyArray" & "#newKeyArrayProxy" methods
         array = [],
         elementToKey = (element) => typeof element === 'object' ? element : `${element}`
     } = {}) {
@@ -175,20 +175,12 @@ export default class KeyArray {
     }
 
     concatToKeyArray(...values) {
-        const keyArray = new KeyArray({
-            array: [...this.$],
-            elementToKey: this.elementToKey,
-        });
-
+        const keyArray = this.$.#newKeyArray(...this.$)
         return this.$.#concatTo(keyArray, values);
     }
 
     concatToKeyArrayProxy(...values) {
-        const keyArray = new KeyArrayProxy({
-            array: [...this.$],
-            elementToKey: this.elementToKey,
-        });
-
+        const keyArray = this.$.#newKeyArrayProxy(...this.$)
         return this.$.#concatTo(keyArray, values);
     }
 
@@ -197,10 +189,7 @@ export default class KeyArray {
      * @returns {KeyArray}
      */
     mapToKeyArray(callback) {
-        const keyArray = new KeyArray({
-            elementToKey: this.elementToKey,
-        });
-
+        const keyArray = this.$.#newKeyArray();
         return this.$.#mapTo(keyArray, callback);
     }
 
@@ -209,14 +198,19 @@ export default class KeyArray {
      * @returns {KeyArrayProxy}
      */
     mapToKeyArrayProxy(callback) {
-        const keyArray = new KeyArrayProxy({
-            elementToKey: this.elementToKey,
-        });
-
+        const keyArray = this.$.#newKeyArrayProxy();
         return this.$.#mapTo(keyArray, callback);
     }
 
-    //TODO spliceToKeyArray + Proxy
+    spliceToKeyArray(start, deleteCount, ...items) {
+        const keyArray = this.$.#newKeyArray();
+        return this.$.#spliceTo(keyArray, start, deleteCount, ...items);
+    }
+
+    spliceToKeyArrayProxy(start, deleteCount, ...items) {
+        const keyArray = this.$.#newKeyArrayProxy();
+        return this.$.#spliceTo(keyArray, start, deleteCount, ...items);
+    }
 
     //TODO insertSorted (returns index where the element was placed in)?
 
@@ -299,39 +293,11 @@ export default class KeyArray {
         }
     }
 
-    //TODO split
+    //TODO slice
 
     //TODO sort
 
-    splice(start = 0, deleteCount, ...items) {
-        const removedElements = [];
-
-        start = Number(start);
-        if (isNaN(start)) {
-            start = 0;
-
-        } else {
-            start = this.$.#validateIndex(start, this.elementMap.size - 1);
-        }
-
-        deleteCount = Number(deleteCount);
-        if (isNaN(deleteCount)) {
-            deleteCount = this.length;
-        }
-
-        let deleteFrom = start - 1;
-        let deleteTo = deleteCount + start;
-        if (deleteTo > this.length) deleteTo = this.length;
-
-        while (++deleteFrom < deleteTo) {
-            removedElements.push(this.get(deleteFrom));
-        }
-
-        this.remove(start, deleteTo);
-        this.insert(items, start);
-
-        return removedElements;
-    }
+    splice = (start = 0, deleteCount, ...items) => this.#spliceTo([], start, deleteCount, ...items);
 
     /**
      * @param {(accumulator, currentValue, currentIndex=0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
@@ -501,6 +467,48 @@ export default class KeyArray {
         });
 
         return obj;
+    }
+
+    #spliceTo(obj, start, deleteCount, ...items) {
+        start = Number(start);
+        if (isNaN(start)) {
+            start = 0;
+
+        } else {
+            start = this.$.#validateIndex(start, this.elementMap.size - 1);
+        }
+
+        deleteCount = Number(deleteCount);
+        if (isNaN(deleteCount)) {
+            deleteCount = this.length;
+        }
+
+        let deleteFrom = start - 1;
+        let deleteTo = deleteCount + start;
+        if (deleteTo > this.length) deleteTo = this.length;
+
+        while (++deleteFrom < deleteTo) {
+            obj.push(this.get(deleteFrom));
+        }
+
+        this.remove(start, deleteTo);
+        this.insert(items, start);
+
+        return obj;
+    }
+
+    #newKeyArray(array) {
+        return new KeyArray({
+            elementToKey: this.elementToKey,
+            array
+        });
+    }
+
+    #newKeyArrayProxy(array) {
+        return new KeyArrayProxy({
+            elementToKey: this.elementToKey,
+            array
+        });
     }
 
     #getIndexMapSortedIndex = (key, index) => arrIndexToInsertNum(this.indexMap.get(key), index);
