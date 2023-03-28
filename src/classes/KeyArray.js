@@ -174,43 +174,27 @@ export default class KeyArray {
         }
     }
 
-    concatToKeyArray(...values) {
-        const keyArray = this.$.#newKeyArray(...this.$)
-        return this.$.#concatTo(keyArray, values);
-    }
-
-    concatToKeyArrayProxy(...values) {
-        const keyArray = this.$.#newKeyArrayProxy(...this.$)
-        return this.$.#concatTo(keyArray, values);
-    }
-
     /**
      * @param {(element, index = 0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
      * @returns {KeyArray}
      */
-    mapToKeyArray(callback) {
-        const keyArray = this.$.#newKeyArray();
-        return this.$.#mapTo(keyArray, callback);
-    }
+    mapToKeyArray = (callback) => this.$.#mapTo(this.$.#newKeyArray(), callback);
 
     /**
      * @param {(element, index = 0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
      * @returns {KeyArrayProxy}
      */
-    mapToKeyArrayProxy(callback) {
-        const keyArray = this.$.#newKeyArrayProxy();
-        return this.$.#mapTo(keyArray, callback);
-    }
+    mapToKeyArrayProxy = (callback) => this.$.#mapTo(this.$.#newKeyArrayProxy(), callback);
 
-    spliceToKeyArray(start, deleteCount, ...items) {
-        const keyArray = this.$.#newKeyArray();
-        return this.$.#spliceTo(keyArray, start, deleteCount, ...items);
-    }
 
-    spliceToKeyArrayProxy(start, deleteCount, ...items) {
-        const keyArray = this.$.#newKeyArrayProxy();
-        return this.$.#spliceTo(keyArray, start, deleteCount, ...items);
-    }
+    spliceToKeyArray = (start, deleteCount, ...items) => this.$.#spliceTo(this.$.#newKeyArray(), start, deleteCount, ...items);
+    spliceToKeyArrayProxy = (start, deleteCount, ...items) => this.$.#spliceTo(this.$.#newKeyArrayProxy(), start, deleteCount, ...items);
+
+    concatToKeyArray = (...values) => this.$.#concatTo(this.$.#newKeyArray(...this.$), values);
+    concatToKeyArrayProxy = (...values) => this.$.#concatTo(this.$.#newKeyArrayProxy(...this.$), values);
+
+    sliceToKeyArray = (start, end) => this.$.#sliceTo(this.$.#newKeyArray(), start, end);
+    sliceToKeyArrayProxy = (start, end) => this.$.#sliceTo(this.$.#newKeyArrayProxy(), start, end);
 
     //TODO insertSorted (returns index where the element was placed in)?
 
@@ -293,11 +277,7 @@ export default class KeyArray {
         }
     }
 
-    //TODO slice
-
     //TODO sort
-
-    splice = (start = 0, deleteCount, ...items) => this.#spliceTo([], start, deleteCount, ...items);
 
     /**
      * @param {(accumulator, currentValue, currentIndex=0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
@@ -354,6 +334,10 @@ export default class KeyArray {
     map = (callback) => this.$.#mapTo([], callback);
 
     concat = (...values) => this.$.#concatTo([...this.$], values);
+
+    slice = (start, end) => this.$.#sliceTo([], start, end);
+
+    splice = (start = 0, deleteCount, ...items) => this.$.#spliceTo([], start, deleteCount, items);
 
     includes(searchElement, fromIndex) {
         fromIndex = this.$.#validateIndex(fromIndex, 0);
@@ -461,6 +445,24 @@ export default class KeyArray {
         return obj;
     }
 
+    #sliceTo(obj, start, end) {
+        start = Number(start);
+        end = Number(end);
+
+        if (isNaN(end)) {
+            end = this.elementMap.size;
+        }
+
+        start = this.$.#validateIndex(start, this.elementMap.size - 1);
+
+        start--;
+        while (++start < end) {
+            obj.push(this.elementMap.get(start));
+        }
+
+        return obj;
+    }
+
     #mapTo(obj, callback) {
         this.forEach((element, index) => {
             obj.push(callback(element, index, this.$));
@@ -469,7 +471,7 @@ export default class KeyArray {
         return obj;
     }
 
-    #spliceTo(obj, start, deleteCount, ...items) {
+    #spliceTo(obj, start, deleteCount, items) {
         start = Number(start);
         if (isNaN(start)) {
             start = 0;
@@ -480,7 +482,7 @@ export default class KeyArray {
 
         deleteCount = Number(deleteCount);
         if (isNaN(deleteCount)) {
-            deleteCount = this.length;
+            deleteCount = this.elementMap.size;
         }
 
         let deleteFrom = start - 1;
