@@ -1,4 +1,4 @@
-import { arrFindIndex } from '../pure/arrUtil.js'
+import { arrFindIndex } from '../pure/arrayUtil.js'
 
 export const arrInsert = (arr = [], index = 0, ...elements) => arr.splice(index, 0, ...elements);
 

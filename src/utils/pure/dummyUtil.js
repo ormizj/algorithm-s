@@ -1,6 +1,6 @@
 import { vTypeOf } from "./jsUtil.js";
-import { numRandInclusive } from "./numUtil.js";
-import { forIn } from "./objUtil.js";
+import { numRandInclusive } from "./numberUtil.js";
+import { forIn } from "./objectUtil.js";
 
 /**
  * Example:
