@@ -8,9 +8,9 @@ import {
 	arrToIndex,
 	arrUnorderedCompare,
 	arrValidate,
-} from "./arrUtil.js";
+} from "./arrayUtil.js";
 import { strIsSubString, toString, toStringDelimiter } from "./stringUtil.js";
-import { objForIn, objSize } from "./objUtil.js";
+import { objForIn, objSize } from "./objectUtil.js";
 import { getValueByPath, valuePath } from "./jsUtil.js";
 
 /**

@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { objEqual, objSize, forIn, objEqualMessy } from '../utils/objUtil.js';
+import { objEqual, objSize, forIn, objEqualMessy } from '../utils/objectUtil.js';
 import { vTypeOf } from '../utils/jsUtil.js';
 
 const space = `    `;

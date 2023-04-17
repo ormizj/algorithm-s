@@ -1,6 +1,6 @@
-import { arrInsert, arrRemove } from "../utils/mutation/arrUtil.js";
-import { arrValidate, arrIsEmpty, arrIndexToInsertNum } from "../utils/pure/arrUtil.js";
-import { numValidate } from "../utils/pure/numUtil.js";
+import { arrInsert, arrRemove } from "../utils/mutation/arrayUtil.js";
+import { arrValidate, arrIsEmpty, arrIndexToInsertNum } from "../utils/pure/arrayUtil.js";
+import { numValidate } from "../utils/pure/numberUtil.js";
 export default class KeyArray {
     /**
      * @param {[]} array to initialize elements

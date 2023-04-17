@@ -1,5 +1,4 @@
-import { numIsBetween } from "./numUtil.js";
-import { arrValidate } from "./arrUtil.js";
+import { numIsBetween } from "./numberUtil.js";
 
 export const findChild = (element = HTMLElement, className = '') => {
     for (let child of element.children) {
@@ -181,4 +180,111 @@ const scrollDirection = (element = HTMLElement, direction = '', amount = 0, scro
             element[scrollType](amount, amount);
             break;
     }
+}
+
+export const getUnappendedAttr = (element, attributes = []) => {
+    const attributesMap = {};
+
+    document.body.appendChild(element);
+    for (const attr of attributes) {
+        attributesMap[attr] = element[attr];
+    }
+    document.body.removeChild(element);
+
+    return attributesMap;
+}
+
+/**
+ * @param element
+ * @param beforeCb (elementClone, element)
+ * 					callback to call, before appending cloned element;
+ * 				   	return {any}- to change appended element;
+ * 				   	return {undefined}- to not change the appended element;
+ * 				   	return {null}- child will not be appended to the clone (including its children);
+ *
+ * @param afterCb (elementClone, element)
+ * 					callback to call, after appending the cloned elements, parameters are: (elementClone, element);
+ *
+ * @param invalidCb (element)
+ * 					callback to determine if child should be skipped;
+ * 					return {~true~}- child will not be appended to the clone (including its children);
+ * 					return {~false~}- child will be appended to the clone normally
+ *
+ * @returns {ActiveX.IXMLDOMNode | Node}
+ */
+export const htmlDeepClone = ({
+    element = HTMLElement,
+    beforeCb,
+    afterCb,
+    invalidCb
+}) => {
+    const clonedElement = element.cloneNode();
+    document.body.appendChild(clonedElement); // appending for attributes calculations
+
+    htmlDeepCloneHelper({
+        element,
+        clonedElement,
+        beforeCb,
+        afterCb,
+        invalidCb
+    });
+
+    document.body.removeChild(clonedElement);
+    return clonedElement;
+}
+
+const htmlDeepCloneHelper = ({
+    element = HTMLElement,
+    clonedElement = HTMLElement,
+    beforeCb,
+    afterCb,
+    invalidCb
+}) => {
+    const children = element.children;
+
+    for (let index = 0; index < children.length; index++) {
+        //check child validation
+        const child = children[index];
+        const isInvalid = invalidCb?.(child);
+        if (isInvalid) continue;
+
+        //clone child
+        let childClone = child.cloneNode();
+        if (child.childNodes[0]?.nodeName === '#text')
+            childClone.appendChild(child.childNodes[0].cloneNode());
+
+        //beforeCb (before append)
+        const cbRet = beforeCb?.(childClone, child);
+        if (cbRet === null) continue;
+        childClone = cbRet || childClone;
+
+        //append clone
+        clonedElement.appendChild(childClone);
+
+        //afterCb (after append)
+        afterCb?.(childClone, child);
+
+        htmlDeepCloneHelper({
+            element: child,
+            clonedElement: childClone,
+            beforeCb,
+            afterCb,
+            invalidCb
+        });
+    }
+}
+
+/**
+ * use "textContent" attribute for the text of the element,
+ * use "cloneNode()" before appending this node to a different element
+ *
+ * @param element
+ * @returns {null|*}
+ */
+export const getTextNode = (element) => {
+    const node = element.childNodes[0];
+    if (node?.nodeName === '#text') {
+        return node;
+    }
+    return null;
 }
