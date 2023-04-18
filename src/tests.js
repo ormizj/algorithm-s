@@ -48,5 +48,5 @@ const karr3 = new KeyArrayProxy({ array: [1, 2, 3, 4, 5] });
 // console.log(karr3.splice(1, 2, ['a']));
 // console.log(karr3.toArray());
 
-console.log(karr3.slice(-3));
+console.log(karr3.slice());
 

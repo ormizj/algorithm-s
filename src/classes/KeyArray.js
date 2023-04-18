@@ -22,6 +22,7 @@ export default class KeyArray {
 
     /* PUBLIC METHODS */
 
+    // TODO change method to private method, create a new public method (for all "insert"s and "replace"s, where the elements are a varags)
     insert(elements, index) {
         index = this.$.#validateIndex(index, this.elementMap.size);
         elements = arrValidate(elements);
