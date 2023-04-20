@@ -10,6 +10,8 @@ export const strGetFirstWord = (str = '') => str.split(' ')[0];
 
 export const numericAddToStr = (numeric = '0' | 0, otherNumeric = '1' | 1) => `${BigInt(`${numeric}`) + BigInt(`${otherNumeric}`)}`;
 
+export const formatFileName = (str, replacer = '_') => str.replaceAll('/', replacer);
+
 /**
  * Adds a child to html structured {String}. 
  * 

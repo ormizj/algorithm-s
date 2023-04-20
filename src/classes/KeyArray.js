@@ -1,5 +1,5 @@
 import { arrInsert, arrRemove } from "../utils/mutation/arrayUtil.js";
-import { arrValidate, arrIsEmpty, arrIndexToInsertNum } from "../utils/pure/arrayUtil.js";
+import { arrIsEmpty, arrIndexToInsertNum } from "../utils/pure/arrayUtil.js";
 import { numValidate } from "../utils/pure/numberUtil.js";
 export default class KeyArray {
     /**
@@ -25,7 +25,6 @@ export default class KeyArray {
     // TODO change method to private method, create a new public method (for all "insert"s and "replace"s, where the elements are a varags)
     insert(elements, index) {
         index = this.$.#validateIndex(index, this.elementMap.size);
-        elements = arrValidate(elements);
 
         const overwrittenElements = [];
         const startingLength = this.elementMap.size;
@@ -79,7 +78,6 @@ export default class KeyArray {
 
     insertByKeyAll(elements, key) {
         const insertIndexes = this.getKeyArray(key);
-        elements = arrValidate(elements);
 
         for (let index = insertIndexes.length - 1; index >= 0; index--) {
             this.insert(elements, insertIndexes[index]);
@@ -88,7 +86,6 @@ export default class KeyArray {
 
     replace(elements, index) {
         index = this.$.#validateIndexBound(index, this.elementMap.size - 1);
-        elements = arrValidate(elements);
 
         for (const element of elements) {
             // overwriting value in "elementMap"
