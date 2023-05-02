@@ -17,13 +17,13 @@ export default class KeyArray {
         this.elementMap = new Map(); // map containing the elements [key: index,    value:element]
         this.indexMap = new Map(); //   map containing the indexes  [key: string,   value:index]
 
-        this.insert(array); // convert array to "elementMap" + "indexMap"
+        this.$.#insert(array); // convert array to "elementMap" + "indexMap"
     }
 
     /* PUBLIC METHODS */
 
-    // TODO change method to private method, create a new public method (for all "insert"s and "replace"s, where the elements are a varags)
-    insert(elements, index) {
+    insert = (index, ...elements) => this.$.#insert(elements, index);
+    #insert(elements, index) {
         index = this.$.#validateIndex(index, this.elementMap.size);
 
         const overwrittenElements = [];
@@ -46,7 +46,6 @@ export default class KeyArray {
             this.$.#insertToMaps(element, index);
             index++;
         }
-
 
         // re-orgnize "indexMap" (if elements were overwritten)
         if (!arrIsEmpty(overwrittenElements)) {
@@ -74,17 +73,20 @@ export default class KeyArray {
         }
     }
 
-    insertByKey = (elements, key, position) => this.insert(elements, this.getKeyIndex(key, position));
+    insertByKey = (key, position, ...elements) => this.$.#insertByKey(elements, key, position);
+    #insertByKey = (elements, key, position) => this.$.#insert(elements, this.getKeyIndex(key, position));
 
-    insertByKeyAll(elements, key) {
+    insertByKeyAll = (key, ...elements) => this.$.#insertByKeyAll(elements, key);
+    #insertByKeyAll(elements, key) {
         const insertIndexes = this.getKeyArray(key);
 
         for (let index = insertIndexes.length - 1; index >= 0; index--) {
-            this.insert(elements, insertIndexes[index]);
+            this.$.#insert(elements, insertIndexes[index]);
         }
     }
 
-    replace(elements, index) {
+    replace = (index, ...elements) => this.$.#replace(elements, index);
+    #replace(elements, index) {
         index = this.$.#validateIndexBound(index, this.elementMap.size - 1);
 
         for (const element of elements) {
@@ -98,16 +100,18 @@ export default class KeyArray {
         }
     }
 
-    replaceByKey = (elements, key, position) => this.replace(elements, this.getKeyIndex(key, position));
+    replaceByKey = (key, position, ...elements) => this.$.#replaceByKey(elements, key, position);
+    #replaceByKey = (elements, key, position) => this.$.#replace(elements, this.getKeyIndex(key, position));
 
     /**
-     * replaces all elements in the {key} index, does not overwrites added elements,
-     * inserts elements instead of replacing if needed to avoid overwriting added elements
-     * 
-     * @param {[]} elements 
-     * @param {''} key
-     */
-    replaceByKeyAll = (elements, key) => {
+    * replaces all elements in the {key} index, does not overwrites added elements,
+    * inserts elements instead of replacing if needed to avoid overwriting added elements
+    * 
+    * @param {[]} elements 
+    * @param {''} key
+    */
+    replaceByKeyAll = (key, ...elements) => this.$.#replaceByKeyAll(elements, key);
+    #replaceByKeyAll = (elements, key) => {
         const replaceIndexes = this.getKeyArray(key);
         const amount = elements.length;
 
@@ -122,10 +126,10 @@ export default class KeyArray {
             }
 
             const startElements = elements.slice(0, tempAmount);
-            this.replace(startElements, replaceIndex);
+            this.$.#replace(startElements, replaceIndex);
 
             const endElements = elements.slice(tempAmount);
-            this.insert(endElements, replaceIndex + tempAmount);
+            this.$.#insert(endElements, replaceIndex + tempAmount);
         }
     }
 
@@ -348,7 +352,7 @@ export default class KeyArray {
         return false;
     }
 
-    push = (...elements) => this.insert(elements, this.elementMap.size - 1);
+    push = (...elements) => this.$.#insert(elements, this.elementMap.size - 1);
 
     pop() {
         const poppedElement = this.getLast();
@@ -356,7 +360,7 @@ export default class KeyArray {
         return poppedElement;
     }
 
-    unshift = (...elements) => this.insert(elements, 0);
+    unshift = (...elements) => this.$.#insert(elements, 0);
 
     shift() {
         const shiftedElement = this.getFirst();
@@ -492,7 +496,7 @@ export default class KeyArray {
         }
 
         this.remove(start, deleteTo);
-        this.insert(items, start);
+        this.$.#insert(items, start);
 
         return obj;
     }
@@ -562,8 +566,8 @@ export function KeyArrayProxy(
         set(obj, key, value, receiver) {
             if (!Number(key)) return obj[key] = value;
 
-            if (obj.exists(key)) obj.replace(value, key);
-            else obj.insert(value, key);
+            if (obj.exists(key)) obj.replace(key, value);
+            else obj.insert(key, value);
 
             return true;
         },

@@ -6,7 +6,7 @@ const karr2 = new KeyArrayProxy({ array: [1, 2, 3, 4] });
 // karr[5] = 'hello'
 // console.log(karr.length)
 // karr[15] = 5
-// karr.insert('testa', 9)
+karr.insert(9, 'testsa')
 // console.log(karr.get(1));
 
 // console.log(karr[1]);
@@ -48,5 +48,5 @@ const karr3 = new KeyArrayProxy({ array: [1, 2, 3, 4, 5] });
 // console.log(karr3.splice(1, 2, ['a']));
 // console.log(karr3.toArray());
 
-console.log(karr3.slice());
+console.log(karr);
 
