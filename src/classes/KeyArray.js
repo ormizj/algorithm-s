@@ -8,10 +8,12 @@ export default class KeyArray {
      */
     constructor({// when updating the argument for the constructor, update the "#newKeyArray" & "#newKeyArrayProxy" methods
         array = [],
-        elementToKey = (element) => typeof element === 'object' ? element : `${element}`
+        elementToKey = (element) => typeof element === 'object' ? element : `${element}`,
     } = {}) {
         this.$ = this; // "this" variable for "KeyArrayProxy" (Proxy can't access private methods)
         this.$.#defineLength(); // length of the keyArray
+
+        this.$classConstructor = KeyArray; // type of the class, for class overrides E.G. Proxy
 
         this.elementToKey = elementToKey; // function to generate a key for the "indexMap"
         this.elementMap = new Map(); // map containing the elements [key: index,    value:element]
@@ -181,22 +183,9 @@ export default class KeyArray {
      * @returns {KeyArray}
      */
     mapToKeyArray = (callback) => this.$.#mapTo(this.$.#newKeyArray(), callback);
-
-    /**
-     * @param {(element, index = 0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
-     * @returns {KeyArrayProxy}
-     */
-    mapToKeyArrayProxy = (callback) => this.$.#mapTo(this.$.#newKeyArrayProxy(), callback);
-
-
     spliceToKeyArray = (start, deleteCount, ...items) => this.$.#spliceTo(this.$.#newKeyArray(), start, deleteCount, ...items);
-    spliceToKeyArrayProxy = (start, deleteCount, ...items) => this.$.#spliceTo(this.$.#newKeyArrayProxy(), start, deleteCount, ...items);
-
-    concatToKeyArray = (...values) => this.$.#concatTo(this.$.#newKeyArray(...this.$), values);
-    concatToKeyArrayProxy = (...values) => this.$.#concatTo(this.$.#newKeyArrayProxy(...this.$), values);
-
+    concatToKeyArray = (...values) => this.$.#concatTo(this.$.#newKeyArray(), values);
     sliceToKeyArray = (start, end) => this.$.#sliceTo(this.$.#newKeyArray(), start, end);
-    sliceToKeyArrayProxy = (start, end) => this.$.#sliceTo(this.$.#newKeyArrayProxy(), start, end);
 
     //TODO insertSorted (returns index where the element was placed in)?
 
@@ -352,7 +341,7 @@ export default class KeyArray {
         return false;
     }
 
-    push = (...elements) => this.$.#insert(elements, this.elementMap.size - 1);
+    push = (...elements) => this.$.#insert(elements, this.elementMap.size);
 
     pop() {
         const poppedElement = this.getLast();
@@ -501,17 +490,10 @@ export default class KeyArray {
         return obj;
     }
 
-    #newKeyArray(array) {
-        return new KeyArray({
+    #newKeyArray() {
+        return new this.$classConstructor({
+            array: [...this.$],
             elementToKey: this.elementToKey,
-            array
-        });
-    }
-
-    #newKeyArrayProxy(array) {
-        return new KeyArrayProxy({
-            elementToKey: this.elementToKey,
-            array
         });
     }
 
@@ -547,14 +529,19 @@ export default class KeyArray {
     };
 }
 
-export function KeyArrayProxy(
+export function KeyArrayProxy({
     array = [],
-    elementToKey = (element) => `${element} `
-) {
+    elementToKey = (element) => typeof element === 'object' ? element : `${element}`,
+}) {
     // if the "new" keyword isn't used when calling the function, throw TypeError
-    if (!(this instanceof KeyArrayProxy)) throw TypeError(`Constructor KeyArrayProxy requires 'new'`);
+    if (!(this instanceof KeyArrayProxy)) throw TypeError(`Constructor KeyArrayProxy requires "new"`);
 
-    const instance = new KeyArray(array, elementToKey);
+    // initialize KeyArray
+    const instance = new KeyArray({
+        array,
+        elementToKey,
+    });
+    instance.$classConstructor = KeyArrayProxy;
 
     return new Proxy(instance, {
         get(obj, key, receiver) {
