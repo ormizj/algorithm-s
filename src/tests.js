@@ -43,14 +43,21 @@ karr.insert(9, 'testsa')
 // }));
 
 
-const karr3 = new KeyArrayProxy({ array: [1, 2, 3, 4, 5] });
+const karr3 = new KeyArrayProxy({ array: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] });
+
+// const karr3 = new KeyArrayProxy({ array: [5, 2, 6, 9, 1, 2, 4, 6, 8, 3, 0, 1, 9, 3] });
+
 
 // console.log(karr3.splice(1, 2, ['a']));
 // console.log(karr3.toArray());
-console.log(new KeyArray().classType === KeyArray);
-console.log(karr.classType === KeyArrayProxy);
+// console.log(new KeyArray().classType === KeyArray);
+// console.log(karr.classType === KeyArrayProxy);
 
 // console.log(karr.concatToKeyArray([undefined]));
-console.log(karr3.concatToKeyArray([undefined]));
+// console.log(karr3.concatToKeyArray([undefined]));
 
+karr3.comparator = (element, otherElement) => element - otherElement;
 
+console.log(karr3.length);
+console.log(karr3.binarySearch(10));
+console.log(karr3[4]); 

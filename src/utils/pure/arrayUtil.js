@@ -18,10 +18,10 @@ export const arrIndexToInsertNum = (sortedArr, num) => {
 	while (low < high) {
 		const mid = (low + high) >>> 1;
 
-		if (sortedArr[mid] < num) {
-			low = mid + 1;
-		} else {
+		if (sortedArr[mid] > num) {
 			high = mid;
+		} else {
+			low = mid + 1;
 		}
 	}
 

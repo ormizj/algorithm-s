@@ -4,17 +4,20 @@ import { numValidate } from "../utils/pure/numberUtil.js";
 export default class KeyArray {
     /**
      * @param {[]} array to initialize elements
-     * @param {(element) => any} elementToKey  to set the keys for the elements
+     * @param {(element) => any} elementToKey to set the keys for the elements
+     * @param {(element, otherElement) => number} comparator for element sorting
      */
     constructor({// when updating the argument for the constructor, update the "#newKeyArray" & "#newKeyArrayProxy" methods
         array = [],
         elementToKey = (element) => typeof element === 'object' ? element : `${element}`,
+        comparator = (element, otherElement) => 0,
     } = {}) {
         this.$ = this; // "this" variable for "KeyArrayProxy" (Proxy can't access private methods)
         this.$.#defineLength(); // length of the keyArray
 
         this.$classConstructor = KeyArray; // type of the class, for class overrides E.G. Proxy
 
+        this.comparator = comparator; // elements comparator
         this.elementToKey = elementToKey; // function to generate a key for the "indexMap"
         this.elementMap = new Map(); // map containing the elements [key: index,    value:element]
         this.indexMap = new Map(); //   map containing the indexes  [key: string,   value:index]
@@ -189,7 +192,22 @@ export default class KeyArray {
 
     //TODO insertSorted (returns index where the element was placed in)?
 
-    //TODO searchComparator
+    binarySearch(element) {
+        let high = this.elementMap.size;
+        let low = 0;
+
+        while (low < high) {
+            const mid = (low + high) >>> 1;
+
+            if (this.comparator(element, this.elementMap.get(mid)) > 0) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+
+        return element === this.elementMap.get(low) ? low : -1;
+    }
 
     toArray() {
         const arr = [];
@@ -545,16 +563,17 @@ export function KeyArrayProxy({
 
     return new Proxy(instance, {
         get(obj, key, receiver) {
-            if (!Number(key)) return obj[key];
+            const keyNumber = Number(key);
 
-            return obj.get(key);
+            return isNaN(keyNumber) ? obj[key] : obj.get(keyNumber);
         },
 
         set(obj, key, value, receiver) {
-            if (!Number(key)) return obj[key] = value;
+            const keyNumber = Number(key);
+            if (isNaN(keyNumber)) return obj[key] = value;
 
-            if (obj.exists(key)) obj.replace(key, value);
-            else obj.insert(key, value);
+            if (obj.exists(keyNumber)) obj.replace(key, value);
+            else obj.insert(keyNumber, value);
 
             return true;
         },
