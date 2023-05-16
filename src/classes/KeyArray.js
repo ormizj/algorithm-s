@@ -1,11 +1,14 @@
 import { arrInsert, arrRemove } from "../utils/mutation/arrayUtil.js";
-import { arrIsEmpty, arrIndexToInsertNum } from "../utils/pure/arrayUtil.js";
+import { mergeSort, binaryInsertIndex } from "../utils/mutation/sortUtil.js";
+import { arrIsEmpty } from "../utils/pure/arrayUtil.js";
 import { numValidate } from "../utils/pure/numberUtil.js";
+
+
 export default class KeyArray {
     /**
      * @param {[]} array to initialize elements
      * @param {(element) => any} elementToKey to set the keys for the elements
-     * @param {(element, otherElement) => number} comparator for element sorting
+     * @param {(a, b) => number} comparator for storing the compare function of the class (doesn't affect the methods of the class)
      */
     constructor({// when updating the argument for the constructor, update the "#newKeyArray" & "#newKeyArrayProxy" methods
         array = [],
@@ -19,6 +22,8 @@ export default class KeyArray {
 
         this.comparator = comparator; // elements comparator
         this.elementToKey = elementToKey; // function to generate a key for the "indexMap"
+
+        // initializing maps, to act as an array
         this.elementMap = new Map(); // map containing the elements [key: index,    value:element]
         this.indexMap = new Map(); //   map containing the indexes  [key: string,   value:index]
 
@@ -26,6 +31,8 @@ export default class KeyArray {
     }
 
     /* PUBLIC METHODS */
+
+    //TODO insertSorted (returns index where the element was placed in)?
 
     insert = (index, ...elements) => this.$.#insert(elements, index);
     #insert(elements, index) {
@@ -181,6 +188,11 @@ export default class KeyArray {
         }
     }
 
+    resetArray = () => {
+        this.elementMap = new Map();
+        this.indexMap = new Map();
+    }
+
     /**
      * @param {(element, index = 0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
      * @returns {KeyArray}
@@ -190,16 +202,14 @@ export default class KeyArray {
     concatToKeyArray = (...values) => this.$.#concatTo(this.$.#newKeyArray(), values);
     sliceToKeyArray = (start, end) => this.$.#sliceTo(this.$.#newKeyArray(), start, end);
 
-    //TODO insertSorted (returns index where the element was placed in)?
-
-    binarySearch(element) {
+    binarySearch(element, compare = (a, b) => `${a}`.localeCompare(b)) {
         let high = this.elementMap.size;
         let low = 0;
 
         while (low < high) {
             const mid = (low + high) >>> 1;
 
-            if (this.comparator(element, this.elementMap.get(mid)) > 0) {
+            if (compare(element, this.elementMap.get(mid)) > 0) {
                 low = mid + 1;
             } else {
                 high = mid;
@@ -286,7 +296,22 @@ export default class KeyArray {
         }
     }
 
-    //TODO sort
+    sort(compare = (a, b) => `${a}`.localeCompare(b)) {
+        const sortedArr = mergeSort(this.toArray(), compare);
+
+        this.resetArray();
+        this.$.#insert(sortedArr);
+
+        return this;
+    }
+
+    toSorted(compare = (a, b) => `${a}`.localeCompare(b)) {
+        const sortedArr = mergeSort(this.toArray(), compare);
+
+        const newKeyArray = this.$.#newKeyArray(sortedArr);
+
+        return newKeyArray;
+    }
 
     /**
      * @param {(accumulator, currentValue, currentIndex=0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
@@ -508,14 +533,15 @@ export default class KeyArray {
         return obj;
     }
 
-    #newKeyArray() {
+    #newKeyArray(array) {
         return new this.$classConstructor({
-            array: [...this.$],
+            array: array ?? [...this.$],
             elementToKey: this.elementToKey,
+            comparator: this.comparator,
         });
     }
 
-    #getIndexMapSortedIndex = (key, index) => arrIndexToInsertNum(this.indexMap.get(key), index);
+    #getIndexMapSortedIndex = (key, index) => binaryInsertIndex(this.indexMap.get(key), index);
 
     /* SYMBOL AND DEFINE METHODS */
 
@@ -563,15 +589,15 @@ export function KeyArrayProxy({
 
     return new Proxy(instance, {
         get(obj, key, receiver) {
-            const keyNumber = Number(key);
+            const keyNumber = typeof key === 'symbol' ? NaN : key;
 
-            return isNaN(keyNumber) ? obj[key] : obj.get(keyNumber);
+            return isNaN(keyNumber) ? obj[key] : obj.get(Number(key));
         },
 
         set(obj, key, value, receiver) {
-            const keyNumber = Number(key);
-            if (isNaN(keyNumber)) return obj[key] = value;
+            if (isNaN(key)) return obj[key] = value;
 
+            const keyNumber = Number(key);
             if (obj.exists(keyNumber)) obj.replace(key, value);
             else obj.insert(keyNumber, value);
 

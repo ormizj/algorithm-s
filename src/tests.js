@@ -45,7 +45,10 @@ karr.insert(9, 'testsa')
 
 const karr3 = new KeyArrayProxy({ array: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] });
 
-// const karr3 = new KeyArrayProxy({ array: [5, 2, 6, 9, 1, 2, 4, 6, 8, 3, 0, 1, 9, 3] });
+const karrSort = new KeyArrayProxy({ array: [5, 2, 6, 9, 1, 2, 4, 6, 8, 3, 0, 1, 9, 3] });
+
+const karrSort2 = new KeyArrayProxy({ array: [5, 2, 6, 9, 1, 2, 4, 6, 8, 3, 0, 1, 9, 3] });
+
 
 
 // console.log(karr3.splice(1, 2, ['a']));
@@ -58,6 +61,11 @@ const karr3 = new KeyArrayProxy({ array: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] });
 
 karr3.comparator = (element, otherElement) => element - otherElement;
 
-console.log(karr3.length);
-console.log(karr3.binarySearch(10));
-console.log(karr3[4]); 
+// console.log(karr3.length);
+// console.log(karr3.binarySearch(10));
+// console.log(karr3[4]);
+// const outcome = karrSort2.sort((a, b) => a - b);
+// console.log(outcome);
+karrSort.sort((a, b) => a - b)
+
+console.log(karrSort.indexMap);
