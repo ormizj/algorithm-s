@@ -204,7 +204,7 @@ export default class KeyArray {
     concat = (...values) => this.$.#concatTo(this.$.#newKeyArray(), values);
     slice = (start, end) => this.$.#sliceTo(this.$.#newKeyArray(), start, end);
 
-    binarySearch(element, compare = (a, b) => this.comparator(a, b)) {
+    binarySearch(element, compare = this.comparator) {
         let high = this.elementMap.size;
         let low = 0;
 
@@ -298,7 +298,7 @@ export default class KeyArray {
         }
     }
 
-    sort(compare = (a, b) => this.comparator(a, b)) {
+    sort(compare = this.comparator) {
         const sortedArr = mergeSort(this.toArray(), compare);
 
         this.resetArray();
@@ -307,7 +307,7 @@ export default class KeyArray {
         return this;
     }
 
-    toSorted(compare = (a, b) => this.comparator(a, b)) {
+    toSorted(compare = this.comparator) {
         const sortedArr = mergeSort(this.toArray(), compare);
 
         const newKeyArray = this.$.#newKeyArray(sortedArr);
@@ -375,7 +375,7 @@ export default class KeyArray {
 
     spliceToArray = (start = 0, deleteCount, ...items) => this.$.#spliceTo([], start, deleteCount, items);
 
-    toSortedArray = (compare = (a, b) => this.comparator(a, b)) => mergeSort(this.toArray(), compare);
+    toSortedArray = (compare = this.comparator) => mergeSort(this.toArray(), compare);
 
     includes(searchElement, fromIndex) {
         fromIndex = this.$.#validateIndex(fromIndex, 0);
