@@ -7,20 +7,20 @@ import { numValidate } from "../utils/pure/numberUtil.js";
 export default class KeyArray {
     /**
      * @param {[]} array to initialize elements
-     * @param {(element) => any} elementToKey to set the keys for the elements
-     * @param {(a, b) => number} comparator for storing the compare function of the class (doesn't affect the methods of the class)
+     * @param {(element) => any} elementToKey to set the keys for the inserted elements
+     * @param {(a, b) => number} comparator of the elements; the default comparator to every function that uses a "compare" function
      */
     constructor({// when updating the argument for the constructor, update the "#newKeyArray" & "#newKeyArrayProxy" methods
         array = [],
         elementToKey = (element) => typeof element === 'object' ? element : `${element}`,
-        comparator = (element, otherElement) => 0,
+        comparator = (a, b) => `${a}`.localeCompare(b),
     } = {}) {
         this.$ = this; // "this" variable for "KeyArrayProxy" (Proxy can't access private methods)
         this.$.#defineLength(); // length of the keyArray
 
         this.$classConstructor = KeyArray; // type of the class, for class overrides E.G. Proxy
 
-        this.comparator = comparator; // elements comparator
+        this.comparator = comparator; // element comparator, the default comparator to every function that uses "compare"
         this.elementToKey = elementToKey; // function to generate a key for the "indexMap"
 
         // initializing maps, to act as an array
@@ -32,7 +32,7 @@ export default class KeyArray {
 
     /* PUBLIC METHODS */
 
-    //TODO insertSorted (returns index where the element was placed in)?
+    //TODO insertSorted (returns index where the element was placed in)
 
     insert = (index, ...elements) => this.$.#insert(elements, index);
     #insert(elements, index) {
@@ -188,6 +188,8 @@ export default class KeyArray {
         }
     }
 
+    //TODO binaryInsertIndex (returns the sorted position a new element neeeds to be inserted in order to keep the list soreted)
+
     resetArray = () => {
         this.elementMap = new Map();
         this.indexMap = new Map();
@@ -197,12 +199,12 @@ export default class KeyArray {
      * @param {(element, index = 0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
      * @returns {KeyArray}
      */
-    mapToKeyArray = (callback) => this.$.#mapTo(this.$.#newKeyArray(), callback);
-    spliceToKeyArray = (start, deleteCount, ...items) => this.$.#spliceTo(this.$.#newKeyArray(), start, deleteCount, ...items);
-    concatToKeyArray = (...values) => this.$.#concatTo(this.$.#newKeyArray(), values);
-    sliceToKeyArray = (start, end) => this.$.#sliceTo(this.$.#newKeyArray(), start, end);
+    map = (callback) => this.$.#mapTo(this.$.#newKeyArray(), callback);
+    splice = (start, deleteCount, ...items) => this.$.#spliceTo(this.$.#newKeyArray(), start, deleteCount, ...items);
+    concat = (...values) => this.$.#concatTo(this.$.#newKeyArray(), values);
+    slice = (start, end) => this.$.#sliceTo(this.$.#newKeyArray(), start, end);
 
-    binarySearch(element, compare = (a, b) => `${a}`.localeCompare(b)) {
+    binarySearch(element, compare = (a, b) => this.comparator(a, b)) {
         let high = this.elementMap.size;
         let low = 0;
 
@@ -296,7 +298,7 @@ export default class KeyArray {
         }
     }
 
-    sort(compare = (a, b) => `${a}`.localeCompare(b)) {
+    sort(compare = (a, b) => this.comparator(a, b)) {
         const sortedArr = mergeSort(this.toArray(), compare);
 
         this.resetArray();
@@ -305,7 +307,7 @@ export default class KeyArray {
         return this;
     }
 
-    toSorted(compare = (a, b) => `${a}`.localeCompare(b)) {
+    toSorted(compare = (a, b) => this.comparator(a, b)) {
         const sortedArr = mergeSort(this.toArray(), compare);
 
         const newKeyArray = this.$.#newKeyArray(sortedArr);
@@ -365,13 +367,15 @@ export default class KeyArray {
      * @param {(element, index = 0, instance = KeyArray) => any} callback, "instance" will return the instance of {KeyArray}, not an {Array}
      * @returns {[]}
      */
-    map = (callback) => this.$.#mapTo([], callback);
+    mapToArray = (callback) => this.$.#mapTo([], callback);
 
-    concat = (...values) => this.$.#concatTo([...this.$], values);
+    concatToArray = (...values) => this.$.#concatTo([...this.$], values);
 
-    slice = (start, end) => this.$.#sliceTo([], start, end);
+    sliceToArray = (start, end) => this.$.#sliceTo([], start, end);
 
-    splice = (start = 0, deleteCount, ...items) => this.$.#spliceTo([], start, deleteCount, items);
+    spliceToArray = (start = 0, deleteCount, ...items) => this.$.#spliceTo([], start, deleteCount, items);
+
+    toSortedArray = (compare = (a, b) => this.comparator(a, b)) => mergeSort(this.toArray(), compare);
 
     includes(searchElement, fromIndex) {
         fromIndex = this.$.#validateIndex(fromIndex, 0);

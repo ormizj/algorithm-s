@@ -68,4 +68,6 @@ karr3.comparator = (element, otherElement) => element - otherElement;
 // console.log(outcome);
 karrSort.sort((a, b) => a - b)
 
-console.log(karrSort.indexMap);
+console.log(karrSort);
+console.log('-------------');
+console.log(karrSort.toSortedArray());
