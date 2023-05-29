@@ -6,5 +6,5 @@ Contains various algorithms ranging from algorithmic questions to various utilit
 
 ## Highlights
 
-### KeyArray
-Array type structure that support keys to handle the array
+### KeyArray /src/classes/KeyArray.js
+Array type structure supporting *keys* & *indexes*
