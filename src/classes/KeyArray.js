@@ -1,5 +1,5 @@
 import { arrInsert, arrRemove } from "../utils/mutation/arrayUtil.js";
-import { mergeSort, binaryInsertIndex } from "../utils/mutation/sortUtil.js";
+import { mergeSort, sortedInsertIndex } from "../utils/mutation/sortUtil.js";
 import { arrIsEmpty } from "../utils/pure/arrayUtil.js";
 import { numValidate } from "../utils/pure/numberUtil.js";
 
@@ -31,8 +31,6 @@ export default class KeyArray {
     }
 
     /* PUBLIC METHODS */
-
-    //TODO insertSorted (returns index where the element was placed in)
 
     insert = (index, ...elements) => this.$.#insert(elements, index);
     #insert(elements, index) {
@@ -96,6 +94,34 @@ export default class KeyArray {
             this.$.#insert(elements, insertIndexes[index]);
         }
     }
+
+    insertSorted(element, compare) {
+        const index = this.sortedInsertIndex(element, compare);
+        this.$.#insert([element], index);
+    }
+
+    /**
+     * @param {*} element 
+     * @param {*} compare 
+     * @returns the index of the sorted {KeyArray}; inserting the element in the returned index will to keep the {KeyArray} sorted
+     */
+    sortedInsertIndex(element, compare = this.comparator) {
+        let high = this.elementMap.size;
+        let low = 0;
+
+        while (low < high) {
+            const mid = (low + high) >>> 1;
+
+            if (compare(this.elementMap.get(mid), element) > 0) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return low;
+    }
+
 
     replace = (index, ...elements) => this.$.#replace(elements, index);
     #replace(elements, index) {
@@ -188,9 +214,7 @@ export default class KeyArray {
         }
     }
 
-    //TODO binaryInsertIndex (returns the sorted position a new element neeeds to be inserted in order to keep the list soreted)
-
-    resetArray = () => {
+    resetArray() {
         this.elementMap = new Map();
         this.indexMap = new Map();
     }
@@ -545,7 +569,7 @@ export default class KeyArray {
         });
     }
 
-    #getIndexMapSortedIndex = (key, index) => binaryInsertIndex(this.indexMap.get(key), index);
+    #getIndexMapSortedIndex = (key, index) => sortedInsertIndex(this.indexMap.get(key), index);
 
     /* SYMBOL AND DEFINE METHODS */
 
