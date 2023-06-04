@@ -1,6 +1,6 @@
 export const isNum = (num) => typeof num === 'number';
 
-export const numValidate = (num) => Number(num);
+export const toNumber = (num) => Number(num);
 
 export const numIsBetween = (num = 0, min = 0, max = 0) => num >= min && num <= max;
 

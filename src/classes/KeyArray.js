@@ -1,9 +1,3 @@
-import { arrInsert, arrRemove } from "../utils/mutation/arrayUtil.js";
-import { mergeSort, sortedInsertIndex } from "../utils/mutation/sortUtil.js";
-import { arrIsEmpty } from "../utils/pure/arrayUtil.js";
-import { numValidate } from "../utils/pure/numberUtil.js";
-
-
 export default class KeyArray {
     /**
      * @param {[]} array to initialize elements
@@ -441,7 +435,7 @@ export default class KeyArray {
             return lastIndex;
 
         } else {
-            index = numValidate(index);
+            index = toNumber(index);
             if (index < 0) index = index + lastIndex + 1;
         }
 
@@ -632,4 +626,55 @@ export function KeyArrayProxy({
             return true;
         },
     });
+}
+
+/* Independent Functions */
+
+const arrInsert = (arr = [], index = 0, ...elements) => arr.splice(index, 0, ...elements);
+const arrRemove = (arr = [], index = 0, count = 1) => arr.splice(index, count);
+const arrIsEmpty = (arr = []) => arr.length === 0;
+const toNumber = (num) => Number(num);
+
+const mergeSort = (array, compare) => {
+
+    const merge = (leftArr, rightArr) => {
+        const sortedArr = [];
+
+        while (leftArr.length && rightArr.length) {
+            if (compare(leftArr[0], rightArr[0]) > 0) {
+                sortedArr.push(rightArr.shift());
+            } else {
+                sortedArr.push(leftArr.shift());
+            }
+        }
+
+        return [...sortedArr, ...leftArr, ...rightArr];
+    }
+
+    const mergeSortHelper = (arr) => {
+        if (arr.length < 2) return arr;
+
+        const otherArr = arr.splice(0, arr.length >>> 1);
+
+        return merge(mergeSortHelper(arr), mergeSortHelper(otherArr));
+    }
+
+    return mergeSortHelper(array);
+}
+
+const sortedInsertIndex = (sortedArr, num) => {
+    let high = sortedArr.length;
+    let low = 0;
+
+    while (low < high) {
+        const mid = (low + high) >>> 1;
+
+        if (sortedArr[mid] > num) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    return low;
 }

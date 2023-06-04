@@ -2,7 +2,7 @@ import { isNull } from "./jsUtil.js";
 
 export const arrIsEmpty = (arr = []) => arr.length === 0;
 
-export const validateComparator = (comparator) => comparator ? comparator : () => 0;
+export const toComparator = (comparator) => comparator ? comparator : (a, b) => `${a}`.localeCompare(b);
 
 export const isArr = (arr) => Array.isArray(arr);
 
