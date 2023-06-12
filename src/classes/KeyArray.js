@@ -4,7 +4,7 @@ export default class KeyArray {
      * @param {(element) => any} elementToKey to set the keys for the inserted elements
      * @param {(a, b) => number} comparator of the elements; the default comparator to every function that uses a "compare" function
      */
-    constructor({// when updating the argument for the constructor, update the "#newKeyArray" & "#newKeyArrayProxy" methods
+    constructor({// when updating the argument for the constructor, update the KeyArrayProxy class, "#newKeyArray" & "#newKeyArrayProxy" methods
         array = [],
         elementToKey = (element) => typeof element === 'object' ? element : `${element}`,
         comparator = (a, b) => `${a}`.localeCompare(b),
@@ -598,6 +598,7 @@ export default class KeyArray {
 export function KeyArrayProxy({
     array = [],
     elementToKey = (element) => typeof element === 'object' ? element : `${element}`,
+    comparator = (a, b) => `${a}`.localeCompare(b),
 }) {
     // if the "new" keyword isn't used when calling the function, throw TypeError
     if (!(this instanceof KeyArrayProxy)) throw TypeError(`Constructor KeyArrayProxy requires "new"`);
@@ -606,6 +607,7 @@ export function KeyArrayProxy({
     const instance = new KeyArray({
         array,
         elementToKey,
+        comparator
     });
     instance.$classConstructor = KeyArrayProxy;
 
