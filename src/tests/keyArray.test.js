@@ -1,7 +1,7 @@
-import { describe, expect, it, beforeEach } from '@jest/globals';
+import { describe, expect, it, beforeEach, test } from '@jest/globals';
 import { KeyArrayProxy } from '../classes/KeyArray';
 
-describe("insert", () => {
+describe("KeyArray", () => {
     let karr;
 
     beforeEach(() => {
@@ -9,5 +9,13 @@ describe("insert", () => {
         const elementToKey = (letter) => `${letter.charCodeAt()}`;
 
         karr = new KeyArrayProxy({ array, elementToKey });
+    });
+
+    test('insert', () => {
+        karr.insert(0, 'first');
+        karr.insert(karr.length >>> 1, 'mid', 'dle');
+        karr.insert(karr.length, 'last');
+
+        expect(karr.toArray()).toStrictEqual(['first', 'a', 'b', 'c', 'd', 'e', 'mid', 'dle', 'f', 'a', 'g', 'h', 'i', 'g', 'last']);
     });
 });
