@@ -17,8 +17,6 @@ const twoSum = function (nums, target) {
     }
 };
 
-
-
 /*----------------------------------------------------------------------------------------------------*/
 import { printResult } from "../../../answerUtil.js";
 

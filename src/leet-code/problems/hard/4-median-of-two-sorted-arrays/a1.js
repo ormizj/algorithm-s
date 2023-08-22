@@ -36,7 +36,6 @@ const findMedianSortedArrays = function (nums1, nums2) {
     return medianValue[1] || medianValue[0];
 };
 
-
 /*----------------------------------------------------------------------------------------------------*/
 import { printEnd, printResult } from "../../../answerUtil.js";
 
