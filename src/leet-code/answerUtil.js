@@ -59,6 +59,8 @@ const calculateAnswer = ({ expected, actual, isOrder = false } = {}) => {
             return objEqual(expected, actual);
 
         } else {
+            console.log(expected);
+            console.log(actual);
             return objEqualMessy(expected, actual);
         };
     }
