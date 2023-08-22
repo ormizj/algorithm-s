@@ -1,6 +1,6 @@
 import chalk from 'chalk';
-import { objEqual, objSize, forIn, objEqualMessy } from '../utils/objectUtil.js';
-import { vTypeOf } from '../utils/jsUtil.js';
+import { objEqual, objSize, forIn, objEqualMessy } from '../utils/pure/objectUtil.js';
+import { vTypeOf } from '../utils/pure/jsUtil.js';
 
 const space = `    `;
 const dash = `----------`;
