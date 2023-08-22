@@ -19,6 +19,10 @@ const removeByIndex = (str, index, count) => str.slice(0, index) + str.slice(ind
 
 /*----------------------------------------------------------------------------------------------------*/
 import { printResult } from "../../../answerUtil.js";
-printResult({ answerCb: makeGood, expected: 'leetcode', input: { s: 'leEeetcode' } });
-printResult({ answerCb: makeGood, expected: '', input: { s: 'abBAcC' } });
-printResult({ answerCb: makeGood, expected: 's', input: { s: 's' } });
+
+const answerCb = makeGood;
+printResult({ answerCb, expected: 'leetcode', input: { s: 'leEeetcode' } });
+printResult({ answerCb, expected: '', input: { s: 'abBAcC' } });
+printResult({ answerCb, expected: 's', input: { s: 's' } });
+
+printEnd();

@@ -26,13 +26,15 @@ var lengthOfLongestSubstring = function (s) {
 /*----------------------------------------------------------------------------------------------------*/
 import { printEnd, printResult } from "../../../answerUtil.js";
 
-printResult({ answerCb: lengthOfLongestSubstring, expected: 3, input: { s: 'abcabcbb' } });
-printResult({ answerCb: lengthOfLongestSubstring, expected: 1, input: { s: 'bbbbb' } });
-printResult({ answerCb: lengthOfLongestSubstring, expected: 3, input: { s: 'pwwkew' } });
-printResult({ answerCb: lengthOfLongestSubstring, expected: 2, input: { s: 'aab' } });
-printResult({ answerCb: lengthOfLongestSubstring, expected: 3, input: { s: 'dvdf' } });
-printResult({ answerCb: lengthOfLongestSubstring, expected: 1, input: { s: ' ' } });
-printResult({ answerCb: lengthOfLongestSubstring, expected: 2, input: { s: 'au' } });
-printResult({ answerCb: lengthOfLongestSubstring, expected: 2, input: { s: 'cdd' } });
-printResult({ answerCb: lengthOfLongestSubstring, expected: 2, input: { s: 'abba' } });
+const answerCb = lengthOfLongestSubstring;
+printResult({ answerCb, expected: 3, input: { s: 'abcabcbb' } });
+printResult({ answerCb, expected: 1, input: { s: 'bbbbb' } });
+printResult({ answerCb, expected: 3, input: { s: 'pwwkew' } });
+printResult({ answerCb, expected: 2, input: { s: 'aab' } });
+printResult({ answerCb, expected: 3, input: { s: 'dvdf' } });
+printResult({ answerCb, expected: 1, input: { s: ' ' } });
+printResult({ answerCb, expected: 2, input: { s: 'au' } });
+printResult({ answerCb, expected: 2, input: { s: 'cdd' } });
+printResult({ answerCb, expected: 2, input: { s: 'abba' } });
+
 printEnd();

@@ -21,6 +21,10 @@ const twoSum = function (nums, target) {
 
 /*----------------------------------------------------------------------------------------------------*/
 import { printResult } from "../../../answerUtil.js";
-printResult({ answerCb: twoSum, expected: [0, 1], input: { nums: [2, 7, 11, 15], target: 9 } });
-printResult({ answerCb: twoSum, expected: [1, 2], input: { nums: [3, 2, 4], target: 6 } });
-printResult({ answerCb: twoSum, expected: [0, 1], input: { nums: [3, 3], target: 6 } });
+
+const answerCb = twoSum;
+printResult({ answerCb, expected: [0, 1], input: { nums: [2, 7, 11, 15], target: 9 } });
+printResult({ answerCb, expected: [1, 2], input: { nums: [3, 2, 4], target: 6 } });
+printResult({ answerCb, expected: [0, 1], input: { nums: [3, 3], target: 6 } });
+
+printEnd();
