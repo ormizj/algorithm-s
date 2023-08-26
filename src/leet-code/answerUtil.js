@@ -40,12 +40,24 @@ const beautifyJson = (json) => {
 
     let index = 1;
     forIn(json, (value, key) => {
-        beautifiedJson += `[${key}: ${value}]`;
+        if (Array.isArray(value)) {
+            beautifiedJson += `[`;
 
-        if (index < jsonLength) {
-            beautifiedJson += ` ${chalk.yellow('|')} `;
-            index++;
+            beautifiedJson += `[${[value[0]]}]`;
+            for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
+                beautifiedJson += ` [${[value[arrIndex]]}]`;
+            }
+            beautifiedJson += ` [${[value[value.length - 1]]}]]`;
+
+        } else {
+            beautifiedJson += `[${key}: ${value}]`;
+
+            if (index < jsonLength) {
+                beautifiedJson += ` ${chalk.yellow('|')} `;
+                index++;
+            }
         }
+
     });
 
     return beautifiedJson;
