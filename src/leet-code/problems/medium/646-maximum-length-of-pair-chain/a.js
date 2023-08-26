@@ -21,26 +21,18 @@ var findLongestChain = function (pairs) {
     const checkPairs = (pairKey, longestChain) => {
         if (pairKey > endingKey) return longestChain;
 
-        const pairLeap = pairsMap[pairKey] ?? 0;
-        const chainKey = pairKey + pairLeap + 1;
-        if (pairsMap[chainKey] !== undefined) {
-            // console.log(pairsMap[chainKey]);
-
-            // if new chain exists test this chain, continue testing other chains
-            return Math.max(
-                checkPairs(chainKey, longestChain + 1),
-                checkPairs(pairKey + 1, longestChain),
-            );
+        if (pairsMap[pairKey] === undefined) {
+            return checkPairs(pairKey + 1, longestChain);
         }
 
-        // if no new chain exists, continue
-        return checkPairs(pairKey + 1, longestChain)
+        return Math.max(
+            checkPairs(pairKey + 1, longestChain),
+            checkPairs(pairKey + 1 + pairsMap[pairKey], longestChain + 1)
+        );
     }
 
-    return checkPairs(startingKey, 1);
+    return checkPairs(startingKey, 0);
 };
-
-//TODO WIP
 
 /*----------------------------------------------------------------------------------------------------*/
 import { printEnd, printResult } from "../../../answerUtil.js";
