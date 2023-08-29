@@ -285,8 +285,6 @@ export default class KeyArray {
     getKeyFirstIndex = (key) => this.indexMap.get(key)[0];
     /** returns the last index of the key array */
     getKeyLastIndex = (key) => this.indexMap.get(key)[this.getKeySize(key) - 1];
-    /** returns the key of the index */
-    getByKey = (index) => this.elementToKey(this.elementMap.get(index));
     /** returns true if the element exists after it is transfered into its key value */
     includesByKey = (element) => this.keyExists(this.elementToKey(element));
 
@@ -303,6 +301,8 @@ export default class KeyArray {
     getLast = () => this.elementMap.get(this.elementMap.size - 1);
     size = () => this.elementMap.size;
     exists = (index) => this.elementMap.has(index);
+    /** returns the key of the index */
+    getKey = (index) => this.elementToKey(this.elementMap.get(index));
 
     /* ARRAY METHODS */
 
