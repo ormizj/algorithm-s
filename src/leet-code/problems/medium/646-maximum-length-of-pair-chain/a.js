@@ -2,37 +2,23 @@
  * @param {number[][]} pairs
  * @return {number}
  */
-var findLongestChain = function (pairs) {
-    const pairsMap = {};
-    let startingKey = pairs[0][0];
-    let endingKey = pairs[0][0];
+function findLongestChain(pairs) {
+    pairs.sort((a, b) => a[1] - b[1]);
 
-    for (const pair of pairs) {
-        // place LOWEST chain leap in its starting position
-        const pairLeap = pair[1] - pair[0];
-        if (pairsMap[pair[0]] === undefined) pairsMap[pair[0]] = pairLeap;
-        else if (pairsMap[pair[0]] > pairLeap) pairsMap[pair[0]] = pairLeap;
+    let chain = 1;
+    let prev = pairs[0];
 
-        // get minimum key, maximum key
-        if (startingKey > pair[0]) startingKey = pair[0];
-        else if (endingKey < pair[0]) endingKey = pair[0];
-    }
+    for (let i = 1; i < pairs.length; i++) {
+        let curr = pairs[i];
 
-    const checkPairs = (pairKey, longestChain) => {
-        if (pairKey > endingKey) return longestChain;
+        if (curr[0] > prev[1]) {
+            prev = curr;
+            chain++
+        };
+    };
 
-        if (pairsMap[pairKey] === undefined) {
-            return checkPairs(pairKey + 1, longestChain);
-        }
-
-        return Math.max(
-            checkPairs(pairKey + 1, longestChain),
-            checkPairs(pairKey + 1 + pairsMap[pairKey], longestChain + 1)
-        );
-    }
-
-    return checkPairs(startingKey, 0);
-};
+    return chain;
+}
 
 /*----------------------------------------------------------------------------------------------------*/
 import { printEnd, printResult } from "../../../answerUtil.js";
