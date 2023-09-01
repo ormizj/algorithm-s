@@ -13,9 +13,9 @@ function findLongestChain(pairs) {
 
         if (curr[0] > prev[1]) {
             prev = curr;
-            chain++
-        };
-    };
+            chain++;
+        }
+    }
 
     return chain;
 }
