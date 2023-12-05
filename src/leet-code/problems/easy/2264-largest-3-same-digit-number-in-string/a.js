@@ -24,7 +24,7 @@ var largestGoodInteger = function (num) {
 };
 
 /*----------------------------------------------------------------------------------------------------*/
-import { printResult } from "../../../answerUtil.js";
+import { printResult, printEnd } from "../../../answerUtil.js";
 
 const answerCb = largestGoodInteger;
 printResult({ answerCb, expected: '777', input: { num: '6777133339' } });
