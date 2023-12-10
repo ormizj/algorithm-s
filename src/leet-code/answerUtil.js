@@ -2,14 +2,14 @@ import chalk from 'chalk';
 import { objEqual, objSize, forIn, objEqualMessy } from '../utils/pure/objectUtil.js';
 import { vTypeOf } from '../utils/pure/jsUtil.js';
 
-const space = `    `;
-const dash = `----------`;
-const start = chalk.green(`START`);
-const end = chalk.green(`END`);
+const SPACE = `    `;
+const DASH = `----------`;
+const START = chalk.green(`START`);
+const END = chalk.green(`END`);
 
-//prints, printing start on import
-console.log(`\n${space}${dash}${start}${dash}\n`);
-export const printEnd = () => setTimeout(() => console.log(`${space}${dash}-${end}-${dash}\n`));
+// prints
+console.log(`\n${SPACE}${DASH}${START}${DASH}\n`); //prints "----------START----------" on import
+export const printEnd = () => setTimeout(() => console.log(`${SPACE}${DASH}-${END}-${DASH}\n`));
 
 export const printResult = ({ answerCb, expected, input = {}, isOrder = false } = {}) => {
     const inputPrint = beautifyJson(input);
@@ -22,7 +22,9 @@ export const printResult = ({ answerCb, expected, input = {}, isOrder = false } 
         answer = chalk.red(`Wrong Answer`);
     }
 
-    console.log(`${space}${answer}
+    // TODO "[" and "]" (as arrays, not strings) are omitted from the printing;
+    // need to create a function that takes arrays, and transforms the "[" and "]" into strings
+    console.log(`${SPACE}${answer}
     Input:    ${inputPrint}
     Output:   ${actual}
     Expected: ${expected}
@@ -42,19 +44,20 @@ const beautifyJson = (json) => {
     forIn(json, (value, key) => {
         if (Array.isArray(value)) {
 
-            //TODO WIP
-            // beautifiedJson += `[`;
-            // beautifiedJson += `[${[value[0]]}]`;
-            // for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
-            //     beautifiedJson += ` [${[value[arrIndex]]}]`;
-            // }
-            // beautifiedJson += ` [${[value[value.length - 1]]}]]`;
-
-            beautifiedJson += `[${[value[0]]}, `;
+            // TODO WIP [works in "867-transpose-matrix"]
+            beautifiedJson += `[ `;
+            beautifiedJson += `[${[value[0]]}]`;
             for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
-                beautifiedJson += `${[value[arrIndex]]}, `;
+                beautifiedJson += ` [${[value[arrIndex]]}]`;
             }
-            beautifiedJson += `${[value[value.length - 1]]}]`;
+            beautifiedJson += ` [${[value[value.length - 1]]}] ]`;
+
+            // TODO need to check where this function works
+            // beautifiedJson += `[${[value[0]]}, `;
+            // for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
+            //     beautifiedJson += `${[value[arrIndex]]}, `;
+            // }
+            // beautifiedJson += `${[value[value.length - 1]]}]`;
         } else {
             beautifiedJson += `[${key}: ${value}]`;
 
@@ -77,8 +80,6 @@ const calculateAnswer = ({ expected, actual, isOrder = false } = {}) => {
             return objEqual(expected, actual);
 
         } else {
-            console.log(expected);
-            console.log(actual);
             return objEqualMessy(expected, actual);
         };
     }
