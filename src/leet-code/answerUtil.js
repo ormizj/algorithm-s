@@ -45,19 +45,20 @@ const beautifyJson = (json) => {
         if (Array.isArray(value)) {
 
             // TODO WIP [works in "867-transpose-matrix"]
-            beautifiedJson += `[ `;
-            beautifiedJson += `[${[value[0]]}]`;
-            for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
-                beautifiedJson += ` [${[value[arrIndex]]}]`;
-            }
-            beautifiedJson += ` [${[value[value.length - 1]]}] ]`;
-
-            // TODO need to check where this function works
-            // beautifiedJson += `[${[value[0]]}, `;
+            // beautifiedJson += `[ `;
+            // beautifiedJson += `[${[value[0]]}]`;
             // for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
-            //     beautifiedJson += `${[value[arrIndex]]}, `;
+            //     beautifiedJson += ` [${[value[arrIndex]]}]`;
             // }
-            // beautifiedJson += `${[value[value.length - 1]]}]`;
+            // beautifiedJson += ` [${[value[value.length - 1]]}] ]`;
+
+            // TODO WIP [works in 1287-element-appearing-more-than-25%-in-sorted-array]
+            beautifiedJson += `[${[value[0]]}, `;
+            for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
+                beautifiedJson += `${[value[arrIndex]]}, `;
+            }
+            beautifiedJson += `${[value[value.length - 1]]}]`;
+
         } else {
             beautifiedJson += `[${key}: ${value}]`;
 
