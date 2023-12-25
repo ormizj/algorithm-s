@@ -44,6 +44,9 @@ function ListNode(val, next) {
     this.next = (next === undefined ? null : next)
 }
 
+/*----------------------------------------------------------------------------------------------------*/
+import { printEnd, printResult } from "../../../answerUtil.js";
+
 function listNodeToArr(node) {
     const arr = [];
 
@@ -67,9 +70,6 @@ function arrToListNode(arr) {
 
     return node;
 }
-
-/*----------------------------------------------------------------------------------------------------*/
-import { printEnd, printResult } from "../../../answerUtil.js";
 
 const answerCb = addTwoNumbers;
 printResult({ answerCb, expected: ['7', '0', '8'], input: { l1: arrToListNode([2, 4, 3]), l2: arrToListNode([5, 6, 4]) } });
