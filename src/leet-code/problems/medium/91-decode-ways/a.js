@@ -4,7 +4,7 @@ var numDecodings = function (s) {
     dp[s.length] = 1;
 
     for (let i = s.length - 1; i >= 0; i--) {
-        if (s[i] == 0) continue;
+        if (s[i] === "0") continue;
         dp[i] = dp[i + 1];
         if (s[i] + s[i + 1] <= 26) dp[i] += dp[i + 2];
     }
