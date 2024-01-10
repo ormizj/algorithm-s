@@ -14,7 +14,6 @@
 var leafSimilar = function (root1, root2) {
     let tempStrNum = '';
 
-
     const inOrderTraversal = (node) => {
         if (node !== null) {
             if (node.left === null && node.right === null) {
