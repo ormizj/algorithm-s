@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { objEqual, objSize, forIn, objEqualMessy } from '../utils/pure/objectUtil.js';
+import { objEqual, objSize, forIn, objEqualMessy, isObject } from '../utils/pure/objectUtil.js';
 import { vTypeOf } from '../utils/pure/jsUtil.js';
 
 const SPACE = `    `;
@@ -12,7 +12,7 @@ console.log(`\n${SPACE}${DASH}${START}${DASH}\n`); //prints "----------START----
 export const printEnd = () => setTimeout(() => console.log(`${SPACE}${DASH}-${END}-${DASH}\n`));
 
 export const printResult = ({ answerCb, expected, input = {}, isOrder = false } = {}) => {
-    const inputPrint = beautifyJson(input);
+    const inputPrint = beautify(input); // preparing the answer, in-case of mutation to the input
     const actual = runAnswer(input, answerCb);
 
     let answer;
@@ -22,12 +22,10 @@ export const printResult = ({ answerCb, expected, input = {}, isOrder = false } 
         answer = chalk.red(`Wrong Answer`);
     }
 
-    // TODO "[" and "]" (as arrays, not strings) are omitted from the printing;
-    // need to create a function that takes arrays, and transforms the "[" and "]" into strings
     console.log(`${SPACE}${answer}
     Input:    ${inputPrint}
-    Output:   ${actual}
-    Expected: ${expected}
+    Output:   ${beautify(actual)}
+    Expected: ${beautify(expected)}
     `);
 }
 
@@ -36,13 +34,20 @@ const runAnswer = (input = {}, answerCb) => {
     return answerCb.apply(null, inputValues);
 }
 
-const beautifyJson = (json) => {
+const beautify = (toBeautify) => {
+    if (Array.isArray(toBeautify)) return beautifyObject([toBeautify]);
+    else if (isObject(toBeautify)) return beautifyObject(toBeautify);
+    return toBeautify;
+}
+
+// TODO rework this function
+const beautifyObject = (json) => {
     let beautifiedJson = ``;
     const jsonLength = objSize(json);
 
     let index = 1;
     forIn(json, (value, key) => {
-        if (Array.isArray(value)) {
+        if (!isNaN(key) && Array.isArray(value)) {
             if (Array.isArray(value[0])) {
                 beautifiedJson += `[ `;
                 beautifiedJson += `[${[value[0]]}]`;
@@ -50,6 +55,7 @@ const beautifyJson = (json) => {
                     beautifiedJson += ` [${[value[arrIndex]]}]`;
                 }
                 beautifiedJson += ` [${[value[value.length - 1]]}] ]`;
+
             } else {
                 beautifiedJson += `[${[value[0]]}, `;
                 for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
@@ -60,7 +66,6 @@ const beautifyJson = (json) => {
 
         } else {
             beautifiedJson += `[${key}: ${value}]`;
-
             if (index < jsonLength) {
                 beautifiedJson += ` ${chalk.yellow('|')} `;
                 index++;

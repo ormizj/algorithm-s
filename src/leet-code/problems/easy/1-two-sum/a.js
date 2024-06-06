@@ -18,7 +18,7 @@ const twoSum = function (nums, target) {
 };
 
 /*----------------------------------------------------------------------------------------------------*/
-import { printResult } from "../../../answerUtil.js";
+import { printResult, printEnd } from "../../../answerUtil.js";
 
 const answerCb = twoSum;
 printResult({ answerCb, expected: [0, 1], input: { nums: [2, 7, 11, 15], target: 9 } });
