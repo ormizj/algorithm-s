@@ -43,21 +43,20 @@ const beautifyJson = (json) => {
     let index = 1;
     forIn(json, (value, key) => {
         if (Array.isArray(value)) {
-
-            // TODO WIP [works in "867-transpose-matrix"]
-            // beautifiedJson += `[ `;
-            // beautifiedJson += `[${[value[0]]}]`;
-            // for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
-            //     beautifiedJson += ` [${[value[arrIndex]]}]`;
-            // }
-            // beautifiedJson += ` [${[value[value.length - 1]]}] ]`;
-
-            // TODO WIP [works in 1287-element-appearing-more-than-25%-in-sorted-array]
-            beautifiedJson += `[${[value[0]]}, `;
-            for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
-                beautifiedJson += `${[value[arrIndex]]}, `;
+            if (Array.isArray(value[0])) {
+                beautifiedJson += `[ `;
+                beautifiedJson += `[${[value[0]]}]`;
+                for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
+                    beautifiedJson += ` [${[value[arrIndex]]}]`;
+                }
+                beautifiedJson += ` [${[value[value.length - 1]]}] ]`;
+            } else {
+                beautifiedJson += `[${[value[0]]}, `;
+                for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
+                    beautifiedJson += `${[value[arrIndex]]}, `;
+                }
+                beautifiedJson += `${[value[value.length - 1]]}]`;
             }
-            beautifiedJson += `${[value[value.length - 1]]}]`;
 
         } else {
             beautifiedJson += `[${key}: ${value}]`;
@@ -67,7 +66,6 @@ const beautifyJson = (json) => {
                 index++;
             }
         }
-
     });
 
     return beautifiedJson;
