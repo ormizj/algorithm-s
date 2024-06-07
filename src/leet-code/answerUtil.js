@@ -68,14 +68,12 @@ const beautify = (toBeautify) => {
     }
 
     if (typeof toBeautify === 'object') {
-        let start = '';
-        let end = '';
+        let start = '{ ';
+        let end = ' }';
+
         if (Array.isArray(toBeautify)) {
             start = '[ ';
             end = ' ]';
-        } else {
-            start = '{ ';
-            end = ' }';
         }
 
         beautified = start;
