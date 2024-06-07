@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { objEqual, objSize, forIn, objEqualMessy, isObject } from '../utils/pure/objectUtil.js';
+import { objEqual, forIn, objEqualMessy, isObject } from '../utils/pure/objectUtil.js';
 import { vTypeOf } from '../utils/pure/jsUtil.js';
 
 const SPACE = `    `;
@@ -35,45 +35,58 @@ const runAnswer = (input = {}, answerCb) => {
 }
 
 const beautify = (toBeautify) => {
-    if (Array.isArray(toBeautify)) return beautifyObject([toBeautify]);
-    else if (isObject(toBeautify)) return beautifyObject(toBeautify);
-    return toBeautify;
-}
+    let beautified = '';
 
-// TODO rework this function
-const beautifyObject = (json) => {
-    let beautifiedJson = ``;
-    const jsonLength = objSize(json);
+    const removeBeautifiedExcess = () => {
+        beautified = beautified.substring(0, beautified.length - 2);
+    }
 
-    let index = 1;
-    forIn(json, (value, key) => {
-        if (!isNaN(key) && Array.isArray(value)) {
-            if (Array.isArray(value[0])) {
-                beautifiedJson += `[ `;
-                beautifiedJson += `[${[value[0]]}]`;
-                for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
-                    beautifiedJson += ` [${[value[arrIndex]]}]`;
+    const beautifyHelper = (obj) => {
+        forIn(obj, (value, key) => {
+            if (isNaN(key)) beautified += `${key}: `;
+
+            if (Array.isArray(value)) {
+                beautified += `[`;
+                if (value.length > 0) {
+                    beautifyHelper(value);
+                    removeBeautifiedExcess();
                 }
-                beautifiedJson += ` [${[value[value.length - 1]]}] ]`;
+                beautified += `], `;
+
+            } else if (isObject(value)) {
+                beautified += `{`;
+                if (Object.keys(value).length > 0) {
+                    beautifyHelper(value);
+                    removeBeautifiedExcess();
+                }
+                beautified += `}, `;
 
             } else {
-                beautifiedJson += `[${[value[0]]}, `;
-                for (let arrIndex = 1; arrIndex < value.length - 1; arrIndex++) {
-                    beautifiedJson += `${[value[arrIndex]]}, `;
-                }
-                beautifiedJson += `${[value[value.length - 1]]}]`;
+                beautified += `${value}, `;
             }
+        });
+    }
 
+    if (typeof toBeautify === 'object') {
+        let start = '';
+        let end = '';
+        if (Array.isArray(toBeautify)) {
+            start = '[ ';
+            end = ' ]';
         } else {
-            beautifiedJson += `[${key}: ${value}]`;
-            if (index < jsonLength) {
-                beautifiedJson += ` ${chalk.yellow('|')} `;
-                index++;
-            }
+            start = '{ ';
+            end = ' }';
         }
-    });
 
-    return beautifiedJson;
+        beautified = start;
+        beautifyHelper(toBeautify);
+        removeBeautifiedExcess();
+        beautified += end;
+
+        return beautified;
+    }
+
+    return toBeautify;
 }
 
 const calculateAnswer = ({ expected, actual, isOrder = false } = {}) => {
