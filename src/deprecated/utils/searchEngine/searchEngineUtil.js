@@ -11,7 +11,7 @@ import {
 } from "./arrayUtil.js";
 import { strIsSubString, toString, toStringDelimiter } from "./stringUtil.js";
 import { objForIn, objSize } from "./objectUtil.js";
-import { getValueByPath, valuePath } from "./jsUtil.js";
+import { getValueByPath, valuePath } from "./javascriptUtil.js";
 
 /**
  * sub-item = item in the path of the "Searched" item

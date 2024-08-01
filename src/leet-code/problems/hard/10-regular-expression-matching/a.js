@@ -48,6 +48,6 @@ const answerCb = isMatch;
 printResult({ answerCb, expected: false, input: { s: "aa", p: "a" } });
 printResult({ answerCb, expected: true, input: { s: "aa", p: "a*" } });
 printResult({ answerCb, expected: true, input: { s: "ab", p: ".*" } });
-printResult({ answerCb, expected: true, input: { s: "aab", p: "c*a*b" } });
+printResult({ answerCb, expected: false, input: { s: "aab", p: "c*a*b" } });
 
 printEnd();

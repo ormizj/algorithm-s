@@ -1,4 +1,4 @@
-import { numIsBetween } from "./numberUtil.js";
+import { isBetween } from "./numberUtil.js";
 
 export const findChild = (element = HTMLElement, className = '') => {
     for (let child of element.children) {
@@ -45,7 +45,7 @@ export const styleAddWidth = (element, widths, widthType = 'width') => {
     };
 }
 
-export const elCalcOverflow = (elements, startCb, endCb) => {
+export const calcOverflow = (elements, startCb, endCb) => {
     let maxOverflowWidth = 0;
     let maxOffsetWidth = 0;
 
@@ -100,9 +100,9 @@ export const scrollToAnimation = (element = HTMLElement, current = 0, to = 0, {
     const scrollLeft = current - to;
     let speed = -(scrollLeft / ease);
 
-    if (numIsBetween(speed, 0, 1)) {
+    if (isBetween(speed, 0, 1)) {
         speed = 1;
-    } else if (numIsBetween(speed, -1, 0)) {
+    } else if (isBetween(speed, -1, 0)) {
         speed = -1;
     }
 
@@ -182,7 +182,7 @@ const scrollDirection = (element = HTMLElement, direction = '', amount = 0, scro
     }
 }
 
-export const getUnappendedAttr = (element, attributes = []) => {
+export const getUnpendedAttribute = (element, attributes = []) => {
     const attributesMap = {};
 
     document.body.appendChild(element);
@@ -212,7 +212,7 @@ export const getUnappendedAttr = (element, attributes = []) => {
  *
  * @returns {ActiveX.IXMLDOMNode | Node}
  */
-export const htmlDeepClone = ({
+export const deepClone = ({
     element = HTMLElement,
     beforeCb,
     afterCb,
@@ -221,7 +221,7 @@ export const htmlDeepClone = ({
     const clonedElement = element.cloneNode();
     document.body.appendChild(clonedElement); // appending for attributes calculations
 
-    htmlDeepCloneHelper({
+    deepCloneHelper({
         element,
         clonedElement,
         beforeCb,
@@ -233,7 +233,7 @@ export const htmlDeepClone = ({
     return clonedElement;
 }
 
-const htmlDeepCloneHelper = ({
+const deepCloneHelper = ({
     element = HTMLElement,
     clonedElement = HTMLElement,
     beforeCb,
@@ -264,7 +264,7 @@ const htmlDeepCloneHelper = ({
         //afterCb (after append)
         afterCb?.(childClone, child);
 
-        htmlDeepCloneHelper({
+        deepCloneHelper({
             element: child,
             clonedElement: childClone,
             beforeCb,

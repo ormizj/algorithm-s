@@ -1,9 +1,9 @@
-import { arrRemoveElement } from "../mutation/arrayUtil.js";
-import { vTypeOf } from "./jsUtil.js";
+import { removeElement } from "../mutation/arrayUtil.js";
+import { vTypeOf } from "./javascriptUtil.js";
 
 export const isObject = (obj = {}) => obj !== null && !Array.isArray(obj) && typeof obj === 'object';
 
-export const objIsEmpty = (obj = {}) => {
+export const isEmpty = (obj = {}) => {
     for (let objKey in obj) {
         if (hasOwn(obj, objKey)) return false;
     }
@@ -12,7 +12,7 @@ export const objIsEmpty = (obj = {}) => {
 
 export const hasOwn = (obj, property) => Object.hasOwn(obj, property);
 
-const objExistDeep = (obj, target) => {
+const existDeep = (obj, target) => {
     for (let key in obj) {
         if (!hasOwn(obj, key)) continue;
         const value = obj[key];
@@ -22,7 +22,7 @@ const objExistDeep = (obj, target) => {
         }
 
         if (typeof value === 'object') {
-            const res = objExistDeep(value, target);
+            const res = existDeep(value, target);
             if (res) return true;
         }
     }
@@ -30,12 +30,12 @@ const objExistDeep = (obj, target) => {
     return false;
 }
 
-export const objEqual = (obj, otherObj) => {
+export const equal = (obj, otherObj) => {
     if (obj === otherObj) return true;
-    return objEqualHelper(obj, otherObj);
+    return equalHelper(obj, otherObj);
 }
 
-const objEqualHelper = (obj, otherObj) => {
+const equalHelper = (obj, otherObj) => {
     if (vTypeOf(obj) !== vTypeOf(otherObj)) return false;
 
     if (typeof obj === 'object') {
@@ -44,7 +44,7 @@ const objEqualHelper = (obj, otherObj) => {
             const value = obj[objKey];
             const otherValue = otherObj[objKey];
 
-            if (!objEqualHelper(value, otherValue)) {
+            if (!equalHelper(value, otherValue)) {
                 return false;
             }
         }
@@ -58,24 +58,24 @@ const objEqualHelper = (obj, otherObj) => {
     return true;
 }
 
-export const objEqualMessy = (obj, otherObj) => {
+export const equalMessy = (obj, otherObj) => {
     if (obj === otherObj) return true;
     const flatArr = deepFlat(obj);
-    return objEqualMessyHelper(otherObj, flatArr);
+    return equalMessyHelper(otherObj, flatArr);
 }
 
-const objEqualMessyHelper = (obj, flatArr) => {
+const equalMessyHelper = (obj, flatArr) => {
     if (typeof obj === 'object') {
         for (const objKey in obj) {
             if (!hasOwn(obj, objKey)) continue;
             const value = obj[objKey];
 
             if (typeof value === 'object') {
-                objEqualMessyHelper(value, flatArr);
+                equalMessyHelper(value, flatArr);
 
             } else {
-                if (!objExistDeep(flatArr, value)) return false;
-                arrRemoveElement(flatArr, value);
+                if (!existDeep(flatArr, value)) return false;
+                removeElement(flatArr, value);
             }
         }
     }
@@ -83,7 +83,7 @@ const objEqualMessyHelper = (obj, flatArr) => {
     return flatArr.length === 0;
 }
 
-export const objProtoAttr = (any, attrType) => {
+export const protoAttr = (any, attrType) => {
     const properties = new Set();
     let protoCurr = Object.getPrototypeOf(any);
 
@@ -150,7 +150,7 @@ export const forInDeepBreak = (obj, cb) => {
     })(obj)
 }
 
-export const objSize = (obj) => {
+export const size = (obj) => {
     let size = 0;
     forIn(obj, () => size++);
     return size;

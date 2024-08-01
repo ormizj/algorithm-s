@@ -1,14 +1,14 @@
 export const isString = (str) => typeof str === 'string';
 
-export const strCompareAs = (str, otherStr) => `${str}` === `${otherStr}`;
+export const compareAs = (str, otherStr) => `${str}` === `${otherStr}`;
 
-export const strIsSubString = (longStr = '', shortStr = '') => longStr.indexOf(shortStr) > -1;
+export const isSubString = (longStr = '', shortStr = '') => longStr.indexOf(shortStr) > -1;
 
-export const strRemoveLastLetter = (str = '') => str.substring(0, str.length - 1);
+export const removeLastLetter = (str = '') => str.substring(0, str.length - 1);
 
-export const strGetFirstWord = (str = '') => str.split(' ')[0];
+export const getFirstWord = (str = '') => str.split(' ')[0];
 
-export const numericAddToStr = (numeric = '0' | 0, otherNumeric = '1' | 1) => `${BigInt(`${numeric}`) + BigInt(`${otherNumeric}`)}`;
+export const numericAddToString = (numeric = '0' | 0, otherNumeric = '1' | 1) => `${BigInt(`${numeric}`) + BigInt(`${otherNumeric}`)}`;
 
 export const formatFileName = (str, replacer = '_') => str.replaceAll('/', replacer);
 
@@ -20,7 +20,7 @@ export const formatFileName = (str, replacer = '_') => str.replaceAll('/', repla
  * @param {*} strChild child to be added to the {strEl}
  * @returns copy of the html structured {String}, with the {strChild} appended, or undefined if {strEl} was not found
  */
-export const strAddHtmlChild = (strHtml = '', strEl = '', strChild = '') => {
+export const addHtmlChild = (strHtml = '', strEl = '', strChild = '') => {
     const toCut = strEl.includes('/') ? -2 : -1;
     const elStart = strEl.slice(0, toCut);
     const elEnd = strEl.slice(toCut);
@@ -38,7 +38,7 @@ export const strAddHtmlChild = (strHtml = '', strEl = '', strChild = '') => {
             }
 
         } else if (currentIndex === elLen) {
-            return strInsert(strHtml, strChild, i);
+            return insert(strHtml, strChild, i);
 
         } else {
             if (!isEnd) {
@@ -48,7 +48,7 @@ export const strAddHtmlChild = (strHtml = '', strEl = '', strChild = '') => {
     }
 };
 
-export const strInsert = (str, insertStr, index) => {
+export const insert = (str, insertStr, index) => {
     if (index > 0) {
         return str.substring(0, index) + insertStr + str.substring(index);
     }
@@ -57,7 +57,7 @@ export const strInsert = (str, insertStr, index) => {
 };
 
 
-export const strGetLastWord = (str = '') => {
+export const getLastWord = (str = '') => {
     const strArr = str.split(' ');
     return strArr[strArr.length - 1];
 }
@@ -71,4 +71,4 @@ export const toStringDelimiter = (delimiter = '', ...any) => {
     return str;
 }
 
-export const strCut = (str = '', cut = '') => str.replace(cut, '');
+export const cut = (str = '', cut = '') => str.replace(cut, '');

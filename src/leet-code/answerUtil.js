@@ -1,6 +1,6 @@
 import chalk from 'chalk';
-import { objEqual, forIn, objEqualMessy, isObject } from '../utils/pure/objectUtil.js';
-import { vTypeOf } from '../utils/pure/jsUtil.js';
+import { equal, forIn, equalMessy, isObject } from '../utils/pure/objectUtil.js';
+import { vTypeOf } from '../utils/pure/javascriptUtil.js';
 
 const SPACE = `    `;
 const DASH = `----------`;
@@ -92,10 +92,10 @@ const calculateAnswer = ({ expected, actual, isOrder = false } = {}) => {
 
     if (type === 'object' || type === 'array') {
         if (isOrder) {
-            return objEqual(expected, actual);
+            return equal(expected, actual);
 
         } else {
-            return objEqualMessy(expected, actual);
+            return equalMessy(expected, actual);
         };
     }
 

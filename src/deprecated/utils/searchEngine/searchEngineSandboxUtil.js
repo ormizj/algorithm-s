@@ -11,7 +11,7 @@ import {
 } from "./arrayUtil.js";
 import { isSubString, toString, toStringDelimiter } from "./stringUtil.js";
 import { forIn, keyStructure, size } from "./objectUtil.js";
-import { getValueByPath, isNumber, valuePath } from "./jsUtil.js";
+import { getValueByPath, isNumber, valuePath } from "./javascriptUtil.js";
 
 /**
  * see {searchEngineUtil.js} for TODO

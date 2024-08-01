@@ -3,8 +3,8 @@
  *
  * use the "Function.prototype.bind()" if cb contains parameters
  * 
- * Example: <function>.bind(null, [<arg1, <arg2>, ...]);
- *          await calculateTime(<function>);
+ * Example: const myFunction = <function>.bind(null, <arg1>, <arg2>, ...);
+ *          await calculateTime(myFunction);
  */
 /*----------------------------------------------------------------------------------------------------*/
 

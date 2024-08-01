@@ -4,12 +4,12 @@
  * @param {RegExp} regex
  * @param input
  */
-export const regHandleModifier = (regex, input) => regex.test(input) && input.length === 1;
+export const handleModifier = (regex, input) => regex.test(input) && input.length === 1;
 
 /** returns regex for numeric values (0-9) */
-export const regNumber = () => new RegExp('^\\d+$');
+export const number = () => new RegExp('^\\d+$');
 
 /** finds non number values, for html input type "number" */
-export const regInputNumber = () => new RegExp('[-+eE]');
+export const inputNumber = () => new RegExp('[-+eE]');
 
-export const expLowerCaseLetters = () => /[a-z]/;
+export const lowerCaseLetters = () => /[a-z]/;

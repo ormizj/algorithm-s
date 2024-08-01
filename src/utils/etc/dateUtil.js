@@ -4,7 +4,7 @@
  * @see {Intl.DateTimeFormat}
  * @returns 
  */
-export const getDateMap = (date = undefined, format = undefined) => {
+export const toMap = (date = undefined, format = undefined) => {
     const dateArr = new Intl.DateTimeFormat(format).formatToParts(date);
 
     const dateObj = {};
@@ -19,7 +19,7 @@ export const getDateMap = (date = undefined, format = undefined) => {
  * @param {Date} date 
  * @returns {[year, month, day]}
  */
-export const getDateArr = (date = new Date) => {
+export const toArray = (date = new Date) => {
     const year = date.getFullYear();
     let month = date.getMonth() + 1; //January is 0!
     let day = date.getDate();
@@ -39,7 +39,7 @@ export const getDateArr = (date = new Date) => {
  * @param dateTo
  * @returns {number} month difference between dates, without taking days into account
  */
-export const dateMonthDuration = (dateFrom, dateTo) => {
+export const monthDuration = (dateFrom, dateTo) => {
     return dateTo.getMonth() - dateFrom.getMonth()
         + (12 * (dateTo.getFullYear() - dateFrom.getFullYear()));
 }

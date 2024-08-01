@@ -1,4 +1,4 @@
-import { cloneDeep } from "../jsUtil.js";
+import { cloneDeep } from "../javascriptUtil.js";
 import { hasOwn } from "../objectUtil.js";
 
 /**

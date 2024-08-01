@@ -1,4 +1,4 @@
-export const canClone = (can) => {
+export const clone = (can) => {
     //create a new canvas
     const newCan = document.createElement('canvas');
     const ctx = newCan.getContext('2d');
@@ -14,7 +14,7 @@ export const canClone = (can) => {
     return newCan;
 }
 
-export const canReplicate = (can, otherCan) => {
+export const replicate = (can, otherCan) => {
     //get canvas context
     const context = otherCan.getContext('2d');
 
@@ -26,7 +26,7 @@ export const canReplicate = (can, otherCan) => {
     context.drawImage(can, 0, 0);
 }
 
-export const canToImg = (can) => {
+export const toImg = (can) => {
     const img = document.createElement('img');
 
     img.src = can.toDataURL().replace("image/png", "image/octet-stream");

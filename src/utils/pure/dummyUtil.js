@@ -1,5 +1,5 @@
-import { vTypeOf } from "./jsUtil.js";
-import { numRandInclusive } from "./numberUtil.js";
+import { vTypeOf } from "./javascriptUtil.js";
+import { random as randomNumber } from "./numberUtil.js";
 import { forIn } from "./objectUtil.js";
 
 /**
@@ -75,7 +75,7 @@ const buildDummyDataHelper = (obj, dupeObj, options) => {
 }
 
 
-const genRandData = ({
+const genRandomData = ({
 	type = '',
 	cntLetters = [],
 	lang,
@@ -85,13 +85,13 @@ const genRandData = ({
 	let randData;
 	switch (type) {
 		case 'string':
-			randFunction = randStr;
+			randFunction = randomString;
 			randData = ``;
 			break;
 
 		case 'number':
 			if (cntLetters.length > 1) console.error(`the type: "${type}", "words" must be exactly 1`)
-			randFunction = randNum;
+			randFunction = randomNumber;
 			randData = 0;
 			break;
 
@@ -104,7 +104,7 @@ const genRandData = ({
 		let newCnt = cntLetters[i];
 
 		if (randRange) {
-			newCnt = numRandInclusive(newCnt / 2, newCnt * 2);
+			newCnt = randomNumber(newCnt / 2, newCnt * 2);
 		}
 
 		if (i < cntLetters.length - 1) {
@@ -147,7 +147,7 @@ const handleCustomKey = ({
 		randRange = options.randRange;
 	}
 
-	return genRandData({
+	return genRandomData({
 		type,
 		cntLetters,
 		lang,
@@ -155,7 +155,7 @@ const handleCustomKey = ({
 	});
 }
 
-export const randStr = (length, lang) => {
+export const randomString = (length, lang) => {
 	let result = '';
 
 	let characters;
@@ -181,7 +181,7 @@ export const randStr = (length, lang) => {
 	return result;
 }
 
-export const randNum = (length) => {
+export const randomNumber = (length) => {
 	if (length === 0) return 0;
 
 	//characters without "0"

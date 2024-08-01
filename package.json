@@ -9,11 +9,10 @@
   },
   "author": "Or Mizrahi",
   "license": "ISC",
-  "dependencies": {
-    "chalk": "5.1.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "jest": "^29.4.0",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "chalk": "5.1.2"
   }
 }

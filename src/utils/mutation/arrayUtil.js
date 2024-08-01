@@ -1,10 +1,10 @@
-import { arrFindIndex } from '../pure/arrayUtil.js'
+import { findIndex } from '../pure/arrayUtil.js'
 
-export const arrInsert = (arr = [], index = 0, ...elements) => arr.splice(index, 0, ...elements);
+export const insert = (arr = [], index = 0, ...elements) => arr.splice(index, 0, ...elements);
 
-export const arrRemove = (arr = [], index = 0, count = 1) => arr.splice(index, count);
+export const remove = (arr = [], index = 0, count = 1) => arr.splice(index, count);
 
-export const arrRemoveElement = (arr = [], element) => {
-    const index = arrFindIndex(arr, element);
-    arrRemove(arr, index);
+export const removeElement = (arr = [], element) => {
+    const index = findIndex(arr, element);
+    remove(arr, index);
 }
