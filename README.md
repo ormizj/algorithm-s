@@ -2,13 +2,15 @@
 
 Contains various algorithms ranging from algorithmic questions to various utilities
 
+## Typescript
 
+## Javascript
 
-## Highlights
+### [KeyArray](https://github.com/spiderpig60/algorithm-s/blob/master/javascript/src/classes/KeyArray.js)
 
-### [KeyArray](https://github.com/spiderpig60/algorithm-s/blob/master/src/classes/KeyArray.js)
-Array type structure supporting *keys* & *indexes*
+Array type structure supporting _keys_ & _indexes_
 
-### [Leet Code](https://github.com/spiderpig60/algorithm-s/tree/master/src/leet-code)
+### [Leet Code](https://github.com/spiderpig60/algorithm-s/tree/master/javascript/src/leet-code)
+
 - Functions to validate leet code questions
 - Answers to leet code questions
