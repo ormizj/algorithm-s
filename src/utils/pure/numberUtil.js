@@ -15,10 +15,9 @@ export const numToDigits = (num = 0) => {
     return digits;
 }
 
-// "floor" rounds upward (if 0.5 turns to 1)
-export const numToFixed = (num = 0, digit = 0, { base = 10, roundFunc = 'floor' } = {}) => {
-    const pow = Math.pow(base, digit);
-    return Math[roundFunc](num * pow) / pow;
+export const numberToFixed = (number = 0, decimals = 0, { base = 10, roundFn = 'round' } = {}) => {
+    const pow = Math.pow(base, decimals);
+    return Math[roundFn](number * pow) / pow;
 };
 
 export const numRand = (min, max) => {
