@@ -1,3 +1,3 @@
-interface ActionObject {
-	[K: string]: () => unknown;
+interface ActionObject<T> {
+	[K: string]: () => T;
 }
