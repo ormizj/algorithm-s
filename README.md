@@ -4,6 +4,10 @@ Contains various algorithms ranging from algorithmic questions to various utilit
 
 ## Typescript
 
+### [VueFromInputs](https://github.com/ormizj/algorithm-s/blob/master/typescript/src/framework/vue/classes/FormInputs.ts)
+
+lightweight form inputs handler
+
 ## Javascript
 
 ### [KeyArray](https://github.com/spiderpig60/algorithm-s/blob/master/javascript/src/classes/KeyArray.js)
