@@ -54,10 +54,6 @@ export default class FormInputs<T extends FormInputFields> {
 		return this.inputs;
 	}
 
-	setInputError(inputKey: keyof T, errorMessage: string) {
-		this.inputs[inputKey].error.value = errorMessage;
-	}
-
 	private getInitializedInputs(inputs: FormInputFields<T>) {
 		for (const inputKey in inputs) {
 			if (!Object.hasOwn(inputs, inputKey)) continue;
