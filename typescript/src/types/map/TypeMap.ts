@@ -1,3 +1,3 @@
-interface TypeMap<T = unknown> {
+interface TypeMap<T> {
 	[K: string | number | symbol]: T;
 }
