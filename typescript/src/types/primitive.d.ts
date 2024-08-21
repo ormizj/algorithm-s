@@ -1,1 +1,1 @@
-type Primitive = string | boolean | number;
+type Primitive = string | number | boolean;
