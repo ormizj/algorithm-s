@@ -21,7 +21,7 @@ const attributes: Record<keyof FunctionalInterface, TypeOf> = {
 	functionAttribute: 'function',
 };
 
-export const instanceofComplexInterface = <T extends object>(
+export const instanceofFunctionalInterface = <T extends object>(
 	complexClass: T
 ): complexClass is T & FunctionalInterface =>
 	satisfiesPropertiesTypes(complexClass, attributes);
@@ -52,3 +52,5 @@ type TypeOf =
 	| 'symbol'
 	| 'function';
 /* UTILITY TYPES */
+
+instanceofFunctionalInterface(null);
