@@ -1,30 +1,30 @@
 // interface example
 export interface FunctionalInterface {
-	undefinedAttribute: undefined;
-	objectAttribute: object;
-	booleanAttribute: boolean;
-	numberAttribute: number;
-	bigintAttribute: bigint;
-	stringAttribute: string;
-	symbolAttribute: Symbol;
-	functionAttribute: Function;
+	undefinedProperty: undefined;
+	objectProperty: object;
+	booleanProperty: boolean;
+	numberProperty: number;
+	bigintProperty: bigint;
+	stringProperty: string;
+	symbolProperty: Symbol;
+	functionProperty: Function;
 }
-// mapping interface attributes into javascript types
-const attributes: Record<keyof FunctionalInterface, TypeOf> = {
-	undefinedAttribute: 'undefined',
-	objectAttribute: 'object',
-	booleanAttribute: 'boolean',
-	numberAttribute: 'number',
-	bigintAttribute: 'bigint',
-	stringAttribute: 'string',
-	symbolAttribute: 'symbol',
-	functionAttribute: 'function',
+// mapping interface properties into javascript types
+const properties: Record<keyof FunctionalInterface, TypeOf> = {
+	undefinedProperty: 'undefined',
+	objectProperty: 'object',
+	booleanProperty: 'boolean',
+	numberProperty: 'number',
+	bigintProperty: 'bigint',
+	stringProperty: 'string',
+	symbolProperty: 'symbol',
+	functionProperty: 'function',
 };
 
 export const instanceofFunctionalInterface = <T extends object>(
 	complexClass: T
 ): complexClass is T & FunctionalInterface =>
-	satisfiesPropertiesTypes(complexClass, attributes);
+	satisfiesPropertiesTypes(complexClass, properties);
 
 /* UTILITY FUNCTIONS */
 const satisfiesPropertiesTypes = <T extends object>(
