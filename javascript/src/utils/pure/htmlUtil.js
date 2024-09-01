@@ -288,3 +288,16 @@ export const getTextNode = (element) => {
     }
     return null;
 }
+
+export const wrapMatches = (content = '', searchTerm = '', regexFlags = 'ig') => {
+    // stopping function if search is not relevant   
+    if (searchTerm === '') return content;
+
+    const pattern = new RegExp(searchTerm, regexFlags);
+
+    // dividing the matched letters and text
+    const markedText = content.replace(pattern, (matchedLetters) =>
+        `<span class="matching">${matchedLetters}</span>`
+    );
+    return `<span class="non-matching">${markedText}</span>`;
+};
