@@ -1,0 +1,1 @@
+type HTMLElementType = keyof HTMLElementTagNameMap;
