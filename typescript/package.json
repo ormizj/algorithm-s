@@ -1,6 +1,7 @@
 {
 	"name": "algorithm-s",
 	"version": "1.0.0",
+	"type": "module",
 	"description": "Contains various algorithms ranging from algorithmic questions to various utilities",
 	"main": "tests.js",
 	"scripts": {
@@ -13,6 +14,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.8.0",
+		"@typescript-eslint/eslint-plugin": "^7.17.0",
 		"@typescript-eslint/parser": "^7.17.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-vue": "^9.27.0",

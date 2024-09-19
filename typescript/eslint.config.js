@@ -3,6 +3,7 @@ import pluginJs from '@eslint/js';
 import pluginVue from 'eslint-plugin-vue';
 import pluginPrettier from 'eslint-config-prettier';
 import parser from '@typescript-eslint/parser';
+import pluginTypescript from '@typescript-eslint/eslint-plugin';
 
 export default [
 	// DO NOT CHANGE ORDER OF PLUGINS
@@ -17,6 +18,9 @@ export default [
 			parserOptions: {
 				project: './tsconfig.json',
 			},
+		},
+		plugins: {
+			'@typescript-eslint': pluginTypescript,
 		},
 		rules: {
 			'@typescript-eslint/switch-exhaustiveness-check': 'error',
