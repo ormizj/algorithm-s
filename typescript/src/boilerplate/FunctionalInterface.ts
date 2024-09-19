@@ -57,5 +57,3 @@ type TypeOf =
 	| 'symbol'
 	| 'function';
 /* UTILITY TYPES */
-
-instanceofFunctionalInterface(null);
