@@ -18,7 +18,7 @@ interface ValidationInput<T> {
 	validate(ref: Ref<T>, setError: (newError: string) => boolean): boolean;
 }
 
-interface initializedValidationInput<T> extends ValidationInput<T> {
+interface InitializedValidationInput<T> extends ValidationInput<T> {
 	dirty: Ref<boolean>;
 
 	validate(): boolean;
@@ -31,7 +31,7 @@ type FormInputFields<T = unknown> = {
 };
 
 type InitializedFormInputFields<T> = {
-	[K in keyof T]: initializedValidationInput<T[K]>;
+	[K in keyof T]: InitializedValidationInput<T[K]>;
 };
 
 export default class FormInputs<T extends FormInputFields> {
@@ -114,7 +114,7 @@ export default class FormInputs<T extends FormInputFields> {
 	}
 
 	private initInputReset(input: ValidationInput<T[Extract<keyof T, string>]>) {
-		const newInput = input as initializedValidationInput<
+		const newInput = input as InitializedValidationInput<
 			T[Extract<keyof T, string>]
 		>;
 		const initialValue = input.ref.value;
