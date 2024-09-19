@@ -2,23 +2,25 @@ import type { Ref } from 'vue';
 import { ref, watch } from 'vue';
 
 interface ValidationInput<T> {
-	ref: Ref<T>;
-	error: Ref<string>;
-	dirty?: Ref<boolean>;
+	value: T;
+	error?: string;
+	dirty?: boolean;
 
 	/**
-	 * Validation function for the input,
-	 * the input will be considered valid if
-	 * 1. {false} is NOT returned
-	 * 2. error is an empty {string}
+	 * Validation function for the input, the input will be considered valid if no error is set
 	 *
-	 * @param ref of the current input
-	 * @param setError function to set the error, this function always returns {false}
+	 * @param value of the current input
+	 * @param setError function to set the error, empty string will clear input error
 	 */
 	validate(ref: Ref<T>, setError: (newError: string) => boolean): boolean;
 }
 
-interface InitializedValidationInput<T> extends ValidationInput<T> {
+interface InitializedValidationInput<T>
+	extends Omit<ValidationInput<T>, 'value' | 'error' | 'dirty'> {
+	ref: Ref<T>;
+
+	error: Ref<string>;
+
 	dirty: Ref<boolean>;
 
 	validate(): boolean;
@@ -38,9 +40,7 @@ export default class FormInputs<T extends FormInputFields> {
 	private readonly inputs: InitializedFormInputFields<T>;
 
 	constructor(inputs: FormInputFields<T>) {
-		this.inputs = this.getInitializedInputs(
-			inputs
-		) as InitializedFormInputFields<T>; // initInputs, should ensure that "this.inputs" will satisfy "InitializedFormInput"
+		this.inputs = this.getInitializedInputs(inputs);
 	}
 
 	/**
@@ -82,16 +82,33 @@ export default class FormInputs<T extends FormInputFields> {
 	private getInitializedInputs(inputs: FormInputFields<T>) {
 		for (const inputKey in inputs) {
 			if (!Object.hasOwn(inputs, inputKey)) continue;
-			const input = inputs[inputKey];
-			this.initInputDirty(input);
-			this.initInputValidate(input);
-			this.initInputReset(input);
+			const initializedInput = this.initInitializedValidationInput(
+				inputs[inputKey]
+			);
+			this.initInputDirty(initializedInput);
+			this.initInputValidate(initializedInput);
+			this.initInputReset(initializedInput);
 		}
-		return inputs;
+		return inputs as unknown as InitializedFormInputFields<T>;
 	}
 
-	private initInputDirty(input: ValidationInput<T[Extract<keyof T, string>]>) {
-		if (!input.dirty) input.dirty = ref(false);
+	private initInitializedValidationInput(
+		input: ValidationInput<T[Extract<keyof T, string>]>
+	) {
+		const initializedInput = input as unknown as InitializedValidationInput<
+			T[Extract<keyof T, string>]
+		>;
+
+		initializedInput.ref = ref(input.value as Ref<T[Extract<keyof T, string>]>);
+		initializedInput.error = ref(input.error ?? '');
+		initializedInput.dirty = ref(input.dirty ?? false);
+
+		return initializedInput;
+	}
+
+	private initInputDirty(
+		input: InitializedValidationInput<T[Extract<keyof T, string>]>
+	) {
 		watch(input.ref, () => {
 			if (!input.dirty) input.dirty = ref(false);
 			input.dirty.value = true;
@@ -99,12 +116,14 @@ export default class FormInputs<T extends FormInputFields> {
 	}
 
 	private initInputValidate(
-		input: ValidationInput<T[Extract<keyof T, string>]>
+		input: InitializedValidationInput<T[Extract<keyof T, string>]>
 	) {
 		const setError = (newError: string): boolean => {
 			input.error.value = newError;
 			return newError === '';
 		};
+
+		// @ts-expect-error transforming validationInput to initializedValidationInput
 		const boundValidate = input.validate.bind(null, input.ref, setError);
 		input.validate = () => {
 			const isValid = boundValidate();
@@ -113,12 +132,11 @@ export default class FormInputs<T extends FormInputFields> {
 		};
 	}
 
-	private initInputReset(input: ValidationInput<T[Extract<keyof T, string>]>) {
-		const newInput = input as InitializedValidationInput<
-			T[Extract<keyof T, string>]
-		>;
+	private initInputReset(
+		input: InitializedValidationInput<T[Extract<keyof T, string>]>
+	) {
 		const initialValue = input.ref.value;
-		newInput.reset = () => {
+		input.reset = () => {
 			input.ref.value = initialValue;
 		};
 	}
