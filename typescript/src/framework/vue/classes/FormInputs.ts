@@ -127,7 +127,7 @@ export default class FormInputs<T extends FormInputFields> {
 		const boundValidate = input.validate.bind(null, input.ref, setError);
 		input.validate = () => {
 			const isValid = boundValidate();
-			if (isValid) setError('');
+			if (isValid !== false) setError('');
 			return isValid;
 		};
 	}
