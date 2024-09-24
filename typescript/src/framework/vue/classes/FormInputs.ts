@@ -12,7 +12,7 @@ interface ValidationInput<T> {
 	 * @param value of the current input
 	 * @param setError function to set the error, empty string will clear input error
 	 */
-	validate(ref: Ref<T>, setError: (newError: string) => boolean): boolean;
+	validate(ref: Ref<T>, setError: (newError: string) => boolean): boolean | undefined;
 }
 
 interface InitializedValidationInput<T>
