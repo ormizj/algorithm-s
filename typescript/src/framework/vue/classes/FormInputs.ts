@@ -12,7 +12,11 @@ interface ValidationInput<T> {
 	 * @param value of the current input
 	 * @param setError function to set the error, empty string will clear input error
 	 */
-	validate(ref: Ref<T>, setError: (newError: string) => boolean): boolean | undefined;
+	validate(
+		ref: Ref<T>,
+		setError: (newError: string) => boolean
+		// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+	): boolean | void;
 }
 
 interface InitializedValidationInput<T>
