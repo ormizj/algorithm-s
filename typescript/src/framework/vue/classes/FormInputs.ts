@@ -68,6 +68,13 @@ export default class FormInputs<T extends FormInputFields> {
 		}
 	}
 
+	cleanInputsDirtyState(): void {
+		for (const inputKey in this.inputs) {
+			if (!Object.hasOwn(this.inputs, inputKey)) continue;
+			this.inputs[inputKey].dirty.value = false;
+		}
+	}
+
 	/**
 	 * @returns {true} if there are currently any errors
 	 */
