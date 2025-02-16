@@ -104,7 +104,7 @@ export const hexAlpha = (hex: string, opacity: number): string => {
 	};
 
 	if (opacity > 1) opacity = 1;
-	if (opacity < 0) opacity = 0;
+	else if (opacity < 0) opacity = 0;
 	const opacityKey = Number(opacity).toFixed(2);
 
 	return `${hex}${opacityMap[opacityKey]}`;
