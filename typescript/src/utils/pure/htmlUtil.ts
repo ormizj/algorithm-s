@@ -50,16 +50,13 @@ const findChildByClassHelper = (
 			return currentResult;
 		}
 
-		// go over children
-		if (currentChild.children) {
-			const foundResult = findChildByClassHelper(
-				currentChild,
-				child,
-				elementWithClassToFind,
-				currentResult
-			);
-			if (foundResult) return foundResult;
-		}
+		const foundResult = findChildByClassHelper(
+			currentChild,
+			child,
+			elementWithClassToFind,
+			currentResult
+		);
+		if (foundResult) return foundResult;
 	}
 
 	return null;
