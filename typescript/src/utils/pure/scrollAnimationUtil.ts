@@ -12,6 +12,9 @@ export const scrollToAnimation = (
 	{ direction = 'both' as ScrollDirection, ease = 50 } = {}
 ) => {
 	let current = element.scrollTop;
+	if (current === to) return;
+
+	const originalTo = to;
 	if (to > 0) {
 		to = 0;
 	} else if (to < element.offsetWidth - element.scrollWidth) {
@@ -30,17 +33,17 @@ export const scrollToAnimation = (
 	let previous = current;
 	const intervalId = setInterval(() => {
 		current += speed;
-
 		scrollByDirection(element, direction, speed);
 
+		// end conditions
 		if (speed < 0) {
 			if (current < to || previous === current) {
-				scrollToDirection(element, direction, to);
+				scrollToDirection(element, direction, originalTo);
 				clearInterval(intervalId);
 			}
 		} else {
 			if (current > to || previous === current) {
-				scrollToDirection(element, direction, to);
+				scrollToDirection(element, direction, originalTo);
 				clearInterval(intervalId);
 			}
 		}
