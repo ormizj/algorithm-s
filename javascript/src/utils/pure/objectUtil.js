@@ -4,11 +4,11 @@ import { vTypeOf } from "./javascriptUtil.js";
 export const isObject = (obj = {}) => obj !== null && !Array.isArray(obj) && typeof obj === 'object';
 
 export const isEmpty = (obj = {}) => {
-    for (let objKey in obj) {
-        if (hasOwn(obj, objKey)) return false;
-    }
-    return true;
-}
+	for (const objKey in obj) {
+		if (Object.hasOwn(obj, objKey)) return false;
+	}
+	return true;
+};
 
 export const hasOwn = (obj, property) => Object.hasOwn(obj, property);
 
