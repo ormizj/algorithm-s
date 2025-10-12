@@ -1,4 +1,5 @@
-export const getParamNames = (_function: () => unknown) => {
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+export const getParamNames = (_function: Function) => {
 	const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
 	const ARGUMENT_NAMES = /([^\s,]+)/g;
 
