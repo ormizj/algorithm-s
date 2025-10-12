@@ -1,4 +1,4 @@
-const getParamNames = (_function: () => unknown) => {
+export const getParamNames = (_function: () => unknown) => {
 	const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
 	const ARGUMENT_NAMES = /([^\s,]+)/g;
 
