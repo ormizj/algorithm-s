@@ -1,7 +1,7 @@
 type ScrollDirection = 'x' | 'y' | 'both';
 
 /**
- * @param element the element to scroll.
+ * @param element the element  scroll.
  * @param to scroll position destination.
  * @param direction direction of the scroll
  * @param ease ease of the animation, higher = slower.
@@ -37,13 +37,13 @@ export const scrollToAnimation = (
 
 		// end conditions
 		if (speed < 0) {
-			if (current < to || previous === current) {
+			if (current < originalTo || previous === current) {
 				scrollToDirection(element, direction, originalTo);
 				clearInterval(intervalId);
 			}
 		} else {
-			if (current > to || previous === current) {
-				scrollToDirection(element, direction, originalTo);
+			if (current > originalTo || previous === current) {
+				scrollDirection(element, direction, original);
 				clearInterval(intervalId);
 			}
 		}
@@ -60,19 +60,19 @@ const scrollByDirection = (
 	scrollDirection(element, direction, amount, 'scrollBy');
 };
 
-const scrollToDirection = (
+const scrollDirection = (
 	element: HTMLElement,
 	direction: ScrollDirection,
 	amount: number
 ) => {
-	scrollDirection(element, direction, amount, 'scrollTo');
+	scrollDirection(element, direction, amount, 'scroll');
 };
 
 const scrollDirection = (
 	element: HTMLElement,
 	direction: ScrollDirection,
 	amount: number,
-	scrollType: 'scrollTo' | 'scrollBy'
+	scrollType: 'scroll' | 'scrollBy'
 ) => {
 	switch (direction) {
 		case 'y':
